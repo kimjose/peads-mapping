@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Pedatric Mapping Application</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Pedatric Mapping</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Data Management
+            </div>
+
+            <!-- Nav Item - data-->
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Users</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-pills"></i>
+                    <span>Regimens</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="dataentry.html">
+                    <i class="far fa-fw fa-edit"></i>
+                    <span>Data Entry</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Reports</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Admin Privileges
+            </div>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-users-cog"></i>
+                    <span>User Roles</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Account
+            </div>
+
+            <!-- Nav item -->
+            <li class="nav-item">
+                <a class="nav-link" href="login.html">
+                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                    <span>Sign Out</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <img class="img-profile rounded-circle" src="img/images.png">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <!-- <br /> -->
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mt-4 mb-4">
+                        <div class="card-header py-3">
+
+                            <h1 class="h3 mb-2 text-gray-800 text-center">Pedatric Mapping Application for Monitoring
+                                OVC,OTZ and PAMA Interventions </h1>
+
+                            <h2 class="h5 mb-2 text-gray-800 text-center">A Technical Officer mentorship tool to Monitor
+                                and Manage Patients to Realise better Retention and suppression Outcomes</h2>
+
+                        </div>
+                        <form action="code.php" method="POST" onsubmit="event.preventDefault();">
+
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">System Information
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Technical Officer</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Last Login date</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Data Entry date</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                </tbody>
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">Background Patient
+                                                            Information
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Unique Patient Number (CCC No)
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">MFL code</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Facility Name</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">County</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Sex</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of birth</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of HIV diagnosis</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date enrolled into care</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Age at enrollment</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current age</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Start Regimen</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Started ART</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Start Regimen Kaletra
+                                                            formulation
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                </tbody>
+
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">Change Information
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current Regimen</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current Regimen line</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Started Current regimen
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current Kaletra formulation
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current Viral Load Copies</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current Viral Load Date</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current Viral Load Outcome
+                                                            status
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Child's Latest Z Score/MUAC/BMI
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Specify Current Opportunistic
+                                                            Infection</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Disclosure Status</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">IPT Status</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Schooling Status</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current status at Transition
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="col-lg-2"></div> -->
+
+                                    <div class="col-lg-6">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">Intervention
+                                                            services
+                                                            Enrolled in
+                                                        </th>
+                                                        <th class="d-inline-block col-12 text-center">OVC</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Enrolled in OVC</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Enrolled in OVC</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">OVC CPMIS unique number</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Discontinued from OVC care
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                </tbody>
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">OTZ</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Enrolled In OTZ</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of OTZ enrolment</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Baseline OTZ ART regimen</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Baseline OTZ VL</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Baseline OTZ VL</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Missed last appointment</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Endline ART adherence
+                                                            assessment
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Last Completed OTZ Modules</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Status at OTZ Transition</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Discontinued from OTZ care
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                </tbody>
+
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">PAMA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Enrolled in PAMA</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Enrolled in PAMA Care</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Is Care giver enrolled in the
+                                                            same
+                                                            facility</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Type of PAMA Caregiver</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Care giver 1 CCC No</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Care giver 2 CCC No</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current Viral Load of Caregiver
+                                                            (cps/ml)
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Care giver Current viral laod
+                                                            status
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">PAMA status_at 3month after
+                                                            enrollment</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">PAMA status at 6 month after
+                                                            enrollment</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">PAMA status at 12 month after
+                                                            enrollment</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">PAMA status at 24 month after
+                                                            enrollment</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current PAMA status</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Status at PAMA Transition</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Discontinued from PAMA
+                                                            care
+                                                        </td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                </tbody>
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">Comment</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-12">
+                                                            <textarea class="form-control" rows="3" required
+                                                                id="comment"></textarea>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="card-footer">
+                                <br />
+                                <button id="btnLogin" class="btn btn-primary btn-user btn-block">
+                                    Submit Changes
+                                </button>
+                                <br />
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; CHS 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+</body>
+
+</html>
