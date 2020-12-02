@@ -1502,11 +1502,11 @@ pre code {
 }
 
 .table-bordered {
-    border: 1px solid #a1a3a5
+    border: 1px solid #e3e6f0
 }
 
 .table-bordered td, .table-bordered th {
-    border: 1px solid #a1a3a5
+    border: 1px solid #e3e6f0
 }
 
 .table-bordered thead td, .table-bordered thead th {
