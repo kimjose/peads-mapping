@@ -482,7 +482,9 @@
                                                         <td class="d-inline-block col-4">Disclosure Status</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="currentformulationSelect" class="form-control">
-                                                                <option hidden>Select Kaletra formulation</option>
+                                                                <option value="fulldisclosure">Full disclosure</option>
+                                                                <option value="partialdisclosure">Partial/ongoing disclosure</option>
+                                                                <option value="notstarted">Not started</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -490,7 +492,10 @@
                                                         <td class="d-inline-block col-4">IPT Status</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="iptstatus" class="form-control">
-                                                                <option hidden>Select IPT status</option>
+                                                                <option value="started">Started and ongoing</option>
+                                                                <option value="completed">Completed</option>
+                                                                <option value="discontinued">Discontinued</option>
+                                                                <option value="notstarted">Not started</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -498,7 +503,12 @@
                                                         <td class="d-inline-block col-4">Schooling Status</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="schoolingstatus" class="form-control">
-                                                                <option hidden>Select Schooling status</option>
+                                                                <option value="boarding">Boarding</option>
+                                                                <option value="dayschool">Day school</option>
+                                                                <option value="notinschool">Not in school</option>
+                                                                <option value="tertiary">Tertiary</option>
+                                                                <option value="college">college</option>
+                                                                <option value="na">N/A</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -776,6 +786,16 @@
                                                         <td class="d-inline-block col-8">
                                                             <input type="number" name="caregivervl" class="form-control"
                                                                 placeholder="Enter Caregiver VL" id="caregivervl">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Current Viral Load of Caregiver
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="caregivervlddate"
+                                                                class="form-control"
+                                                                placeholder="Enter Date Discontinued from OVC care"
+                                                                id="caregivervlddate">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
