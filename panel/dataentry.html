@@ -241,7 +241,7 @@
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr class="row m-0">
-                                                        <th class="d-inline-block col-12 text-center" >System Information
+                                                        <th class="d-inline-block col-12 text-center">System Information
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -482,7 +482,9 @@
                                                         <td class="d-inline-block col-4">Disclosure Status</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="currentformulationSelect" class="form-control">
-                                                                <option hidden>Select Kaletra formulation</option>
+                                                                <option value="fulldisclosure">Full disclosure</option>
+                                                                <option value="partialdisclosure">Partial/ongoing disclosure</option>
+                                                                <option value="notstarted">Not started</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -490,7 +492,10 @@
                                                         <td class="d-inline-block col-4">IPT Status</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="iptstatus" class="form-control">
-                                                                <option hidden>Select IPT status</option>
+                                                                <option value="started">Started and ongoing</option>
+                                                                <option value="completed">Completed</option>
+                                                                <option value="discontinued">Discontinued</option>
+                                                                <option value="notstarted">Not started</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -498,7 +503,12 @@
                                                         <td class="d-inline-block col-4">Schooling Status</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="schoolingstatus" class="form-control">
-                                                                <option hidden>Select Schooling status</option>
+                                                                <option value="boarding">Boarding</option>
+                                                                <option value="dayschool">Day school</option>
+                                                                <option value="notinschool">Not in school</option>
+                                                                <option value="tertiary">Tertiary</option>
+                                                                <option value="college">college</option>
+                                                                <option value="na">N/A</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -507,7 +517,11 @@
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="currentstatusattransition" class="form-control">
-                                                                <option hidden>Select Current Status At Transition
+                                                                <option value="active">Active</option>
+                                                                <option value="tranferout">Transfer Out</option>
+                                                                <option value="lftu">LTFU</option>
+                                                                <option value="dead">Dead</option>
+                                                                <option value="adultcare">Transition to Adult Care
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -568,6 +582,19 @@
                                                                 id="ovcdiscontinueddate">
                                                         </td>
                                                     </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Status at OVC Discontinuation </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="ovcdiscontinuationstatusSelect" class="form-control">
+                                                                <option value="active">Active</option>
+                                                                <option value="tranferout">Transfer Out</option>
+                                                                <option value="lftu">LTFU</option>
+                                                                <option value="dead">Dead</option>
+                                                                <option value="adultcare">Transition to Adult Care
+                                                                </option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                                 <thead>
                                                     <tr class="row m-0">
@@ -606,15 +633,13 @@
                                                         <td class="d-inline-block col-4">Baseline OTZ VL</td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="number" name="otzvl" class="form-control"
-                                                                placeholder="Enter OTZ VL (cps/ml)"
-                                                                id="otzvl">
+                                                                placeholder="Enter OTZ VL (cps/ml)" id="otzvl">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date of Baseline OTZ VL</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="date" name="otzvldate"
-                                                                class="form-control"
+                                                            <input type="date" name="otzvldate" class="form-control"
                                                                 placeholder="Enter Date of Baseline OTZ VL"
                                                                 id="otzvldate">
                                                         </td>
@@ -641,18 +666,27 @@
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Last Completed OTZ Modules</td>
-                                                        <td class="d-inline-block col-8 text-center">
-                                                            <div class="custom-control custom-checkbox ml-2">
-                                                                <input type="checkbox" class="custom-control-input" id='mod1'>
-                                                                <label for="mod1" class="custom-control-label">Module 1</label>
-                                                            </div>
-                                                            <div class="custom-control custom-checkbox ml-2">
-                                                                <input type="checkbox" class="custom-control-input" id='mod2'>
-                                                                <label for="mod2" class="custom-control-label">Module 2</label>
-                                                            </div>
-                                                            <div class="custom-control custom-checkbox ml-2">
-                                                                <input type="checkbox" class="custom-control-input" id='mod3'>
-                                                                <label for="mod3" class="custom-control-label">Module 3</label>
+                                                        <td class="d-inline-block col-8">
+                                                            <div class="form-group" id="otzmodulesdiv">
+
+                                                                <!-- <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id='mod1'>
+                                                                    <label for="mod1"
+                                                                        class="custom-control-label">Module 1</label>
+                                                                </div>
+                                                                <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id='mod2'>
+                                                                    <label for="mod2"
+                                                                        class="custom-control-label">Module 2</label>
+                                                                </div>
+                                                                <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id='mod3'>
+                                                                    <label for="mod3"
+                                                                        class="custom-control-label">Module 3</label>
+                                                                </div> -->
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -664,7 +698,8 @@
                                                                 <option value="tranferout">Transfer Out</option>
                                                                 <option value="lftu">LTFU</option>
                                                                 <option value="dead">Dead</option>
-                                                                <option value="adultcare">Transition to Adult Care</option>
+                                                                <option value="adultcare">Transition to Adult Care
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -729,7 +764,8 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Care giver 1 CCC No</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="number" name="caregiver1cccno" class="form-control"
+                                                            <input type="number" name="caregiver1cccno"
+                                                                class="form-control"
                                                                 placeholder="Enter Care giver 1 CCC No"
                                                                 id="caregiver1cccno">
                                                         </td>
@@ -737,7 +773,8 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Care giver 2 CCC No</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="number" name="caregiver2cccno" class="form-control"
+                                                            <input type="number" name="caregiver2cccno"
+                                                                class="form-control"
                                                                 placeholder="Enter Care giver 2 CCC No"
                                                                 id="caregiver2cccno">
                                                         </td>
@@ -748,8 +785,17 @@
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="number" name="caregivervl" class="form-control"
-                                                            placeholder="Enter Caregiver VL"
-                                                            id="caregivervl">
+                                                                placeholder="Enter Caregiver VL" id="caregivervl">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Current Viral Load of Caregiver
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="caregivervlddate"
+                                                                class="form-control"
+                                                                placeholder="Enter Date Discontinued from OVC care"
+                                                                id="caregivervlddate">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -820,19 +866,22 @@
                                                                 <option value="tranferout">Transfer Out</option>
                                                                 <option value="lftu">LTFU</option>
                                                                 <option value="dead">Dead</option>
-                                                                <option value="adultcare">Transition to Adult Care</option>
+                                                                <option value="adultcare">Transition to Adult Care
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Status at PAMA Transition</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="pamastatusattransitionSelect" class="form-control">
+                                                            <select id="pamastatusattransitionSelect"
+                                                                class="form-control">
                                                                 <option value="active">Active</option>
                                                                 <option value="tranferout">Transfer Out</option>
                                                                 <option value="lftu">LTFU</option>
                                                                 <option value="dead">Dead</option>
-                                                                <option value="adultcare">Transition to Adult Care</option>
+                                                                <option value="adultcare">Transition to Adult Care
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -914,6 +963,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    <script src="js/dataentry.js"></script>
 
 </body>
 
