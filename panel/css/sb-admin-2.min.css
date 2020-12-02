@@ -2541,7 +2541,8 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 .btn-outline-primary {
     color: #4e73df;
-    border-color: #4e73df
+    border-color: #4e73df;
+    border-width:2px;
 }
 
 .btn-outline-primary:hover {
@@ -3915,7 +3916,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     flex-direction: column;
     padding-left: 0;
     margin-bottom: 0;
-    list-style: none
+    list-style: none;
 }
 
 .navbar-nav .nav-link {

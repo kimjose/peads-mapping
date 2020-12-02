@@ -247,15 +247,21 @@
                                                 <tbody>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Technical Officer</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            autopopulated
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Last Login date</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            autopopulated
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Data Entry date</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            autopopulated
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                                 <thead>
@@ -269,57 +275,116 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Unique Patient Number (CCC No)
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <div class="row">
+
+                                                                <div class="col-8">
+
+                                                                    <input type="text" name="cccNo" class="form-control"
+                                                                        placeholder="Enter CCC Number" id="cccNo">
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <button type="button"
+                                                                        class="btn btn-outline-primary waves-effect"
+                                                                        style="width: 100%;">Search</button>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">MFL code</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="text" name="mflcode" class="form-control"
+                                                                style="width: 100%;" placeholder="Enter MFL Code"
+                                                                id="mflcode">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Facility Name</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="text" name="facility" class="form-control"
+                                                                style="width: 100%;" placeholder="Enter Facility Name"
+                                                                id="facility">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">County</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="text" name="county" class="form-control"
+                                                                style="width: 100%;" placeholder="Enter County"
+                                                                id="county">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Sex</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="genderSelect" class="form-control">
+                                                                <option value="Male">Male</option>
+                                                                <option value="Female">Female</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date of birth</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="dob" class="form-control"
+                                                                style="width: 100%;" placeholder="Enter Date of birth"
+                                                                id="dob">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date of HIV diagnosis</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="dohd" class="form-control"
+                                                                style="width: 100%;"
+                                                                placeholder="Enter Date of HIV diagnosis" id="dohd">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date enrolled into care</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="dec" class="form-control"
+                                                                style="width: 100%;"
+                                                                placeholder="Enter Date Enrolled into Care" id="dec">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Age at enrollment</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8" id="ageatenrollment">
+                                                            autocalc
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current age</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8" id="currentage">
+                                                            autocalc
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Start Regimen</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="startregimenSelect" class="form-control">
+                                                                <option hidden>Select Start Regimen</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date Started ART</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="dsa" class="form-control"
+                                                                style="width: 100%;"
+                                                                placeholder="Enter Date Started ART" id="dsa">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Start Regimen Kaletra
                                                             formulation
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="startformulationSelect" class="form-control">
+                                                                <option hidden>Select Kaletra formulation</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
 
@@ -332,62 +397,119 @@
                                                 <tbody>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current Regimen</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="currentregimenSelect" class="form-control">
+                                                                <option hidden>Select Current Regimen</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current Regimen line</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="regimenlineSelect" class="form-control">
+                                                                <option hidden>Select Current Regimen Line</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date Started Current regimen
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="dscr" class="form-control"
+                                                                style="width: 100%;"
+                                                                placeholder="Enter Date Started Current Regimen"
+                                                                id="dscr">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current Kaletra formulation
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="currentformulationSelect" class="form-control">
+                                                                <option hidden>Select Kaletra formulation</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current Viral Load Copies</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="vlcopies" class="form-control"
+                                                                style="width: 100%;"
+                                                                placeholder="Enter Current Viral Load Copies"
+                                                                id="vlcopies">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current Viral Load Date</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="vldate" class="form-control"
+                                                                style="width: 100%;"
+                                                                placeholder="Enter Current Viral Load Date" id="vldate">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current Viral Load Outcome
                                                             status
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="text" name="vloutcomestatus"
+                                                                class="form-control" style="width: 100%;"
+                                                                placeholder="Enter Viral Load Outcome Status"
+                                                                id="vloutcomestatus">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Child's Latest Z Score/MUAC/BMI
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="zscore" class="form-control"
+                                                                style="width: 100%;" placeholder="Enter Latest Z Score"
+                                                                id="zscore">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Specify Current Opportunistic
                                                             Infection</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="currentoi" class="form-control">
+                                                                <option hidden>Select Current Opportunistic Infection
+                                                                </option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Disclosure Status</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="currentformulationSelect" class="form-control">
+                                                                <option hidden>Select Kaletra formulation</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">IPT Status</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="iptstatus" class="form-control">
+                                                                <option hidden>Select IPT status</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Schooling Status</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="schoolingstatus" class="form-control">
+                                                                <option hidden>Select Schooling status</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current status at Transition
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="currentstatusattransition" class="form-control">
+                                                                <option hidden>Select Current Status At Transition
+                                                                </option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -402,8 +524,7 @@
                                                 <thead>
                                                     <tr class="row m-0">
                                                         <th class="d-inline-block col-12 text-center">Intervention
-                                                            services
-                                                            Enrolled in
+                                                            services enrolled in
                                                         </th>
                                                         <th class="d-inline-block col-12 text-center">OVC</th>
                                                     </tr>
@@ -411,20 +532,40 @@
                                                 <tbody>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Enrolled in OVC</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="ovcenrolledSelect" class="form-control">
+                                                                <option value="Y">Yes</option>
+                                                                <option value="N">No</option>
+                                                                <option value="NA">N/A</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date Enrolled in OVC</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="ovcenrollmentdate"
+                                                                class="form-control"
+                                                                placeholder="Enter Date Enrolled in OVC"
+                                                                id="ovcenrollmentdate">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">OVC CPMIS unique number</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="ovcnumber" class="form-control"
+                                                                placeholder="Enter OVC CPMIS unique number"
+                                                                id="ovcnumber">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date Discontinued from OVC care
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="ovcdiscontinueddate"
+                                                                class="form-control"
+                                                                placeholder="Enter Date Discontinued from OVC care"
+                                                                id="ovcdiscontinueddate">
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                                 <thead>
@@ -435,46 +576,106 @@
                                                 <tbody>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Enrolled In OTZ</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="otzenrolledSelect" class="form-control">
+                                                                <option value="Y">Yes</option>
+                                                                <option value="N">No</option>
+                                                                <option value="NA">N/A</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date of OTZ enrolment</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="otzenrollmentdate"
+                                                                class="form-control"
+                                                                placeholder="Enter Date Enrolled in OTZ"
+                                                                id="otzenrollmentdate">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Baseline OTZ ART regimen</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="otzregimenSelect" class="form-control">
+                                                                <option hidden>Select OTZ ART Regimen</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Baseline OTZ VL</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="otzvl" class="form-control"
+                                                                placeholder="Enter OTZ VL (cps/ml)"
+                                                                id="otzvl">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date of Baseline OTZ VL</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="otzvldate"
+                                                                class="form-control"
+                                                                placeholder="Enter Date of Baseline OTZ VL"
+                                                                id="otzvldate">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Missed last appointment</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="otzenrolledSelect" class="form-control">
+                                                                <option value="Y">Yes</option>
+                                                                <option value="N">No</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Endline ART adherence
                                                             assessment
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="artassessmentSelect" class="form-control">
+                                                                <option value="satisfactory">Satisfactory</option>
+                                                                <option value="unsatisfactory">Unsatisfactory</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Last Completed OTZ Modules</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8 text-center">
+                                                            <div class="custom-control custom-checkbox ml-2">
+                                                                <input type="checkbox" class="custom-control-input" id='mod1'>
+                                                                <label for="mod1" class="custom-control-label">Module 1</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox ml-2">
+                                                                <input type="checkbox" class="custom-control-input" id='mod2'>
+                                                                <label for="mod2" class="custom-control-label">Module 2</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox ml-2">
+                                                                <input type="checkbox" class="custom-control-input" id='mod3'>
+                                                                <label for="mod3" class="custom-control-label">Module 3</label>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Status at OTZ Transition</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="arttransitionstatusSelect" class="form-control">
+                                                                <option value="active">Active</option>
+                                                                <option value="tranferout">Transfer Out</option>
+                                                                <option value="lftu">LTFU</option>
+                                                                <option value="dead">Dead</option>
+                                                                <option value="adultcare">Transition to Adult Care</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date Discontinued from OTZ care
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="otzdiscontinueddate"
+                                                                class="form-control"
+                                                                placeholder="Enter Date Discontinued from OTZ care"
+                                                                id="otzdiscontinueddate">
+                                                        </td>
                                                     </tr>
                                                 </tbody>
 
@@ -486,75 +687,164 @@
                                                 <tbody>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Enrolled in PAMA</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="pamaenrolledSelect" class="form-control">
+                                                                <option value="Y">Yes</option>
+                                                                <option value="N">No</option>
+                                                                <option value="NA">N/A</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date Enrolled in PAMA Care</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="pamaenrollmentdate"
+                                                                class="form-control"
+                                                                placeholder="Enter Date Enrolled in PAMA"
+                                                                id="pamaenrollmentdate">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Is Care giver enrolled in the
                                                             same
                                                             facility</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="caregiverenrolledSelect" class="form-control">
+                                                                <option value="Y">Yes</option>
+                                                                <option value="N">No</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Type of PAMA Caregiver</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="caregivertypeSelect" class="form-control">
+                                                                <option value="mother">Mother</option>
+                                                                <option value="father">Father</option>
+                                                                <option value="guardian">Guardian</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Care giver 1 CCC No</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="caregiver1cccno" class="form-control"
+                                                                placeholder="Enter Care giver 1 CCC No"
+                                                                id="caregiver1cccno">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Care giver 2 CCC No</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="caregiver2cccno" class="form-control"
+                                                                placeholder="Enter Care giver 2 CCC No"
+                                                                id="caregiver2cccno">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current Viral Load of Caregiver
                                                             (cps/ml)
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="caregivervl" class="form-control"
+                                                            placeholder="Enter Caregiver VL"
+                                                            id="caregivervl">
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Care giver Current viral laod
                                                             status
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="caregivervlstatustSelect" class="form-control">
+                                                                <option value="satisfactory">Satisfactory</option>
+                                                                <option value="unsatisfactory">Unsatisfactory</option>
+                                                                <option value="novl">No Viral Load</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">PAMA status_at 3month after
                                                             enrollment</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="pamastatusat3Select" class="form-control">
+                                                                <option value="active">Active</option>
+                                                                <option value="tranferout">Transfer Out</option>
+                                                                <option value="lftu">LTFU</option>
+                                                                <option value="dead">Dead</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">PAMA status at 6 month after
                                                             enrollment</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="pamastatusat6Select" class="form-control">
+                                                                <option value="active">Active</option>
+                                                                <option value="tranferout">Transfer Out</option>
+                                                                <option value="lftu">LTFU</option>
+                                                                <option value="dead">Dead</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">PAMA status at 12 month after
                                                             enrollment</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="pamastatusat12Select" class="form-control">
+                                                                <option value="active">Active</option>
+                                                                <option value="tranferout">Transfer Out</option>
+                                                                <option value="lftu">LTFU</option>
+                                                                <option value="dead">Dead</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">PAMA status at 24 month after
                                                             enrollment</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="pamastatusat24Select" class="form-control">
+                                                                <option value="active">Active</option>
+                                                                <option value="tranferout">Transfer Out</option>
+                                                                <option value="lftu">LTFU</option>
+                                                                <option value="dead">Dead</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current PAMA status</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="currentpamastatusSelect" class="form-control">
+                                                                <option value="active">Active</option>
+                                                                <option value="tranferout">Transfer Out</option>
+                                                                <option value="lftu">LTFU</option>
+                                                                <option value="dead">Dead</option>
+                                                                <option value="adultcare">Transition to Adult Care</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Status at PAMA Transition</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="pamastatusattransitionSelect" class="form-control">
+                                                                <option value="active">Active</option>
+                                                                <option value="tranferout">Transfer Out</option>
+                                                                <option value="lftu">LTFU</option>
+                                                                <option value="dead">Dead</option>
+                                                                <option value="adultcare">Transition to Adult Care</option>
+                                                            </select>
+                                                        </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date Discontinued from PAMA
                                                             care
                                                         </td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="pamadiscontinueddate"
+                                                                class="form-control"
+                                                                placeholder="Enter Date Discontinued from PAMA care"
+                                                                id="pamadiscontinueddate">
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                                 <thead>
