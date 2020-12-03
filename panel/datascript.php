@@ -5,6 +5,8 @@ require_once "../models/OTZModules.php";
 require_once "../models/User.php";
 require_once __DIR__ . "/../models/Observation.php";
 require_once __DIR__ . "/../models/Regimen.php";
+require_once "../models/Cadre.php";
+require_once "../models/Facility.php";
 
 $request = $_GET['request'];
 $response = [];
@@ -100,8 +102,89 @@ try {
 
     } else if ($request == "get_users") {
         $users = User::all();
+        foreach ($users as $user) {
+            $cadre = Cadre::findOrFail($user->cadre);
+            $facility = Facility::findOrFail($user->facility);
+            $user['cadreName'] = $cadre->name;
+            $user['facilityName'] = $facility->name;
+        }
         echo myJsonResponse(200, "Users retrieved", $users);
-    } else throw new Exception("Invalid request.", -1);
+    } 
+    /*******Users Management**** */
+    elseif ($request == "save_user") {
+        $username = $_POST['username'];
+        $firstname = $_POST['firstname'];
+        $surname = $_POST['surname'];
+        // $gender = $_POST['gender'];
+        $cadre = $_POST['cadre'];
+        $facility = $_POST['facility'];
+        $county = $_POST['county'];
+        // $mobile = $_POST['mobile'];
+        // $email = $_POST['email'];
+        $password = $_POST['password'];
+        $active = $_POST['active'];
+        $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $id = $_POST['id'];
+        if ($id != NULL && $id != '') {
+            $user = User::findOrFail($id);
+            $hashedpassword = $password == '' || $password == null ? $user->password : password_hash($password, PASSWORD_DEFAULT);
+            $user->username = $username;
+            $user->firstName = $firstname;
+            // $user->middlename = $middlename;
+            $user->surname = $surname;
+            // $user->gender = $gender;
+            $user->cadre = $cadre;
+            $user->facility = $facility;
+            $user->county = $county;
+            // $user->mobile = $mobile;
+            // $user->email = $email;
+            $user->password = $hashedpassword;
+            $user->active = $active;
+            $user->save();
+        } else {
+            User::create([
+                "username" => $username,
+                "firstname" => $firstname,
+                // "middlename" => $middlename,
+                "surname" => $surname,
+                // "gender" => $gender,
+                "cadre" => $cadre,
+                "facility" => $facility,
+                "county" => $county,
+                // "mobile" => $mobile,
+                // "email" => $email,
+                "password" => $hashedpassword,
+                "active" => 1,
+            ]);
+        }
+        $users = User::all();
+        foreach ($users as $user) {
+            $cadre = Cadre::findOrFail($user->cadre);
+            $facility = Facility::findOrFail($user->facility);
+            $user['cadreName'] = $cadre->name;
+            $user['facilityName'] = $facility->name;
+        }
+        echo myJsonResponse(200, "Here are the users.", $users);
+    } elseif ($request == "get_cadres") {
+        $cadres = Cadre::all();
+        echo myJsonResponse(200, "Cadres retrieved", $cadres);
+    } elseif ($request == "get_facilities") {
+        require_once "../models/Facility.php";
+        $facilities = Facility::all();
+        echo myJsonResponse(200, "Facilities retrieved", $facilities);
+    } 
+    /*************Authentication */
+    elseif ($request == 'login') {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $user = User::where('username', $username)->where('active', 1)->firstOrFail();
+        if (password_verify($password, $user->password)) {
+            $user->last_login = date("d-m-Y h:i A", time());
+            $user->save();
+            echo myJsonResponse(200, 'Logged in', $user);
+        } else throw new Exception("Error Processing Request", 1);
+    }else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
     echo myJsonResponse(400, $th->getMessage());
 }

@@ -1,8 +1,24 @@
 const otzmodulesdiv = document.getElementById("otzmodulesdiv");
+const userName = document.getElementById("userName");
+const lastLoginDate = document.getElementById("lastLoginDate");
+const dataEntryDate = document.getElementById("dataEntryDate");
 
 initialize();
 
 function initialize() {
+  let userObject = sessionStorage.getItem("user");
+  if (userObject == null) {
+    window.location.replace("login.html");
+    return;
+  }
+  var loggedinuser = JSON.parse(userObject);
+  console.log(loggedinuser);
+
+  userName.innerText = loggedinuser.firstName + " " + loggedinuser.surname;
+  lastLoginDate.innerHTML = loggedinuser.last_login;
+  var d = new Date().toLocaleString();
+  dataEntryDate.innerHTML = d;
+
   $.ajax({
     type: "GET",
     url: "datascript?request=get_otz_modules",
