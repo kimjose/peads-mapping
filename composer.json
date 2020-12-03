@@ -1,12 +1,13 @@
 {
     "require": {
-        "illuminate/database": "^7.27",
-        "setasign/fpdf": "^1.8"
+        "illuminate/database": "^7.30"
     },
     "autoload": {
         "classmap": [
             "models"
         ]
     }
+    
+    
 
 }
