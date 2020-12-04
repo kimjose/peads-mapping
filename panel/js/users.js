@@ -196,7 +196,7 @@ function loadDataToTable(users) {
     // inputMiddlename.value = middleName;
     inputSurname.value = surname;
     var cad = cadre;
-    $("#usercatSelect").val(cad);
+    $("#cadreSelect").val(cad);
     var facil = facility;
     $("#facilitySelect").val(facil);
     // inputEmail.value = email;

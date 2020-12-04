@@ -7,6 +7,8 @@ require_once __DIR__ . "/../models/Observation.php";
 require_once __DIR__ . "/../models/Regimen.php";
 require_once "../models/Cadre.php";
 require_once "../models/Facility.php";
+require_once __DIR__ . "/../models/Patient.php";
+require_once __DIR__ . "/../models/Facility.php";
 
 $request = $_GET['request'];
 $response = [];
@@ -16,7 +18,7 @@ try {
         require_once "../models/OTZModules.php";
         $modules = OTZModules::all();
         echo myJsonResponse(200, "Modules retrieved", $modules);
-    } else if ($request == "submit_form") {
+    } elseif ($request == "submit_form") {
         $userId = $_POST['userId'];
         $PAMAStatus6 = $_POST['PAMAStatus6'];
         $PAMAStatus12 = $_POST['PAMAStatus12'];
@@ -25,9 +27,9 @@ try {
         $PAMAStatusTransition = $_POST['PAMAStatusTransition'];
         $dateDiscontinuedFromPAMA = $_POST['dateDiscontinuedFromPAMA'];
         $comment = $_POST['comment'];
-        
-        
-        
+
+
+
         $dateDiscontinuedFromOTZ = $_POST['dateDiscontinuedFromOTZ'];
         $enrolledInPAMA = $_POST['enrolledInPAMA'];
         $dateEnrolledInPAMA = $_POST['dateEnrolledInPAMA'];
@@ -39,8 +41,8 @@ try {
         $caregiverVLDate = $_POST['caregiverVLDate'];
         $caregiverVLStatus = $_POST['caregiverVLStatus'];
         $PAMAStatus3 = $_POST['PAMAStatus3'];
-        
-        
+
+
         $OTZArtRegimen = $_POST['OTZArtRegimen'];
         $OTZVL = $_POST['OTZVL'];
         $OTZVLDate = $_POST['OTZVLDate'];
@@ -48,23 +50,24 @@ try {
         $ArtAdherenceAssessment = $_POST['ArtAdherenceAssessment'];
         $completedOTZModules = $_POST['completedOTZModules'];
         $statusAtOTZTransition = $_POST['statusAtOTZTransition'];
-        
-        
+
+
         $dateEnrolledInOVC = $_POST['dateEnrolledInOVC'];
         $CPMISNumber = $_POST['CPMISNumber'];
         $dateDiscontinuedFromOVC = $_POST['dateDiscontinuedFromOVC'];
         $statusAtOVCDiscontinuation = $_POST['statusAtOVCDiscontinuation'];
         $enrolledInOTZ = $_POST['enrolledInOTZ'];
         $dateEnrolledInOTZ = $_POST['dateEnrolledInOTZ'];
-        
+
         $patientCCC = $_POST['patientCCC'];
         $currentRegimen = $_POST['currentRegimen'];
         $regimenLine = $_POST['regimenLine'];
         $regimenStartDate = $_POST['regimenStartDate'];
         $kaletraFormulation = $_POST['kaletraFormulation'];
         $vlDate = $_POST['vlDate'];
+        $vlCopies = $_POST['vlCopies'];
         $vlOutcome = $_POST['vlOutcome'];
-        
+
         $latestZScore = $_POST['latestZScore'];
         $opportunisticInfection = $_POST['opportunisticInfection'];
         $disclosureStatus = $_POST['disclosureStatus'];
@@ -72,8 +75,8 @@ try {
         $schooling = $_POST['schooling'];
         $statusAtTransition = $_POST['statusAtTransition'];
         $enrolledInOVC = $_POST['enrolledInOVC'];
-        
-        
+
+
         Observation::create([
             'patientCCC' => $patientCCC, 'userId' => $userId,
             'currentRegimen' => $currentRegimen,
@@ -81,6 +84,7 @@ try {
             'regimenStartDate' => $regimenStartDate,
             'kaletraFormulation' => $kaletraFormulation,
             'vlDate' => $vlDate,
+            'vlCopies' => $vlCopies,
             'vlOutcome' => $vlOutcome,
             'latestZScore' => $latestZScore, 'opportunisticInfection' => $opportunisticInfection,
             'disclosureStatus' => $disclosureStatus, 'iptStatus' => $iptStatus, 'schooling' => $schooling,
@@ -99,7 +103,6 @@ try {
             'PAMAStatusCurrent' => $PAMAStatusCurrent, 'PAMAStatusTransition' => $PAMAStatusTransition,
             'dateDiscontinuedFromPAMA' => $dateDiscontinuedFromPAMA, 'comment' => $comment
         ]);
-
     } else if ($request == "get_users") {
         $users = User::all();
         foreach ($users as $user) {
@@ -184,9 +187,26 @@ try {
             $user->save();
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
+    } elseif ($request == "load_prev_obs") {
+        $cccNo = $_GET['cccNo'];
+        $patient = Patient::where('cccNo', $cccNo)->first();
+        if ($patient == null) throw new Exception("Patient not found", 404);
+        $facility = Facility::findOrFail($patient->facility);
+        $patient['facilityData'] = $facility;
+        $data = [];
+        $data['patient'] = $patient;
+        $observation = Observation::where('patientCCC', $patient->cccNo)->orderBy('id', 'desc')->first();
+        if ($observation == null) {
+            echo myJsonResponse(201, "No Observation", $data);
+        } else {
+            $data['observation'] = $observation;
+            echo myJsonResponse(200, "Latest Observation", $data);
+        }
+    } elseif ($request == "get_regimens") {
+        $regimens = Regimen::all();
+        echo myJsonResponse(200, "Regimens", $regimens);
     }else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
+    // http_response_code(400);
     echo myJsonResponse(400, $th->getMessage());
 }
-
-?>
