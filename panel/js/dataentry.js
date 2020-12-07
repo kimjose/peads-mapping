@@ -93,6 +93,21 @@ var dob, dateenrolled;
 var facilities;
 
 initialize();
+$.ajax({
+  dataType: "json",
+  url: "data.json",
+  success: function (data) {
+    var opportunisticInfections = data.opportunisticInfections;
+    opportunisticInfections.sort();
+    opportunisticInfections.forEach(oi => {
+      let option = document.createElement("option");
+      option.setAttribute("value", oi);
+      option.appendChild(document.createTextNode(oi));
+      currentoiSelect.appendChild(option);
+    });
+  }
+});
+
 
 btnSearch.addEventListener("click", () => loadPreviousObservation());
 
@@ -321,7 +336,7 @@ function loadObsData(observation) {
   $("#currentvlstatustSelect").val(observation.vlOutcome);
   zscoreInput.value = observation.latestZScore;
   var opprtunisticInfections = currentoiSelect.options;
-  for (var i = 0; i < kaletraFormulations.length; i++) {
+  for (var i = 0; i < opprtunisticInfections.length; i++) {
     const opprtunisticInfection = opprtunisticInfections[i];
     if (opprtunisticInfection.value == observation.opportunisticInfection) {
       currentoiSelect.selectedIndex = i;
@@ -349,7 +364,7 @@ function loadObsData(observation) {
   }
 
   var iptstatus = $("#iptstatusSelect").val();
-  if (iptstatus == "Completed"){
+  if (iptstatus == "Completed") {
     iptstatusSelect.disabled = true;
   }
 
@@ -392,7 +407,7 @@ function loadObsData(observation) {
     ovcEnrollmentDateInput.readOnly = true;
   }
   cpmisNumberInput.value = observation.CPMISNumber;
-  if (observation.CPMISNumber == "0") {
+  if (observation.CPMISNumber !== 0) {
     cpmisNumberInput.readOnly = true;
   }
   ovcDiscontinuedDateInput.value = observation.dateDiscontinuedFromOVC;
@@ -514,7 +529,7 @@ function loadObsData(observation) {
   }
 
   pamaDiscontinuedDateInput.value = observation.dateDiscontinuedFromPAMA;
-  commentArea.innerHTML = document.createTextNode(observation.comment);
+  commentArea.value = observation.comment;
 
   /********************************
            * 'currentRegimen', 'regimenLine', 'regimenStartDate',  'kaletraFormulation', 'vlDate', 'vlOutcome',
@@ -533,7 +548,7 @@ function loadObsData(observation) {
  *
  * @return {array[ boolean, string ]}
  */
-function verify() {}
+function verify() { }
 
 function submitData() {
 
@@ -735,7 +750,7 @@ function showMflCode(str) {
 function submitPatientData() {
 
   let cccNo = cccNoInput.value;
-  let facility = facilitySelector.options[facilitySelector.selectedIndex].value; 
+  let facility = facilitySelector.options[facilitySelector.selectedIndex].value;
   let county = countyInput.innerHTML;
   let sex = genderSelect.options[genderSelect.selectedIndex].value;
   let dob = dobInput.value;
