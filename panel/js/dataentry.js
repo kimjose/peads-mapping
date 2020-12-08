@@ -24,10 +24,14 @@ const dscrInput = document.getElementById("dscr");
 const currentKaletraformulationSelect = document.getElementById(
   "currentformulationSelect"
 );
+const isLDL1 = document.getElementById("isLDL1");
 const vlcopiesInput = document.getElementById("vlcopies");
 const vldateInput = document.getElementById("vldate");
 // const vloutcomestatusInput = document.getElementById("vloutcomestatus");
 const currentvlstatustSelect = document.getElementById("currentvlstatustSelect");
+const isZScoreCheck = document.getElementById("isZScore");
+const isMUACCheck = document.getElementById("isMUAC");
+const isBMICheck = document.getElementById("isBMI");
 const zscoreInput = document.getElementById("zscore");
 const currentoiSelect = document.getElementById("currentoiSelect");
 const disclosureStatusSelect = document.getElementById(
@@ -126,6 +130,40 @@ function initialize() {
   lastLoginDate.innerHTML = loggedinuser.last_login;
   var d = new Date().toLocaleString();
   dataEntryDate.innerHTML = d;
+
+  isLDL1.addEventListener('click', () => {
+    if (isLDL1.checked) {
+      vlcopiesInput.value = '';
+      vlcopiesInput.disabled = true;
+    } else {
+      vlcopiesInput.disabled = false;
+    }
+  });
+
+  isBMICheck.addEventListener('click', () => {
+    if (isBMICheck.checked) {
+      isZScoreCheck.checked = false;
+      isMUACCheck.checked = false;
+    }
+  });
+
+  isZScoreCheck.addEventListener('click', () => {
+    if (isZScoreCheck.checked) {
+      isBMICheck.checked = false;
+      isMUACCheck.checked = false;
+    }
+  });
+
+  isMUACCheck.addEventListener('click', () => {
+    if (isMUACCheck.checked) {
+      isBMICheck.checked = false;
+      isZScoreCheck.checked = false;
+    }
+  });
+
+  ovcenrolledSelect.addEventListener('click', ()=>ovcOptionChanged());
+  otzenrolledSelect.addEventListener('click', ()=>otzOptionChanged());
+  pamaEnrolledSelect.addEventListener('click', ()=>pamaOptionChanged())
 
   $.ajax({
     type: "GET",
@@ -334,6 +372,13 @@ function loadObsData(observation) {
   vlcopiesInput.value = observation.vlCopies;
   // vloutcomestatusInput.value = observation.vlOutcome;
   $("#currentvlstatustSelect").val(observation.vlOutcome);
+  isZScoreCheck.checked = false;
+  isMUACCheck.checked = false;
+  isBMICheck.checked = false;
+  if (observation.vlScoreType == 'ZScore') isZScoreCheck.checked = true;
+  else if (observation.vlScoreType == 'MUAC') isMUACCheck.checked = true;
+  else if (observation.vlScoreType == 'BMI') isBMICheck.checked = true;
+
   zscoreInput.value = observation.latestZScore;
   var opprtunisticInfections = currentoiSelect.options;
   for (var i = 0; i < opprtunisticInfections.length; i++) {
@@ -397,10 +442,7 @@ function loadObsData(observation) {
     }
   }
 
-  var enrolledInOVC = observation.enrolledInOVC;
-  if (enrolledInOVC == "Yes") {
-    ovcenrolledSelect.disabled = true;
-  }
+  ovcOptionChanged(true);
 
   ovcEnrollmentDateInput.value = observation.dateEnrolledInOVC;
   if (observation.dateEnrolledInOVC !== "" && observation.dateEnrolledInOVC !== "0000-00-00") {
@@ -421,6 +463,7 @@ function loadObsData(observation) {
 
   //OTZ work ---->
   var otzEnrolledOptions = otzenrolledSelect.options;
+  otzOptionChanged(true);
   for (var i = 0; i < otzEnrolledOptions.length; i++) {
     const otzEnrolledOption = otzEnrolledOptions[i];
     if (otzEnrolledOption.value == observation.enrolledInOTZ) {
@@ -475,6 +518,7 @@ function loadObsData(observation) {
       pamaEnrolledSelect.selectedIndex = i;
     }
   }
+  pamaOptionChanged(true);
   pamaEnrollmentDate.value = observation.dateEnrolledInPAMA;
   var cgInPamaOptions = caregiverenrolledSelect.options;
   for (var i = 0; i < cgInPamaOptions.length; i++) {
@@ -566,9 +610,15 @@ function submitData() {
       currentKaletraformulationSelect.selectedIndex
     ].value;
   let vlDate = vldateInput.value;
-  let vlCopies = vlcopiesInput.value;
-  let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
-  // let vlOutcome = vloutcomestatusInput.value;
+  let vlCopies = isLDL1.checked ? "LDL" : vlcopiesInput.value;
+  let vlOutcome = "Not Done"
+  if (isLDL1.checked || vlcopiesInput.value < 1000) vlOutcome = "Supressed";
+  else if (vlCopies.value >= 1000) vlOutcome = "Not Supressed";
+  // let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
+  let vlScoreType = '';
+  if (isBMICheck.checked) vlScoreType = 'BMI';
+  else if (isZScoreCheck.checked) vlScoreType = 'ZScore';
+  else if (isMUACCheck.checked) vlScoreType = 'MUAC';
   let latestZScore = zscoreInput.value;
   let opportunisticInfection =
     currentoiSelect.options[currentoiSelect.selectedIndex].value;
@@ -587,6 +637,7 @@ function submitData() {
   formData.append("vlDate", vlDate);
   formData.append("vlCopies", vlCopies);
   formData.append("vlOutcome", vlOutcome);
+  formData.append("vlScoreType", vlScoreType);
   formData.append("latestZScore", latestZScore);
   formData.append("opportunisticInfection", opportunisticInfection);
   formData.append("disclosureStatus", disclosureStatus);
@@ -790,4 +841,62 @@ function submitPatientData() {
     },
   });
 
+}
+
+/**
+ * 
+ * @param {boolean} disableOptions 
+ */
+function ovcOptionChanged(disableOptions = false) {
+  var selectedValue = ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
+  var ovcFields = document.querySelectorAll(".ovcClass");
+  if (selectedValue == "Yes") {
+    if (disableOptions) ovcenrolledSelect.disabled = true;
+    ovcFields.forEach(ovcField => {
+      ovcField.removeAttribute("disabled");
+    });
+  } else {
+    ovcFields.forEach(ovcField => {
+      ovcField.setAttribute("disabled", "");
+    });
+  }
+}
+
+
+/**
+ * 
+ * @param {boolean} disableOptions 
+ */
+function otzOptionChanged(disableOptions = false) {
+  var selectedValue = otzenrolledSelect.options[otzenrolledSelect.selectedIndex].value;
+  var otzFields = document.querySelectorAll(".otzClass");
+  if (selectedValue == "Yes") {
+    if (disableOptions) otzenrolledSelect.readOnly = true;
+    otzFields.forEach(otzField => {
+      otzField.removeAttribute("disabled");
+    });
+  } else {
+    otzFields.forEach(otzField => {
+      otzField.setAttribute("disabled", "");
+    });
+  }
+}
+
+/**
+ * 
+ * @param {boolean} disableOptions 
+ */
+function pamaOptionChanged(disableOptions = false) {
+  var selectedValue = pamaEnrolledSelect.options[pamaEnrolledSelect.selectedIndex].value;
+  var pamaFields = document.querySelectorAll(".pamaClass");
+  if (selectedValue == "Yes") {
+    if (disableOptions) pamaEnrolledSelect.readOnly = true;
+    pamaFields.forEach(pamaField => {
+      pamaField.removeAttribute("disabled");
+    });
+  } else {
+    pamaFields.forEach(pamaField => {
+      pamaField.setAttribute("disabled", "");
+    });
+  }
 }

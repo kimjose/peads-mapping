@@ -68,6 +68,7 @@ try {
         $vlCopies = $_POST['vlCopies'];
         $vlOutcome = $_POST['vlOutcome'];
 
+        $vlScoreType = $_POST['vlScoreType'];
         $latestZScore = $_POST['latestZScore'];
         $opportunisticInfection = $_POST['opportunisticInfection'];
         $disclosureStatus = $_POST['disclosureStatus'];
@@ -86,6 +87,7 @@ try {
             'vlDate' => $vlDate,
             'vlCopies' => $vlCopies,
             'vlOutcome' => $vlOutcome,
+            'vlScoreType' => $vlScoreType,
             'latestZScore' => $latestZScore, 'opportunisticInfection' => $opportunisticInfection,
             'disclosureStatus' => $disclosureStatus, 'iptStatus' => $iptStatus, 'schooling' => $schooling,
             'statusAtTransition' => $statusAtTransition, 'enrolledInOVC' => $enrolledInOVC,

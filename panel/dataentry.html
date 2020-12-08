@@ -281,7 +281,8 @@
 
                                                                 <div class="col-8">
 
-                                                                    <input type="text" name="cccNum" class="form-control"
+                                                                    <input type="text" name="cccNum"
+                                                                        class="form-control"
                                                                         placeholder="Enter CCC Number" id="cccNo">
                                                                 </div>
                                                                 <div class="col-4">
@@ -295,7 +296,8 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Facility Name</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="facilitySelect" class="form-control" onchange="showMflCode(this.value)" >
+                                                            <select id="facilitySelect" class="form-control"
+                                                                onchange="showMflCode(this.value)">
                                                                 <option value="" hidden>Select Facility</option>
                                                             </select>
                                                             <!-- <input type="text" name="facility" class="form-control"
@@ -386,7 +388,8 @@
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="startformulationSelect" class="form-control">
-                                                                <option value="" hidden>Select Kaletra formulation</option>
+                                                                <option value="" hidden>Select Kaletra formulation
+                                                                </option>
                                                                 <option value="LPV/r pellets">LPV/r pellets</option>
                                                                 <option value="LPV/r syrup">LPV/r syrup</option>
                                                                 <option value="LPV/r tabs">LPV/r tabs</option>
@@ -407,7 +410,8 @@
                                                         <td class="d-inline-block col-4">Current Regimen</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="currentregimenSelect" class="form-control">
-                                                                <option value=null hidden>Select Current Regimen</option>
+                                                                <option value=null hidden>Select Current Regimen
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -415,10 +419,14 @@
                                                         <td class="d-inline-block col-4">Current Regimen line</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="regimenlineSelect" class="form-control">
-                                                                <option value="" hidden selected>Select Current Regimen line</option>
-                                                                <option value="First Regimen Line">First Regimen Line</option>
-                                                                <option value="Second Regimen Line">Second Regimen Line</option>
-                                                                <option value="Third Regimen Line">Third Regimen Line</option>
+                                                                <option value="" hidden selected>Select Current Regimen
+                                                                    line</option>
+                                                                <option value="First Regimen Line">First Regimen Line
+                                                                </option>
+                                                                <option value="Second Regimen Line">Second Regimen Line
+                                                                </option>
+                                                                <option value="Third Regimen Line">Third Regimen Line
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -437,17 +445,22 @@
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="currentformulationSelect" class="form-control">
-                                                                <option value="" hidden>Select Kaletra formulation</option>
+                                                                <option value="" hidden>Select Kaletra formulation
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current Viral Load Copies</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="number" name="vlcopies" class="form-control"
-                                                                style="width: 100%;"
-                                                                placeholder="Enter Current Viral Load Copies"
-                                                                id="vlcopies">
+                                                            <div>
+                                                                <input type="checkbox" id="isLDL1">
+                                                                <label for="isLDL1" value="LDL">LDL</label>
+                                                                <input type="number" name="vlcopies"
+                                                                    class="form-control" style="width: 100%;"
+                                                                    placeholder="Enter Current Viral Load Copies"
+                                                                    id="vlcopies">
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -463,10 +476,12 @@
                                                             status
                                                         </td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="currentvlstatustSelect" class="form-control">
+                                                            <select id="currentvlstatustSelect" disabled
+                                                                class="form-control">
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Supressed">Supressed</option>
                                                                 <option value="Not Supressed">Not Supressed</option>
+                                                                <option value="Not Done">Not Done</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -474,8 +489,28 @@
                                                         <td class="d-inline-block col-4">Child's Latest Z Score/MUAC/BMI
                                                         </td>
                                                         <td class="d-inline-block col-8">
+                                                            <ul class="list-inline">
+                                                                <li class="list-item">
+                                                                    <div class="form-check">
+                                                                    <input type="checkbox" id="isZScore" class="form-check-input">
+                                                                    <label class="form-check-label" for="isZScore">Z Score</label>
+                                                                </div>
+                                                                </li>
+                                                                <li class="list-item">
+                                                                    <div class="form-check">
+                                                                    <input type="checkbox" id="isMUAC" class="form-check-input">
+                                                                    <label class="form-check-label" for="isMUAC">MUAC</label>
+                                                                </div>
+                                                                </li>
+                                                                <li class="list-item">
+                                                                    <div class="form-check">
+                                                                    <input type="checkbox" id="isBMI" class="form-check-input">
+                                                                    <label class="form-check-label" for="isBMI">BMI</label>
+                                                                </div>
+                                                                </li>
+                                                            </ul>
                                                             <input type="number" name="zscore" class="form-control"
-                                                                style="width: 100%;" placeholder="Enter Latest Z Score"
+                                                                style="width: 100%;" placeholder="Enter Latest VL"
                                                                 id="zscore">
                                                         </td>
                                                     </tr>
@@ -495,7 +530,8 @@
                                                             <select id="disclosureStatusSelect" class="form-control">
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Full">Full disclosure</option>
-                                                                <option value="Partial/Ongoing">Partial/ongoing disclosure</option>
+                                                                <option value="Partial/Ongoing">Partial/ongoing
+                                                                    disclosure</option>
                                                                 <option value="Not started">Not started</option>
                                                             </select>
                                                         </td>
@@ -505,7 +541,8 @@
                                                         <td class="d-inline-block col-8">
                                                             <select id="iptstatusSelect" class="form-control">
                                                                 <option value="" hidden>Select Status</option>
-                                                                <option value="Started and ongoing">Started and ongoing</option>
+                                                                <option value="Started and ongoing">Started and ongoing
+                                                                </option>
                                                                 <option value="Completed">Completed</option>
                                                                 <option value="Discontinued">Discontinued</option>
                                                                 <option value="Not started">Not started</option>
@@ -520,7 +557,8 @@
                                                                 <option value="Boarding">Boarding</option>
                                                                 <option value="Day school">Day school</option>
                                                                 <option value="Not in school">Not in school</option>
-                                                                <option value="Tertiary/college">Tertiary/college</option>
+                                                                <option value="Tertiary/college">Tertiary/college
+                                                                </option>
                                                                 <option value="NA">N/A</option>
                                                             </select>
                                                         </td>
@@ -535,7 +573,8 @@
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
+                                                                <option value="Transition to Adult Care">Transition to
+                                                                    Adult Care
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -573,8 +612,8 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date Enrolled in OVC</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="date" name="ovcenrollmentdate"
-                                                                class="form-control"
+                                                            <input type="date" name="ovcenrollmentdate" disabled
+                                                                class="form-control ovcClass"
                                                                 placeholder="Enter Date Enrolled in OVC"
                                                                 id="ovcEnrollmentDate">
                                                         </td>
@@ -582,7 +621,7 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">OVC CPMIS unique number</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="number" name="ovcnumber" class="form-control"
+                                                            <input type="number" name="ovcnumber" class="form-control ovcClass" disabled
                                                                 placeholder="Enter OVC CPMIS unique number"
                                                                 id="cpmisNumber">
                                                         </td>
@@ -592,21 +631,24 @@
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="ovcdiscontinueddate"
-                                                                class="form-control"
+                                                                class="form-control ovcClass" disabled
                                                                 placeholder="Enter Date Discontinued from OVC care"
                                                                 id="ovcDiscontinuedDate">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Status at OVC Discontinuation </td>
+                                                        <td class="d-inline-block col-4">Status at OVC Discontinuation
+                                                        </td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="ovcDiscontinuationStatusSelect" class="form-control">
+                                                            <select id="ovcDiscontinuationStatusSelect"
+                                                                class="form-control ovcClass" disabled>
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Active">Active</option>
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
+                                                                <option value="Transition to Adult Care">Transition to
+                                                                    Adult Care
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -633,7 +675,7 @@
                                                         <td class="d-inline-block col-4">Date of OTZ enrolment</td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="otzenrollmentdate"
-                                                                class="form-control"
+                                                                class="form-control otzClass" disabled
                                                                 placeholder="Enter Date Enrolled in OTZ"
                                                                 id="otzenrollmentdate">
                                                         </td>
@@ -641,22 +683,22 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Baseline OTZ ART regimen</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="otzregimenSelect" class="form-control">
-                                                                <option value=""  hidden>Select OTZ ART Regimen</option>
+                                                            <select id="otzregimenSelect" class="form-control otzClass" disabled>
+                                                                <option value="" hidden>Select OTZ ART Regimen</option>
                                                             </select>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Baseline OTZ VL</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="number" name="otzvl" class="form-control"
+                                                            <input type="number" name="otzvl" class="form-control otzClass" disabled
                                                                 placeholder="Enter OTZ VL (cps/ml)" id="otzvl">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date of Baseline OTZ VL</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="date" name="otzvldate" class="form-control"
+                                                            <input type="date" name="otzvldate" class="form-control otzClass" disabled
                                                                 placeholder="Enter Date of Baseline OTZ VL"
                                                                 id="otzvldate">
                                                         </td>
@@ -664,7 +706,8 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Missed last appointment</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="missedLastAppointmentSelect" class="form-control">
+                                                            <select id="missedLastAppointmentSelect"
+                                                                class="form-control otzClass" disabled>
                                                                 <option value="" hidden>Select Option</option>
                                                                 <option value="Yes">Yes</option>
                                                                 <option value="No">No</option>
@@ -676,7 +719,7 @@
                                                             assessment
                                                         </td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="artassessmentSelect" class="form-control">
+                                                            <select id="artassessmentSelect" class="form-control otzClass" disabled>
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Satisfactory">Satisfactory</option>
                                                                 <option value="Unsatisfactory">Unsatisfactory</option>
@@ -686,41 +729,9 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Last Completed OTZ Modules</td>
                                                         <td class="d-inline-block col-8">
-                                                            <div class="form-group" id="otzmodulesdiv">
+                                                            <div class="form-group otzClass" disabled id="otzmodulesdiv">
 
-                                                                <!-- <div class="custom-control custom-checkbox ml-2">
-                                                                    <input type="checkbox" class="custom-control-input"
-                                                                        id='mod1'>
-                                                                    <label for="mod1"
-                                                                        class="custom-control-label">Module 1</label>
-                                                                </div>
-                                                                <div class="custom-control custom-checkbox ml-2">
-                                                                    <input type="checkbox" class="custom-control-input"
-                                                                        id='mod2'>
-                                                                    <label for="mod2"
-                                                                        class="custom-control-label">Module 2</label>
-                                                                </div>
-                                                                <div class="custom-control custom-checkbox ml-2">
-                                                                    <input type="checkbox" class="custom-control-input"
-                                                                        id='mod3'>
-                                                                    <label for="mod3"
-                                                                        class="custom-control-label">Module 3</label>
-                                                                </div> -->
                                                             </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Status at OTZ Transition</td>
-                                                        <td class="d-inline-block col-8">
-                                                            <select id="otzTransitionStatusSelect" class="form-control">
-                                                                <option value="" hidden>Select Status</option>
-                                                                <option value="Active">Active</option>
-                                                                <option value="Transfer Out">Transfer Out</option>
-                                                                <option value="LTFU">LTFU</option>
-                                                                <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
-                                                                </option>
-                                                            </select>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -728,9 +739,24 @@
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="otzdiscontinueddate"
-                                                                class="form-control"
+                                                                class="form-control otzClass" disabled
                                                                 placeholder="Enter Date Discontinued from OTZ care"
                                                                 id="otzDiscontinuedDate">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Status at OTZ Transition</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="otzTransitionStatusSelect" class="form-control otzClass" disabled>
+                                                                <option value="" hidden>Select Status</option>
+                                                                <option value="Active">Active</option>
+                                                                <option value="Transfer Out">Transfer Out</option>
+                                                                <option value="LTFU">LTFU</option>
+                                                                <option value="Dead">Dead</option>
+                                                                <option value="Transition to Adult Care">Transition to
+                                                                    Adult Care
+                                                                </option>
+                                                            </select>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -756,7 +782,7 @@
                                                         <td class="d-inline-block col-4">Date Enrolled in PAMA Care</td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="pamaenrollmentdate"
-                                                                class="form-control"
+                                                                class="form-control pamaClass" disabled
                                                                 placeholder="Enter Date Enrolled in PAMA"
                                                                 id="pamaEnrollmentDate">
                                                         </td>
@@ -766,7 +792,7 @@
                                                             same
                                                             facility</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="caregiverenrolledSelect" class="form-control">
+                                                            <select id="caregiverenrolledSelect" class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Option</option>
                                                                 <option value="Yes">Yes</option>
                                                                 <option value="No">No</option>
@@ -776,7 +802,7 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Type of PAMA Caregiver</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="caregivertypeSelect" class="form-control">
+                                                            <select id="caregivertypeSelect" class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Type</option>
                                                                 <option value="Mother">Mother</option>
                                                                 <option value="Father">Father</option>
@@ -788,7 +814,7 @@
                                                         <td class="d-inline-block col-4">Care giver 1 CCC No</td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="number" name="caregiver1cccno"
-                                                                class="form-control"
+                                                                class="form-control pamaClass" disabled
                                                                 placeholder="Enter Care giver 1 CCC No"
                                                                 id="caregiver1cccno">
                                                         </td>
@@ -797,7 +823,7 @@
                                                         <td class="d-inline-block col-4">Care giver 2 CCC No</td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="number" name="caregiver2cccno"
-                                                                class="form-control"
+                                                                class="form-control pamaClass" disabled
                                                                 placeholder="Enter Care giver 2 CCC No"
                                                                 id="caregiver2cccno">
                                                         </td>
@@ -807,16 +833,17 @@
                                                             (cps/ml)
                                                         </td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="number" name="caregivervl" class="form-control"
+                                                            <input type="number" name="caregivervl" class="form-control pamaClass" disabled
                                                                 placeholder="Enter Caregiver VL" id="caregivervl">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date of Current Viral Load of Caregiver
+                                                        <td class="d-inline-block col-4">Date of Current Viral Load of
+                                                            Caregiver
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="caregivervlddate"
-                                                                class="form-control"
+                                                                class="form-control pamaClass" disabled
                                                                 placeholder="Enter Date Discontinued from OVC care"
                                                                 id="caregivervlddate">
                                                         </td>
@@ -826,7 +853,7 @@
                                                             status
                                                         </td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="caregivervlstatustSelect" class="form-control">
+                                                            <select id="caregivervlstatustSelect" class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Supressed">Supressed</option>
                                                                 <option value="Not Supressed">Not Supressed</option>
@@ -839,7 +866,7 @@
                                                         <td class="d-inline-block col-4">PAMA status_at 3month after
                                                             enrollment</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="pamastatusat3Select" class="form-control">
+                                                            <select id="pamastatusat3Select" class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Active">Active</option>
                                                                 <option value="Transfer Out">Transfer Out</option>
@@ -852,7 +879,7 @@
                                                         <td class="d-inline-block col-4">PAMA status at 6 month after
                                                             enrollment</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="pamastatusat6Select" class="form-control">
+                                                            <select id="pamastatusat6Select" class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Active">Active</option>
                                                                 <option value="Transfer Out">Transfer Out</option>
@@ -865,7 +892,7 @@
                                                         <td class="d-inline-block col-4">PAMA status at 12 month after
                                                             enrollment</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="pamastatusat12Select" class="form-control">
+                                                            <select id="pamastatusat12Select" class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Active">Active</option>
                                                                 <option value="Transfer Out">Transfer Out</option>
@@ -878,7 +905,7 @@
                                                         <td class="d-inline-block col-4">PAMA status at 24 month after
                                                             enrollment</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="pamastatusat24Select" class="form-control">
+                                                            <select id="pamastatusat24Select" class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Active">Active</option>
                                                                 <option value="Transfer Out">Transfer Out</option>
@@ -890,13 +917,14 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current PAMA status</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="currentpamastatusSelect" class="form-control">
+                                                            <select id="currentpamastatusSelect" class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Active">Active</option>
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
+                                                                <option value="Transition to Adult Care">Transition to
+                                                                    Adult Care
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -905,13 +933,14 @@
                                                         <td class="d-inline-block col-4">Status at PAMA Transition</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="pamastatusattransitionSelect"
-                                                                class="form-control">
+                                                                class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Active">Active</option>
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
+                                                                <option value="Transition to Adult Care">Transition to
+                                                                    Adult Care
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -922,7 +951,7 @@
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="pamadiscontinueddate"
-                                                                class="form-control"
+                                                                class="form-control pamaClass" disabled
                                                                 placeholder="Enter Date Discontinued from PAMA care"
                                                                 id="pamadiscontinueddate">
                                                         </td>
