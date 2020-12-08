@@ -674,14 +674,12 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current OVC VL Copies</td>
                                                         <td class="d-inline-block col-8">
-                                                            <div>
                                                                 <input type="checkbox" class="ovcClass" disabled id="isLDL2">
                                                                 <label for="isLDL2" value="LDL">LDL</label>
                                                                 <input type="number" name="vlcopies" disabled
                                                                     class="form-control ovcClass" style="width: 100%;"
                                                                     placeholder="Enter Current Viral Load Copies"
                                                                     id="ovcVLcopies">
-                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -771,7 +769,7 @@
                                                                 id="otzvldate">
                                                         </td>
                                                     </tr>
-                                                    <tr class="row m-0">
+                                                    <!-- <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Missed last appointment
                                                         </td>
                                                         <td class="d-inline-block col-8">
@@ -781,6 +779,24 @@
                                                                 <option value="Yes">Yes</option>
                                                                 <option value="No">No</option>
                                                             </select>
+                                                        </td>
+                                                    </tr> -->
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of last attendance</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="otzenrollmentdate"
+                                                                class="form-control otzClass" disabled
+                                                                placeholder="Enter Date Enrolled in OTZ"
+                                                                id="otzlastAttendDate">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Next Appointement</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="otzenrollmentdate"
+                                                                class="form-control otzClass" disabled
+                                                                placeholder="Enter Date Enrolled in OTZ"
+                                                                id="otzNextAppointmentDate">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -890,17 +906,17 @@
                                                                 <option value="Guardian">Guardian</option>
                                                             </select> -->
                                                             <div class="custom-control custom-checkbox ml-2">
-                                                                <input type="checkbox" class="custom-control-input"
+                                                                <input type="checkbox" class="custom-control-input pamaClass" disabled
                                                                     id='motherchkbox'>
                                                                 <label for="motherchkbox" class="custom-control-label">Mother</label>
                                                             </div>
                                                             <div class="custom-control custom-checkbox ml-2">
-                                                                <input type="checkbox" class="custom-control-input"
+                                                                <input type="checkbox" class="custom-control-input pamaClass" disabled
                                                                     id='fatherchkbox'>
                                                                 <label for="fatherchkbox" class="custom-control-label">Father</label>
                                                             </div>
                                                             <div class="custom-control custom-checkbox ml-2">
-                                                                <input type="checkbox" class="custom-control-input"
+                                                                <input type="checkbox" class="custom-control-input pamaClass" disabled
                                                                     id='guardianchkbox'>
                                                                 <label for="guardianchkbox" class="custom-control-label">Guardian</label>
                                                             </div>

@@ -46,7 +46,6 @@ try {
         $OTZArtRegimen = $_POST['OTZArtRegimen'];
         $OTZVL = $_POST['OTZVL'];
         $OTZVLDate = $_POST['OTZVLDate'];
-        $missedLastAppointment = $_POST['missedLastAppointment'];
         $ArtAdherenceAssessment = $_POST['ArtAdherenceAssessment'];
         $completedOTZModules = $_POST['completedOTZModules'];
         $statusAtOTZTransition = $_POST['statusAtOTZTransition'];
@@ -95,7 +94,8 @@ try {
             'dateEnrolledInOVC' => $dateEnrolledInOVC, 'CPMISNumber' => $CPMISNumber, 'ovcVLCopies' => $ovcVLCopies,
             'dateDiscontinuedFromOVC' => $dateDiscontinuedFromOVC, 'statusAtOVCDiscontinuation' => $statusAtOVCDiscontinuation,
             'enrolledInOTZ' => $enrolledInOTZ, 'dateEnrolledInOTZ' => $dateEnrolledInOTZ,
-            'OTZArtRegimen' => $OTZArtRegimen, 'OTZVL' => $OTZVL, 'OTZVLDate' => $OTZVLDate, 'missedLastAppointment' => $missedLastAppointment,
+            'OTZArtRegimen' => $OTZArtRegimen, 'OTZVL' => $OTZVL, 'OTZVLDate' => $OTZVLDate, 
+            'lastAttendDate' => $lastAttendDate, 'nextAppointmentDate' => $nextAppointmentDate,
             'ArtAdherenceAssessment' => $ArtAdherenceAssessment, 'completedOTZModules' => $completedOTZModules, 'statusAtOTZTransition' => $statusAtOTZTransition,
             'dateDiscontinuedFromOTZ' => $dateDiscontinuedFromOTZ, 'enrolledInPAMA' => $enrolledInPAMA,
             'dateEnrolledInPAMA' => $dateEnrolledInPAMA, 'caregiverInSameFacility' => $caregiverInSameFacility,

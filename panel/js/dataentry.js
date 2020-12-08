@@ -56,9 +56,11 @@ const otzEnrollmentDateInput = document.getElementById("otzenrollmentdate");
 const otzregimenSelect = document.getElementById("otzregimenSelect");
 const otzVlInput = document.getElementById("otzvl");
 const otzVlDateInput = document.getElementById("otzvldate");
-const missedLastAppointmentSelect = document.getElementById(
-  "missedLastAppointmentSelect"
-);
+// const missedLastAppointmentSelect = document.getElementById(
+//   "missedLastAppointmentSelect"
+// );
+const otzNextAppointmentDateInput = document.getElementById("otzNextAppointmentDate");
+const otzLastAttendDateInput = document.getElementById("otzlastAttendDate");
 const artAssessmentSelect = document.getElementById("artassessmentSelect");
 const otzTransitionStatusSelect = document.getElementById(
   "otzTransitionStatusSelect"
@@ -99,28 +101,28 @@ const guardianchkbox = document.getElementById("guardianchkbox");
 const fatherchkbox = document.getElementById("fatherchkbox");
 const motherchkbox = document.getElementById("motherchkbox");
 
-$("input[type=checkbox]").change(function(){
-//   // if ($('guardianchkbox').is(':checked')) {
-//   //   fatherchkbox.checked = false;
-//   //   motherchkbox.checked = false;
-//   // }
+$("input[type=checkbox]").change(function () {
+  //   // if ($('guardianchkbox').is(':checked')) {
+  //   //   fatherchkbox.checked = false;
+  //   //   motherchkbox.checked = false;
+  //   // }
 
-  if($('#motherchkbox').is(':checked') && $('#fatherchkbox').is(':checked')) {
+  if ($('#motherchkbox').is(':checked') && $('#fatherchkbox').is(':checked')) {
     caregiver1cccnoInput.disabled = false;
     caregiver2cccnoInput.disabled = false;
   }
 
-//   // if ($('#motherchkbox').is(':checked')) {
-//   //   guardianchkbox.checked = false;
-//   // }
-//   // if ($('#fatherchkbox').is(':checked')) {
-//   //   guardianchkbox.checked = false;
-//   // }
+  //   // if ($('#motherchkbox').is(':checked')) {
+  //   //   guardianchkbox.checked = false;
+  //   // }
+  //   // if ($('#fatherchkbox').is(':checked')) {
+  //   //   guardianchkbox.checked = false;
+  //   // }
 
-//   // if ($('guardianchkbox').is(':checked')) {
-//   //   fatherchkbox.checked = false;
-//   //   motherchkbox.checked = false;
-//   // }
+  //   // if ($('guardianchkbox').is(':checked')) {
+  //   //   fatherchkbox.checked = false;
+  //   //   motherchkbox.checked = false;
+  //   // }
 });
 
 guardianchkbox.addEventListener("click", () => {
@@ -234,9 +236,9 @@ function initialize() {
     }
   });
 
-  ovcenrolledSelect.addEventListener('click', ()=>ovcOptionChanged());
-  otzenrolledSelect.addEventListener('click', ()=>otzOptionChanged());
-  pamaEnrolledSelect.addEventListener('click', ()=>pamaOptionChanged())
+  ovcenrolledSelect.addEventListener('click', () => ovcOptionChanged());
+  otzenrolledSelect.addEventListener('click', () => otzOptionChanged());
+  pamaEnrolledSelect.addEventListener('click', () => pamaOptionChanged())
 
   $.ajax({
     type: "GET",
@@ -447,7 +449,7 @@ function loadObsData(observation) {
   if (observation.vlCopies == "LDL") {
     isLDL1.checked = true;
     vlcopiesInput.value = '';
-  }else vlcopiesInput.value = observation.vlCopies;
+  } else vlcopiesInput.value = observation.vlCopies;
   // vloutcomestatusInput.value = observation.vlOutcome;
   $("#currentvlstatustSelect").val(observation.vlOutcome);
   isZScoreCheck.checked = false;
@@ -579,6 +581,8 @@ function loadObsData(observation) {
       artAssessmentSelect.selectedIndex = i;
     }
   }
+  otzLastAttendDateInput.value = observation.lastAttendDate;
+  otzNextAppointmentDateInput.value = observation.nextAppointmentDate;
   var modulesCompleted = JSON.parse(observation.completedOTZModules);
   console.log(modulesCompleted);
   var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
@@ -613,12 +617,20 @@ function loadObsData(observation) {
       caregiverenrolledSelect.selectedIndex = i;
     }
   }
-  var cgTypeOptions = caregivertypeSelect.options;
+  /*var cgTypeOptions = caregivertypeSelect.options;
   for (var i = 0; i < cgTypeOptions.length; i++) {
     const cgTypeOption = cgTypeOptions[i];
     if (cgTypeOption.value == observation.caregiverType) {
       caregivertypeSelect.selectedIndex = i;
     }
+  }*/
+  let cgType = observation.caregiverType;
+  if (cgType == "Mother") motherchkbox.checked = true;
+  else if (cgType == "Father") fatherchkbox.checked = true;
+  else if (cgType == "Guardian") guardianchkbox.checked = true;
+  else if (cgType == "Mother + Father") {
+    motherchkbox.checked = true;
+    fatherchkbox.checked = true;
   }
   caregiver1cccnoInput.value = observation.caregiver1CCC;
   caregiver2cccnoInput.value = observation.caregiver2CCC;
@@ -758,10 +770,12 @@ function submitData() {
     otzregimenSelect.options[otzregimenSelect.selectedIndex].value;
   let OTZVL = otzVlInput.value;
   let OTZVLDate = otzVlDateInput.value;
-  let missedLastAppointment =
+  /*let missedLastAppointment =
     missedLastAppointmentSelect.options[
       missedLastAppointmentSelect.selectedIndex
-    ].value;
+    ].value;*/
+    let lastAttendDate = otzLastAttendDateInput.value;
+    let nextAppointmentDate = otzNextAppointmentDateInput.value;
   let ArtAdherenceAssessment =
     artAssessmentSelect.options[artAssessmentSelect.selectedIndex].value;
   let completedOTZModules = [];
@@ -781,7 +795,9 @@ function submitData() {
   formData.append("OTZArtRegimen", OTZArtRegimen);
   formData.append("OTZVL", OTZVL);
   formData.append("OTZVLDate", OTZVLDate);
-  formData.append("missedLastAppointment", missedLastAppointment);
+  // formData.append("missedLastAppointment", missedLastAppointment);
+  formData.append("lastAttendDate", lastAttendDate);
+  formData.append("nextAppointmentDate", nextAppointmentDate);
   formData.append("ArtAdherenceAssessment", ArtAdherenceAssessment);
   formData.append("completedOTZModules", JSON.stringify(completedOTZModules));
   formData.append("statusAtOTZTransition", statusAtOTZTransition);
@@ -794,8 +810,11 @@ function submitData() {
   let caregiverInSameFacility =
     caregiverenrolledSelect.options[caregiverenrolledSelect.selectedIndex]
       .value;
-  // let caregiverType =
-  //   caregivertypeSelect.options[caregivertypeSelect.selectedIndex].value;
+  let caregiverType = ''
+  if (guardianchkbox.checked) caregiverType = "Guardian";
+  else if (motherchkbox.checked && fatherchkbox.checked) caregiverType = "Mother + Father";
+  else if (motherchkbox.checked) caregiverType = "Mother";
+  else if (fatherchkbox.checked) caregiverType = "Father";
   let caregiver1CCC = caregiver1cccnoInput.value;
   let caregiver2CCC = caregiver2cccnoInput.value;
   let caregiverVL = caregivervlInput.value;
@@ -902,45 +921,45 @@ function submitPatientData() {
     startformulationSelect.options[startformulationSelect.selectedIndex].value;
 
   // if (newpatient == false) {
-    $.ajax({
-      type: "POST",
-      url: "datascript?request=save_patient_data",
-      data: {
-        cccNo: cccNo,
-        facility: facility,
-        county: county,
-        sex: sex,
-        dob: dob,
-        dohd: dohd,
-        dec: dec,
-        startRegimen: startRegimen,
-        dsa: dsa,
-        startkaletra: startkaletra,
-        newpatient: newpatient
-      },
-      success: function (response) {
-        var mResponse = JSON.parse(response);
-        let code = mResponse.code;
-        if (code == 200) {
-          console.log(mResponse.data);
-          submitData();
-        } else {
-          //todo: display error
-        }
-      },
-      fail: (XMLHttpRequest, textStatus, errorThrown) => {
-        alert(errorThrown.message);
-      },
-    });
+  $.ajax({
+    type: "POST",
+    url: "datascript?request=save_patient_data",
+    data: {
+      cccNo: cccNo,
+      facility: facility,
+      county: county,
+      sex: sex,
+      dob: dob,
+      dohd: dohd,
+      dec: dec,
+      startRegimen: startRegimen,
+      dsa: dsa,
+      startkaletra: startkaletra,
+      newpatient: newpatient
+    },
+    success: function (response) {
+      var mResponse = JSON.parse(response);
+      let code = mResponse.code;
+      if (code == 200) {
+        console.log(mResponse.data);
+        submitData();
+      } else {
+        //todo: display error
+      }
+    },
+    fail: (XMLHttpRequest, textStatus, errorThrown) => {
+      alert(errorThrown.message);
+    },
+  });
 }
 
 var text_max = 100;
-$('#count_message').html('0 / ' + text_max );
+$('#count_message').html('0 / ' + text_max);
 
-$('#commentArea').keyup(function() {
+$('#commentArea').keyup(function () {
   var text_length = $('#commentArea').val().length;
   var text_remaining = text_max - text_length;
-  
+
   $('#count_message').html(text_length + ' / ' + text_max);
 });
 /**
