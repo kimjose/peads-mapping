@@ -182,21 +182,39 @@ try {
         $startRegimen = $_POST['startRegimen'];
         $dsa = $_POST['dsa'];
         $startkaletra = $_POST['startkaletra'];
+        $newpatient = $_POST['newpatient'];
 
         if ($cccNo != null && $cccNo != "") {
 
-            $patient = Patient::where('cccNo', $cccNo)->first();
-            $patient->cccNo = $cccNo;
-            $patient->facility = $facility;
-            $patient->county = $county;
-            $patient->sex = $sex;
-            $patient->dob = $dob;
-            $patient->date_of_hiv_diagnosis = $dohd;
-            $patient->date_enrolled = $dec;
-            $patient->dateStartedART = $dsa;
-            $patient->startRegimen = $startRegimen;
-            $patient->startKaletraFormulation = $startkaletra;
-            $patient->save();
+            if ($newpatient == false) {
+
+                $patient = Patient::where('cccNo', $cccNo)->first();
+                $patient->cccNo = $cccNo;
+                $patient->facility = $facility;
+                $patient->county = $county;
+                $patient->sex = $sex;
+                $patient->dob = $dob;
+                $patient->date_of_hiv_diagnosis = $dohd;
+                $patient->date_enrolled = $dec;
+                $patient->dateStartedART = $dsa;
+                $patient->startRegimen = $startRegimen;
+                $patient->startKaletraFormulation = $startkaletra;
+                $patient->save();
+            } else {
+                Patient::create([
+                    "cccNo" => $cccNo,
+                    "facility" => $facility,
+                    "county" => $county,
+                    "sex" => $sex,
+                    "dob" => $dob,
+                    "date_of_hiv_diagnosis" => $dohd,
+                    "date_enrolled" => $dec,
+                    "dateStartedART" => $dsa,
+                    "startRegimen" => $startRegimen,
+                    "startKaletraFormulation" => $startkaletra
+    
+                ]);
+            }
         } else {
             echo "Enter Patient CCC Number";
         }
@@ -205,40 +223,6 @@ try {
 
         echo myJsonResponse(200, 'Patients Retrieved', $patients);
 
-    } else if ($request == "save_new_patient") {
-        $cccNo = $_POST['cccNo'];
-        $facility = $_POST['facility'];
-        $county = $_POST['county'];
-        $sex = $_POST['sex'];
-        $dob = $_POST['dob'];
-        $dohd = $_POST['dohd'];
-        $dec = $_POST['dec'];
-        $startRegimen = $_POST['startRegimen'];
-        $dsa = $_POST['dsa'];
-        $startkaletra = $_POST['startkaletra'];
-
-        if ($cccNo != null && $cccNo != "") {
-
-            Patient::create([
-                "cccNo" => $cccNo,
-                "facility" => $facility,
-                "county" => $county,
-                "sex" => $sex,
-                "dob" => $dob,
-                "date_of_hiv_diagnosis" => $dohd,
-                "date_enrolled" => $dec,
-                "dateStartedART" => $dsa,
-                "startRegimen" => $startRegimen,
-                "startKaletraFormulation" => $startkaletra
-
-            ]);
-        } else {
-            echo "Enter Patient CCC Number";
-        }
-
-        $patients = Patient::all();
-
-        echo myJsonResponse(200, 'Patients Retrieved', $patients);
     } elseif ($request == "get_cadres") {
         $cadres = Cadre::all();
         echo myJsonResponse(200, "Cadres retrieved", $cadres);
