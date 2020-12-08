@@ -238,7 +238,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered">
+                                            <table class="table table-bordered table-active table-striped">
                                                 <thead>
                                                     <tr class="row m-0">
                                                         <th class="d-inline-block col-12 text-center">System Information
@@ -265,6 +265,11 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
+
+                                            </table>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
                                                 <thead>
                                                     <tr class="row m-0">
                                                         <th class="d-inline-block col-12 text-center">Background Patient
@@ -281,7 +286,8 @@
 
                                                                 <div class="col-8">
 
-                                                                    <input type="text" name="cccNum" class="form-control"
+                                                                    <input type="text" name="cccNum"
+                                                                        class="form-control"
                                                                         placeholder="Enter CCC Number" id="cccNo">
                                                                 </div>
                                                                 <div class="col-4">
@@ -295,7 +301,8 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Facility Name</td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="facilitySelect" class="form-control" onchange="showMflCode(this.value)" >
+                                                            <select id="facilitySelect" class="form-control"
+                                                                onchange="showMflCode(this.value)">
                                                                 <option value="" hidden>Select Facility</option>
                                                             </select>
                                                             <!-- <input type="text" name="facility" class="form-control"
@@ -386,7 +393,8 @@
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="startformulationSelect" class="form-control">
-                                                                <option value="" hidden>Select Kaletra formulation</option>
+                                                                <option value="" hidden>Select Kaletra formulation
+                                                                </option>
                                                                 <option value="LPV/r pellets">LPV/r pellets</option>
                                                                 <option value="LPV/r syrup">LPV/r syrup</option>
                                                                 <option value="LPV/r tabs">LPV/r tabs</option>
@@ -395,7 +403,12 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
+                                            </table>
+                                        </div>
+                                        <br />
 
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-success table-striped">
                                                 <thead>
                                                     <tr class="row m-0">
                                                         <th class="d-inline-block col-12 text-center">Change Information
@@ -407,7 +420,8 @@
                                                         <td class="d-inline-block col-4">Current Regimen</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="currentregimenSelect" class="form-control">
-                                                                <option value=null hidden>Select Current Regimen</option>
+                                                                <option value=null hidden>Select Current Regimen
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -415,10 +429,14 @@
                                                         <td class="d-inline-block col-4">Current Regimen line</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="regimenlineSelect" class="form-control">
-                                                                <option value="" hidden selected>Select Current Regimen line</option>
-                                                                <option value="First Regimen Line">First Regimen Line</option>
-                                                                <option value="Second Regimen Line">Second Regimen Line</option>
-                                                                <option value="Third Regimen Line">Third Regimen Line</option>
+                                                                <option value="" hidden selected>Select Current Regimen
+                                                                    line</option>
+                                                                <option value="First Regimen Line">First Regimen Line
+                                                                </option>
+                                                                <option value="Second Regimen Line">Second Regimen Line
+                                                                </option>
+                                                                <option value="Third Regimen Line">Third Regimen Line
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -437,7 +455,8 @@
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="currentformulationSelect" class="form-control">
-                                                                <option value="" hidden>Select Kaletra formulation</option>
+                                                                <option value="" hidden>Select Kaletra formulation
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -495,7 +514,8 @@
                                                             <select id="disclosureStatusSelect" class="form-control">
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Full">Full disclosure</option>
-                                                                <option value="Partial/Ongoing">Partial/ongoing disclosure</option>
+                                                                <option value="Partial/Ongoing">Partial/ongoing
+                                                                    disclosure</option>
                                                                 <option value="Not started">Not started</option>
                                                             </select>
                                                         </td>
@@ -505,7 +525,8 @@
                                                         <td class="d-inline-block col-8">
                                                             <select id="iptstatusSelect" class="form-control">
                                                                 <option value="" hidden>Select Status</option>
-                                                                <option value="Started and ongoing">Started and ongoing</option>
+                                                                <option value="Started and ongoing">Started and ongoing
+                                                                </option>
                                                                 <option value="Completed">Completed</option>
                                                                 <option value="Discontinued">Discontinued</option>
                                                                 <option value="Not started">Not started</option>
@@ -520,7 +541,8 @@
                                                                 <option value="Boarding">Boarding</option>
                                                                 <option value="Day school">Day school</option>
                                                                 <option value="Not in school">Not in school</option>
-                                                                <option value="Tertiary/college">Tertiary/college</option>
+                                                                <option value="Tertiary/college">Tertiary/college
+                                                                </option>
                                                                 <option value="NA">N/A</option>
                                                             </select>
                                                         </td>
@@ -535,7 +557,8 @@
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
+                                                                <option value="Transition to Adult Care">Transition to
+                                                                    Adult Care
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -543,13 +566,39 @@
                                                 </tbody>
                                             </table>
                                         </div>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-info">
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">Latest Viral Load
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Last VL</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="ovcenrollmentdate"
+                                                                class="form-control" id="lastvlDate"
+                                                                disabled="disabled">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">VL Ressult</td>
+                                                        <td class="d-inline-block col-8"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
                                     </div>
 
                                     <!-- <div class="col-lg-2"></div> -->
 
                                     <div class="col-lg-6">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered">
+                                            <table class="table table-bordered table-primary table-striped">
                                                 <thead>
                                                     <tr class="row m-0">
                                                         <th class="d-inline-block col-12 text-center">Intervention
@@ -580,7 +629,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">OVC CPMIS unique number</td>
+                                                        <td class="d-inline-block col-4">OVC CPMIS unique number
+                                                        </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="number" name="ovcnumber" class="form-control"
                                                                 placeholder="Enter OVC CPMIS unique number"
@@ -588,7 +638,25 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date Discontinued from OVC care
+                                                        <td class="d-inline-block col-4">Status at OVC
+                                                            Discontinuation </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="ovcDiscontinuationStatusSelect"
+                                                                class="form-control">
+                                                                <option value="" hidden>Select Status</option>
+                                                                <option value="Active">Active</option>
+                                                                <option value="Transfer Out">Transfer Out</option>
+                                                                <option value="LTFU">LTFU</option>
+                                                                <option value="Dead">Dead</option>
+                                                                <option value="Transition to Adult Care">Transition
+                                                                    to Adult Care
+                                                                </option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Discontinued from OVC
+                                                            care
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="ovcdiscontinueddate"
@@ -597,21 +665,11 @@
                                                                 id="ovcDiscontinuedDate">
                                                         </td>
                                                     </tr>
-                                                    <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Status at OVC Discontinuation </td>
-                                                        <td class="d-inline-block col-8">
-                                                            <select id="ovcDiscontinuationStatusSelect" class="form-control">
-                                                                <option value="" hidden>Select Status</option>
-                                                                <option value="Active">Active</option>
-                                                                <option value="Transfer Out">Transfer Out</option>
-                                                                <option value="LTFU">LTFU</option>
-                                                                <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
-                                                                </option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
                                                 </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-danger table-striped">
                                                 <thead>
                                                     <tr class="row m-0">
                                                         <th class="d-inline-block col-12 text-center">OTZ</th>
@@ -639,10 +697,12 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Baseline OTZ ART regimen</td>
+                                                        <td class="d-inline-block col-4">Baseline OTZ ART regimen
+                                                        </td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="otzregimenSelect" class="form-control">
-                                                                <option value=""  hidden>Select OTZ ART Regimen</option>
+                                                                <option value="" hidden>Select OTZ ART Regimen
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -654,7 +714,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date of Baseline OTZ VL</td>
+                                                        <td class="d-inline-block col-4">Date of Baseline OTZ VL
+                                                        </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="otzvldate" class="form-control"
                                                                 placeholder="Enter Date of Baseline OTZ VL"
@@ -662,9 +723,11 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Missed last appointment</td>
+                                                        <td class="d-inline-block col-4">Missed last appointment
+                                                        </td>
                                                         <td class="d-inline-block col-8">
-                                                            <select id="missedLastAppointmentSelect" class="form-control">
+                                                            <select id="missedLastAppointmentSelect"
+                                                                class="form-control">
                                                                 <option value="" hidden>Select Option</option>
                                                                 <option value="Yes">Yes</option>
                                                                 <option value="No">No</option>
@@ -679,12 +742,14 @@
                                                             <select id="artassessmentSelect" class="form-control">
                                                                 <option value="" hidden>Select Status</option>
                                                                 <option value="Satisfactory">Satisfactory</option>
-                                                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                                                <option value="Unsatisfactory">Unsatisfactory
+                                                                </option>
                                                             </select>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Last Completed OTZ Modules</td>
+                                                        <td class="d-inline-block col-4">Last Completed OTZ Modules
+                                                        </td>
                                                         <td class="d-inline-block col-8">
                                                             <div class="form-group" id="otzmodulesdiv">
 
@@ -710,7 +775,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Status at OTZ Transition</td>
+                                                        <td class="d-inline-block col-4">Status at OTZ Transition
+                                                        </td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="otzTransitionStatusSelect" class="form-control">
                                                                 <option value="" hidden>Select Status</option>
@@ -718,13 +784,15 @@
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
+                                                                <option value="Transition to Adult Care">Transition
+                                                                    to Adult Care
                                                                 </option>
                                                             </select>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date Discontinued from OTZ care
+                                                        <td class="d-inline-block col-4">Date Discontinued from OTZ
+                                                            care
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="otzdiscontinueddate"
@@ -734,7 +802,10 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-
+                                            </table>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-warning table-striped">
                                                 <thead>
                                                     <tr class="row m-0">
                                                         <th class="d-inline-block col-12 text-center">PAMA</th>
@@ -753,7 +824,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date Enrolled in PAMA Care</td>
+                                                        <td class="d-inline-block col-4">Date Enrolled in PAMA Care
+                                                        </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="pamaenrollmentdate"
                                                                 class="form-control"
@@ -762,7 +834,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Is Care giver enrolled in the
+                                                        <td class="d-inline-block col-4">Is Care giver enrolled in
+                                                            the
                                                             same
                                                             facility</td>
                                                         <td class="d-inline-block col-8">
@@ -803,7 +876,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Current Viral Load of Caregiver
+                                                        <td class="d-inline-block col-4">Current Viral Load of
+                                                            Caregiver
                                                             (cps/ml)
                                                         </td>
                                                         <td class="d-inline-block col-8">
@@ -812,7 +886,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date of Current Viral Load of Caregiver
+                                                        <td class="d-inline-block col-4">Date of Current Viral Load
+                                                            of Caregiver
                                                         </td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="caregivervlddate"
@@ -822,7 +897,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Care giver Current viral laod
+                                                        <td class="d-inline-block col-4">Care giver Current viral
+                                                            laod
                                                             status
                                                         </td>
                                                         <td class="d-inline-block col-8">
@@ -849,7 +925,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">PAMA status at 6 month after
+                                                        <td class="d-inline-block col-4">PAMA status at 6 month
+                                                            after
                                                             enrollment</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="pamastatusat6Select" class="form-control">
@@ -862,7 +939,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">PAMA status at 12 month after
+                                                        <td class="d-inline-block col-4">PAMA status at 12 month
+                                                            after
                                                             enrollment</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="pamastatusat12Select" class="form-control">
@@ -875,7 +953,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">PAMA status at 24 month after
+                                                        <td class="d-inline-block col-4">PAMA status at 24 month
+                                                            after
                                                             enrollment</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="pamastatusat24Select" class="form-control">
@@ -896,13 +975,15 @@
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
+                                                                <option value="Transition to Adult Care">Transition
+                                                                    to Adult Care
                                                                 </option>
                                                             </select>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Status at PAMA Transition</td>
+                                                        <td class="d-inline-block col-4">Status at PAMA Transition
+                                                        </td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="pamastatusattransitionSelect"
                                                                 class="form-control">
@@ -911,7 +992,8 @@
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to Adult Care
+                                                                <option value="Transition to Adult Care">Transition
+                                                                    to Adult Care
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -928,6 +1010,10 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
                                                 <thead>
                                                     <tr class="row m-0">
                                                         <th class="d-inline-block col-12 text-center">Comment</th>
@@ -936,8 +1022,10 @@
                                                 <tbody>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-12">
-                                                            <textarea class="form-control" rows="3"
-                                                                id="commentArea"></textarea>
+                                                            <textarea class="form-control" rows="3" id="commentArea"
+                                                                maxlength="100"></textarea>
+                                                            <span class="pull-right label label-default"
+                                                                id="count_message"></span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -984,6 +1072,53 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+
+    <div class="modal fade" id="addpatientmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>This patient does not exist. Do you want to add as a new patient?</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                    <button type="submit" name="registerbtn" id="addNewPatient" class="btn btn-primary">Add New
+                        Patient</button>
+                </div>
+                <!-- <form action="code.php" method="POST" onsubmit="event.preventDefault();">
+
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>Video Name</label>
+                            <input type="text" name="videolink" id="videolink" class="form-control"
+                                placeholder="Video Name" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="statuscheck">
+                                <label class="custom-control-label" for="statuscheck">Reviewed</label>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" name="registerbtn" id="savePatient" class="btn btn-primary"
+                                >Save</button>
+                        </div>
+                </form> -->
+
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>

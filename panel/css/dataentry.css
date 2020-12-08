@@ -5,3 +5,13 @@
 .table-bordered td, .table-bordered th {
     border: 1px solid #a1a3a5
 }
+
+textarea {
+    resize: none;
+}
+
+#count_message {
+    background-color: smoke;
+    margin-top: -20px;
+    margin-right: 5px;
+  }

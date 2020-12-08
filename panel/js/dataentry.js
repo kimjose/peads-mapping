@@ -27,7 +27,9 @@ const currentKaletraformulationSelect = document.getElementById(
 const vlcopiesInput = document.getElementById("vlcopies");
 const vldateInput = document.getElementById("vldate");
 // const vloutcomestatusInput = document.getElementById("vloutcomestatus");
-const currentvlstatustSelect = document.getElementById("currentvlstatustSelect");
+const currentvlstatustSelect = document.getElementById(
+  "currentvlstatustSelect"
+);
 const zscoreInput = document.getElementById("zscore");
 const currentoiSelect = document.getElementById("currentoiSelect");
 const disclosureStatusSelect = document.getElementById(
@@ -88,9 +90,17 @@ const commentArea = document.getElementById("commentArea");
 const btnSubmit = document.getElementById("btnSubmit");
 const mappingform = document.getElementById("mappingform");
 const facilitySelector = document.getElementById("facilitySelect");
+const addNewPatient = document.getElementById("addNewPatient");
 
 var dob, dateenrolled;
 var facilities;
+
+var newpatient = false;
+
+addNewPatient.addEventListener("click", () => {
+  newpatient = true;
+  $("#addpatientmodal").modal("hide");
+});
 
 initialize();
 
@@ -263,7 +273,7 @@ function loadPreviousObservation() {
         $("#startregimenSelect").val(patient.startRegimen);
         $("#startformulationSelect").val(patient.startKaletraFormulation);
       } else {
-        alert(mResponse.message);
+        $("#addpatientmodal").modal("show");
       }
     },
     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -349,7 +359,7 @@ function loadObsData(observation) {
   }
 
   var iptstatus = $("#iptstatusSelect").val();
-  if (iptstatus == "Completed"){
+  if (iptstatus == "Completed") {
     iptstatusSelect.disabled = true;
   }
 
@@ -388,7 +398,10 @@ function loadObsData(observation) {
   }
 
   ovcEnrollmentDateInput.value = observation.dateEnrolledInOVC;
-  if (observation.dateEnrolledInOVC !== "" && observation.dateEnrolledInOVC !== "0000-00-00") {
+  if (
+    observation.dateEnrolledInOVC !== "" &&
+    observation.dateEnrolledInOVC !== "0000-00-00"
+  ) {
     ovcEnrollmentDateInput.readOnly = true;
   }
   cpmisNumberInput.value = observation.CPMISNumber;
@@ -536,7 +549,6 @@ function loadObsData(observation) {
 function verify() {}
 
 function submitData() {
-
   // submitPatientData();
   var formData = new FormData();
 
@@ -552,7 +564,8 @@ function submitData() {
     ].value;
   let vlDate = vldateInput.value;
   let vlCopies = vlcopiesInput.value;
-  let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
+  let vlOutcome =
+    currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
   // let vlOutcome = vloutcomestatusInput.value;
   let latestZScore = zscoreInput.value;
   let opportunisticInfection =
@@ -715,9 +728,9 @@ function submitData() {
 
 function clearForm() {
   mappingform.reset();
-  mflcodeInput.innerHTML = '';
-  currentageInput.innerHTML = '';
-  ageatenrollmentInput.innerHTML = '';
+  mflcodeInput.innerHTML = "";
+  currentageInput.innerHTML = "";
+  ageatenrollmentInput.innerHTML = "";
 }
 
 function showMflCode(str) {
@@ -733,46 +746,91 @@ function showMflCode(str) {
 }
 
 function submitPatientData() {
-
   let cccNo = cccNoInput.value;
-  let facility = facilitySelector.options[facilitySelector.selectedIndex].value; 
+  let facility = facilitySelector.options[facilitySelector.selectedIndex].value;
   let county = countyInput.innerHTML;
   let sex = genderSelect.options[genderSelect.selectedIndex].value;
   let dob = dobInput.value;
   let dohd = dohdInput.value;
   let dec = decInput.value;
-  let startRegimen = startregimenSelect.options[startregimenSelect.selectedIndex].value;
+  let startRegimen =
+    startregimenSelect.options[startregimenSelect.selectedIndex].value;
   let dsa = dsaInput.value;
-  let startkaletra = startformulationSelect.options[startformulationSelect.selectedIndex].value;
+  let startkaletra =
+    startformulationSelect.options[startformulationSelect.selectedIndex].value;
 
-  $.ajax({
-    type: "POST",
-    url: "datascript?request=save_patient_data",
-    data: {
-      cccNo: cccNo,
-      facility: facility,
-      county: county,
-      sex: sex,
-      dob: dob,
-      dohd: dohd,
-      dec: dec,
-      startRegimen: startRegimen,
-      dsa: dsa,
-      startkaletra: startkaletra
-    },
-    success: function (response) {
-      var mResponse = JSON.parse(response);
-      let code = mResponse.code;
-      if (code == 200) {
-        console.log(mResponse.data);
-        submitData();
-      } else {
-        //todo: display error
-      }
-    },
-    fail: (XMLHttpRequest, textStatus, errorThrown) => {
-      alert(errorThrown.message);
-    },
-  });
+  if (newpatient == false) {
+    $.ajax({
+      type: "POST",
+      url: "datascript?request=save_patient_data",
+      data: {
+        cccNo: cccNo,
+        facility: facility,
+        county: county,
+        sex: sex,
+        dob: dob,
+        dohd: dohd,
+        dec: dec,
+        startRegimen: startRegimen,
+        dsa: dsa,
+        startkaletra: startkaletra,
+      },
+      success: function (response) {
+        var mResponse = JSON.parse(response);
+        let code = mResponse.code;
+        if (code == 200) {
+          console.log(mResponse.data);
+          submitData();
+        } else {
+          //todo: display error
+        }
+      },
+      fail: (XMLHttpRequest, textStatus, errorThrown) => {
+        alert(errorThrown.message);
+      },
+    });
 
+  } else {
+
+    $.ajax({
+      type: "POST",
+      url: "datascript?request=save_new_patient",
+      data: {
+        cccNo: cccNo,
+        facility: facility,
+        county: county,
+        sex: sex,
+        dob: dob,
+        dohd: dohd,
+        dec: dec,
+        startRegimen: startRegimen,
+        dsa: dsa,
+        startkaletra: startkaletra,
+      },
+      success: function (response) {
+        var mResponse = JSON.parse(response);
+        let code = mResponse.code;
+        if (code == 200) {
+          console.log(mResponse.data);
+          submitData();
+        } else {
+          //todo: display error
+        }
+      },
+      fail: (XMLHttpRequest, textStatus, errorThrown) => {
+        alert(errorThrown.message);
+      },
+    });
+
+  }
 }
+
+var text_max = 100;
+$('#count_message').html('0 / ' + text_max );
+
+$('#commentArea').keyup(function() {
+  var text_length = $('#commentArea').val().length;
+  var text_remaining = text_max - text_length;
+  
+  $('#count_message').html(text_length + ' / ' + text_max);
+});
