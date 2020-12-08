@@ -54,6 +54,7 @@ try {
 
         $dateEnrolledInOVC = $_POST['dateEnrolledInOVC'];
         $CPMISNumber = $_POST['CPMISNumber'];
+        $ovcVLCopies = $_POST['ovcVLCopies'];
         $dateDiscontinuedFromOVC = $_POST['dateDiscontinuedFromOVC'];
         $statusAtOVCDiscontinuation = $_POST['statusAtOVCDiscontinuation'];
         $enrolledInOTZ = $_POST['enrolledInOTZ'];
@@ -91,7 +92,7 @@ try {
             'latestZScore' => $latestZScore, 'opportunisticInfection' => $opportunisticInfection,
             'disclosureStatus' => $disclosureStatus, 'iptStatus' => $iptStatus, 'schooling' => $schooling,
             'statusAtTransition' => $statusAtTransition, 'enrolledInOVC' => $enrolledInOVC,
-            'dateEnrolledInOVC' => $dateEnrolledInOVC, 'CPMISNumber' => $CPMISNumber,
+            'dateEnrolledInOVC' => $dateEnrolledInOVC, 'CPMISNumber' => $CPMISNumber, 'ovcVLCopies' => $ovcVLCopies,
             'dateDiscontinuedFromOVC' => $dateDiscontinuedFromOVC, 'statusAtOVCDiscontinuation' => $statusAtOVCDiscontinuation,
             'enrolledInOTZ' => $enrolledInOTZ, 'dateEnrolledInOTZ' => $dateEnrolledInOTZ,
             'OTZArtRegimen' => $OTZArtRegimen, 'OTZVL' => $OTZVL, 'OTZVLDate' => $OTZVLDate, 'missedLastAppointment' => $missedLastAppointment,

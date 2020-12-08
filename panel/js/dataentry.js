@@ -45,6 +45,8 @@ const statusAtTransitionSelect = document.getElementById(
 const ovcenrolledSelect = document.getElementById("ovcenrolledSelect");
 const ovcEnrollmentDateInput = document.getElementById("ovcEnrollmentDate");
 const cpmisNumberInput = document.getElementById("cpmisNumber");
+const isLDL2 = document.getElementById("isLDL2");
+const ovcVLcopiesInput = document.getElementById("ovcVLcopies");
 const ovcDiscontinuedDateInput = document.getElementById("ovcDiscontinuedDate");
 const ovcDiscontinuationStatusSelect = document.getElementById(
   "ovcDiscontinuationStatusSelect"
@@ -145,6 +147,15 @@ function initialize() {
       vlcopiesInput.disabled = true;
     } else {
       vlcopiesInput.disabled = false;
+    }
+  });
+
+  isLDL2.addEventListener('click', () => {
+    if (isLDL2.checked) {
+      ovcVLcopiesInput.value = '';
+      ovcVLcopiesInput.readOnly = true;
+    } else {
+      ovcVLcopiesInput.readOnly = false;
     }
   });
 
@@ -377,7 +388,10 @@ function loadObsData(observation) {
       currentKaletraformulationSelect.selectedIndex = i;
     }
   }
-  vlcopiesInput.value = observation.vlCopies;
+  if (observation.vlCopies == "LDL") {
+    isLDL1.checked = true;
+    vlcopiesInput.value = '';
+  }else vlcopiesInput.value = observation.vlCopies;
   // vloutcomestatusInput.value = observation.vlOutcome;
   $("#currentvlstatustSelect").val(observation.vlOutcome);
   isZScoreCheck.checked = false;
@@ -463,6 +477,11 @@ function loadObsData(observation) {
   if (observation.CPMISNumber !== 0) {
     cpmisNumberInput.readOnly = true;
   }
+  if (observation.ovcVLCopies == "LDL") {
+    isLDL2.checked = true;
+    ovcVLcopiesInput.value = '';
+    ovcVLcopiesInput.readOnly = true;
+  } else ovcVLcopiesInput.value = observation.ovcVLCopies
   ovcDiscontinuedDateInput.value = observation.dateDiscontinuedFromOVC;
   var ovcDisStatuses = ovcDiscontinuationStatusSelect.options;
   for (var i = 0; i < ovcDisStatuses.length; i++) {
@@ -660,6 +679,9 @@ function submitData() {
     ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
   let dateEnrolledInOVC = ovcEnrollmentDateInput.value;
   let CPMISNumber = cpmisNumberInput.value;
+  let ovcVLCopies = '';
+  if (isLDL2.checked) ovcVLCopies = "LDL";
+  else ovcVLCopies = ovcVLcopiesInput.value;
   let dateDiscontinuedFromOVC = ovcDiscontinuedDateInput.value;
   let statusAtOVCDiscontinuation =
     ovcDiscontinuationStatusSelect.options[
@@ -668,6 +690,7 @@ function submitData() {
   formData.append("enrolledInOVC", enrolledInOVC);
   formData.append("dateEnrolledInOVC", dateEnrolledInOVC);
   formData.append("CPMISNumber", CPMISNumber);
+  formData.append("ovcVLCopies", ovcVLCopies);
   formData.append("dateDiscontinuedFromOVC", dateDiscontinuedFromOVC);
   formData.append("statusAtOVCDiscontinuation", statusAtOVCDiscontinuation);
 
