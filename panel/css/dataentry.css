@@ -11,7 +11,10 @@ textarea {
 }
 
 #count_message {
-    background-color: smoke;
-    margin-top: -20px;
+    background-color: rgb(197, 196, 196);
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: -30px;
     margin-right: 5px;
+    color: red;
   }

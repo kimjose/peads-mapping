@@ -69,7 +69,7 @@ const pamaEnrollmentDateInput = document.getElementById("pamaEnrollmentDate");
 const caregiverenrolledSelect = document.getElementById(
   "caregiverenrolledSelect"
 );
-const caregivertypeSelect = document.getElementById("caregivertypeSelect");
+// const caregivertypeSelect = document.getElementById("caregivertypeSelect");
 const caregiver1cccnoInput = document.getElementById("caregiver1cccno");
 const caregiver2cccnoInput = document.getElementById("caregiver2cccno");
 const caregivervlInput = document.getElementById("caregivervl");
@@ -95,6 +95,58 @@ const btnSubmit = document.getElementById("btnSubmit");
 const mappingform = document.getElementById("mappingform");
 const facilitySelector = document.getElementById("facilitySelect");
 const addNewPatient = document.getElementById("addNewPatient");
+const guardianchkbox = document.getElementById("guardianchkbox");
+const fatherchkbox = document.getElementById("fatherchkbox");
+const motherchkbox = document.getElementById("motherchkbox");
+
+$("input[type=checkbox]").change(function(){
+//   // if ($('guardianchkbox').is(':checked')) {
+//   //   fatherchkbox.checked = false;
+//   //   motherchkbox.checked = false;
+//   // }
+
+  if($('#motherchkbox').is(':checked') && $('#fatherchkbox').is(':checked')) {
+    caregiver1cccnoInput.disabled = false;
+    caregiver2cccnoInput.disabled = false;
+  }
+
+//   // if ($('#motherchkbox').is(':checked')) {
+//   //   guardianchkbox.checked = false;
+//   // }
+//   // if ($('#fatherchkbox').is(':checked')) {
+//   //   guardianchkbox.checked = false;
+//   // }
+
+//   // if ($('guardianchkbox').is(':checked')) {
+//   //   fatherchkbox.checked = false;
+//   //   motherchkbox.checked = false;
+//   // }
+});
+
+guardianchkbox.addEventListener("click", () => {
+  if (guardianchkbox.checked) {
+    fatherchkbox.checked = false;
+    motherchkbox.checked = false;
+    caregiver1cccnoInput.disabled = true;
+    caregiver2cccnoInput.disabled = true;
+  }
+});
+
+motherchkbox.addEventListener("click", () => {
+  if (motherchkbox.checked) {
+    guardianchkbox.checked = false;
+    caregiver1cccnoInput.disabled = false;
+    caregiver2cccnoInput.disabled = true;
+  }
+});
+
+fatherchkbox.addEventListener("click", () => {
+  if (fatherchkbox.checked) {
+    guardianchkbox.checked = false;
+    caregiver1cccnoInput.disabled = true;
+    caregiver2cccnoInput.disabled = false;
+  }
+});
 
 var dob, dateenrolled;
 var facilities;
@@ -107,6 +159,8 @@ addNewPatient.addEventListener("click", () => {
 });
 
 initialize();
+$('#currentoiSelect').select2();
+
 $.ajax({
   dataType: "json",
   url: "data.json",
@@ -221,6 +275,8 @@ function initialize() {
       }
     },
   });
+
+  $('#facilitySelect').select2();
 
   $.ajax({
     type: "GET",
@@ -738,8 +794,8 @@ function submitData() {
   let caregiverInSameFacility =
     caregiverenrolledSelect.options[caregiverenrolledSelect.selectedIndex]
       .value;
-  let caregiverType =
-    caregivertypeSelect.options[caregivertypeSelect.selectedIndex].value;
+  // let caregiverType =
+  //   caregivertypeSelect.options[caregivertypeSelect.selectedIndex].value;
   let caregiver1CCC = caregiver1cccnoInput.value;
   let caregiver2CCC = caregiver2cccnoInput.value;
   let caregiverVL = caregivervlInput.value;
@@ -845,7 +901,7 @@ function submitPatientData() {
   let startkaletra =
     startformulationSelect.options[startformulationSelect.selectedIndex].value;
 
-  if (newpatient == false) {
+  // if (newpatient == false) {
     $.ajax({
       type: "POST",
       url: "datascript?request=save_patient_data",
@@ -860,6 +916,7 @@ function submitPatientData() {
         startRegimen: startRegimen,
         dsa: dsa,
         startkaletra: startkaletra,
+        newpatient: newpatient
       },
       success: function (response) {
         var mResponse = JSON.parse(response);
@@ -875,40 +932,6 @@ function submitPatientData() {
         alert(errorThrown.message);
       },
     });
-
-  } else {
-
-    $.ajax({
-      type: "POST",
-      url: "datascript?request=save_new_patient",
-      data: {
-        cccNo: cccNo,
-        facility: facility,
-        county: county,
-        sex: sex,
-        dob: dob,
-        dohd: dohd,
-        dec: dec,
-        startRegimen: startRegimen,
-        dsa: dsa,
-        startkaletra: startkaletra,
-      },
-      success: function (response) {
-        var mResponse = JSON.parse(response);
-        let code = mResponse.code;
-        if (code == 200) {
-          console.log(mResponse.data);
-          submitData();
-        } else {
-          //todo: display error
-        }
-      },
-      fail: (XMLHttpRequest, textStatus, errorThrown) => {
-        alert(errorThrown.message);
-      },
-    });
-
-  }
 }
 
 var text_max = 100;
