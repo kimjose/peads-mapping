@@ -567,13 +567,13 @@ function loadObsData(observation) {
   }
   otzVlInput.value = observation.OTZVL;
   otzVlDateInput.value = observation.OTZVLDate;
-  var missedOptions = missedLastAppointmentSelect.options;
+  /*var missedOptions = missedLastAppointmentSelect.options;
   for (var i = 0; i < missedOptions.length; i++) {
     const missedOption = missedOptions[i];
     if (missedOption.value == observation.missedLastAppointment) {
       missedLastAppointmentSelect.selectedIndex = i;
     }
-  }
+  }*/
   var artAssessmentOptions = artAssessmentSelect.options;
   for (var i = 0; i < artAssessmentOptions.length; i++) {
     const artAssessmentOption = artAssessmentOptions[i];
