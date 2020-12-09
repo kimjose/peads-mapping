@@ -56,6 +56,7 @@ const ovcDiscontinuationStatusSelect = document.getElementById(
 const otzenrolledSelect = document.getElementById("otzenrolledSelect");
 const otzEnrollmentDateInput = document.getElementById("otzenrollmentdate");
 const otzregimenSelect = document.getElementById("otzregimenSelect");
+const isLDL4 = document.getElementById("isLDL4")
 const otzVlInput = document.getElementById("otzvl");
 const otzVlDateInput = document.getElementById("otzvldate");
 // const missedLastAppointmentSelect = document.getElementById(
@@ -77,6 +78,7 @@ const caregiverenrolledSelect = document.getElementById(
 // const caregivertypeSelect = document.getElementById("caregivertypeSelect");
 const caregiver1cccnoInput = document.getElementById("caregiver1cccno");
 const caregiver2cccnoInput = document.getElementById("caregiver2cccno");
+const isLDL5 = document.getElementById("isLDL5");
 const caregivervlInput = document.getElementById("caregivervl");
 const caregivervlddateInput = document.getElementById("caregivervlddate");
 const caregivervlstatustSelect = document.getElementById(
@@ -217,6 +219,25 @@ function initialize() {
     }
   });
 
+  isLDL4.addEventListener('click', () => {
+    if (isLDL4.checked) {
+      otzVlInput.value = '';
+      otzVlInput.readOnly = true;
+    } else {
+      otzVlInput.readOnly = false;
+    }
+  });
+
+  isLDL5.addEventListener('click', () => {
+    if (isLDL5.checked) {
+      caregivervlInput.value = '';
+      caregivervlInput.readOnly = true;
+    } else {
+      caregivervlInput.readOnly = false;
+    }
+  });
+
+
   isBMICheck.addEventListener("click", () => {
     if (isBMICheck.checked) {
       isZScoreCheck.checked = false;
@@ -257,8 +278,8 @@ function initialize() {
           option.setAttribute("value", module.id);
           option.appendChild(document.createTextNode(module.name));
           otzModulesSelect.appendChild(option);
-        // console.log(modules);
-        // loadtocheckbox(modules);
+          // console.log(modules);
+          // loadtocheckbox(modules);
         }
       } else {
         //todo: display error message
@@ -560,13 +581,13 @@ function loadObsData(observation) {
 
   //OTZ work ---->
   var otzEnrolledOptions = otzenrolledSelect.options;
-  otzOptionChanged(true);
   for (var i = 0; i < otzEnrolledOptions.length; i++) {
     const otzEnrolledOption = otzEnrolledOptions[i];
     if (otzEnrolledOption.value == observation.enrolledInOTZ) {
       otzenrolledSelect.selectedIndex = i;
     }
   }
+  otzOptionChanged(true);
   otzEnrollmentDateInput.value = observation.dateEnrolledInOTZ;
   for (var i = 0; i < regimens.length; i++) {
     const regimen = regimens[i];
@@ -574,6 +595,11 @@ function loadObsData(observation) {
       otzregimenSelect.selectedIndex = i;
     }
   }
+  if (observation.OTZVL == "LDL") {
+    isLDL4.checked = true;
+    otzVlInput.value = '';
+    otzVlInput.readOnly = true;
+  } else otzVlInput.value = observation.ovcVLCopies
   otzVlInput.value = observation.OTZVL;
   otzVlDateInput.value = observation.OTZVLDate;
   /*var missedOptions = missedLastAppointmentSelect.options;
@@ -650,8 +676,12 @@ function loadObsData(observation) {
   }
   caregiver1cccnoInput.value = observation.caregiver1CCC;
   caregiver2cccnoInput.value = observation.caregiver2CCC;
-  caregivervlInput.value = observation.caregiverVL;
-  caregivervlddateInput.value = observation.caregiverVLDate;
+  if (observation.caregiver1VL == "LDL") {
+    isLDL5.checked = true;
+    caregivervlInput.value = '';
+    caregivervlInput.readOnly = true;
+  } else caregivervlInput.value = observation.caregiver1VL;
+  caregivervlddateInput.value = observation.caregiver1VLDate;
   var cgVLOptions = caregivervlstatustSelect.options;
   for (var i = 0; i < cgVLOptions.length; i++) {
     const cgVLOption = cgVLOptions[i];
@@ -706,7 +736,10 @@ function loadObsData(observation) {
  *
  * @return {array[ boolean, string ]}
  */
-function verify() {}
+function verify() {
+  var errorMessage = '';
+  if (cccNoInput.value.length < 10) errorMessage += "Enter a valid ccc number. \n";
+}
 
 function submitData() {
   // submitPatientData();
@@ -784,16 +817,19 @@ function submitData() {
   let dateEnrolledInOTZ = otzEnrollmentDateInput.value;
   let OTZArtRegimen =
     otzregimenSelect.options[otzregimenSelect.selectedIndex].value;
-  let OTZVL = otzVlInput.value;
+  let OTZVL = '';
+  if (isLDL4.checked) OTZVL = "LDL";
+  else OTZVL = otzVlInput.value;
   let OTZVLDate = otzVlDateInput.value;
   /*let missedLastAppointment =
     missedLastAppointmentSelect.options[
       missedLastAppointmentSelect.selectedIndex
     ].value;*/
-    let lastAttendDate = otzLastAttendDateInput.value;
-    let nextAppointmentDate = otzNextAppointmentDateInput.value;
+  let lastAttendDate = otzLastAttendDateInput.value;
+  let nextAppointmentDate = otzNextAppointmentDateInput.value;
   let ArtAdherenceAssessment =
     artAssessmentSelect.options[artAssessmentSelect.selectedIndex].value;
+  let completedOTZModules = otzModulesSelect.options[otzModulesSelect.selectedIndex].value;
   // let completedOTZModules = [];
   // var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
   // checkBoxes.forEach((checkBox) => {
@@ -815,7 +851,7 @@ function submitData() {
   formData.append("lastAttendDate", lastAttendDate);
   formData.append("nextAppointmentDate", nextAppointmentDate);
   formData.append("ArtAdherenceAssessment", ArtAdherenceAssessment);
-  formData.append("completedOTZModules", JSON.stringify(completedOTZModules));
+  formData.append("completedOTZModules", completedOTZModules);
   formData.append("statusAtOTZTransition", statusAtOTZTransition);
   formData.append("dateDiscontinuedFromOTZ", dateDiscontinuedFromOTZ);
 
@@ -833,9 +869,15 @@ function submitData() {
   else if (fatherchkbox.checked) caregiverType = "Father";
   let caregiver1CCC = caregiver1cccnoInput.value;
   let caregiver2CCC = caregiver2cccnoInput.value;
-  let caregiverVL = caregivervlInput.value;
-  let caregiverVLDate = caregivervlddateInput.value;
-  let caregiverVLStatus = caregivervlstatustSelect.value;
+  let caregiver1VL = '';
+  if (isLDL5.checked) caregiver1VL = "LDL";
+  else caregiver1VL = caregivervlInput.value;
+  let caregiver1VLDate = caregivervlddateInput.value;
+  let caregiver1VLStatus = caregivervlstatustSelect.value;
+  let caregiver2VL = '';
+  if (isLDL6.checked) caregiver2VL = "LDL";
+  else caregiver2VL = caregiver2vlInput.value;
+  let caregiver2VLDate = caregiver2vlddateInput.value;
   let PAMAStatus3 =
     pamastatusat3Select.options[pamastatusat3Select.selectedIndex].value;
   let PAMAStatus6 =
@@ -859,9 +901,11 @@ function submitData() {
   formData.append("caregiverType", caregiverType);
   formData.append("caregiver1CCC", caregiver1CCC);
   formData.append("caregiver2CCC", caregiver2CCC);
-  formData.append("caregiverVL", caregiverVL);
-  formData.append("caregiverVLDate", caregiverVLDate);
-  formData.append("caregiverVLStatus", caregiverVLStatus);
+  formData.append("caregiver1VL", caregiver1VL);
+  formData.append("caregiver1VLDate", caregiver1VLDate);
+  formData.append("caregiver2VL", caregiver2VL);
+  formData.append("caregiver2VLDate", caregiver2VLDate);
+  formData.append("caregiver1VLStatus", caregiver1VLStatus);
   formData.append("PAMAStatus3", PAMAStatus3);
   formData.append("PAMAStatus6", PAMAStatus6);
   formData.append("PAMAStatus12", PAMAStatus12);
@@ -1007,10 +1051,14 @@ function otzOptionChanged(disableOptions = false) {
     otzenrolledSelect.options[otzenrolledSelect.selectedIndex].value;
   var otzFields = document.querySelectorAll(".otzClass");
   if (selectedValue == "Yes") {
-    if (disableOptions) otzenrolledSelect.readOnly = true;
     otzFields.forEach((otzField) => {
       otzField.removeAttribute("disabled");
     });
+    if (disableOptions) {
+      otzenrolledSelect.readOnly = true;
+      otzEnrollmentDateInput.setAttribute("disabled", "");
+      otzregimenSelect.setAttribute("disabled", "");
+    }
   } else {
     otzFields.forEach((otzField) => {
       otzField.setAttribute("disabled", "");

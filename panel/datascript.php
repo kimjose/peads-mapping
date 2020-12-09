@@ -37,9 +37,12 @@ try {
         $caregiverType = $_POST['caregiverType'];
         $caregiver1CCC = $_POST['caregiver1CCC'];
         $caregiver2CCC = $_POST['caregiver2CCC'];
-        $caregiverVL = $_POST['caregiverVL'];
-        $caregiverVLDate = $_POST['caregiverVLDate'];
-        $caregiverVLStatus = $_POST['caregiverVLStatus'];
+        $caregiver1VL = $_POST['caregiver1VL'];
+        $caregiver1VLDate = $_POST['caregiver1VLDate'];
+        $caregiver1VLStatus = $_POST['caregiver1VLStatus'];
+        $caregiver2VL = $_POST['caregiver2VL'];
+        $caregiver2VLDate = $_POST['caregiver2VLDate'];
+        $caregiver2VLStatus = $_POST['caregiver2VLStatus'];
         $PAMAStatus3 = $_POST['PAMAStatus3'];
 
 
@@ -54,6 +57,7 @@ try {
         $dateEnrolledInOVC = $_POST['dateEnrolledInOVC'];
         $CPMISNumber = $_POST['CPMISNumber'];
         $ovcVLCopies = $_POST['ovcVLCopies'];
+        $baselineOvcVlDate = $_POST['baselineOvcVlDate'];
         $dateDiscontinuedFromOVC = $_POST['dateDiscontinuedFromOVC'];
         $statusAtOVCDiscontinuation = $_POST['statusAtOVCDiscontinuation'];
         $enrolledInOTZ = $_POST['enrolledInOTZ'];
@@ -91,7 +95,7 @@ try {
             'latestZScore' => $latestZScore, 'opportunisticInfection' => $opportunisticInfection,
             'disclosureStatus' => $disclosureStatus, 'iptStatus' => $iptStatus, 'schooling' => $schooling,
             'statusAtTransition' => $statusAtTransition, 'enrolledInOVC' => $enrolledInOVC,
-            'dateEnrolledInOVC' => $dateEnrolledInOVC, 'CPMISNumber' => $CPMISNumber, 'ovcVLCopies' => $ovcVLCopies,
+            'dateEnrolledInOVC' => $dateEnrolledInOVC, 'CPMISNumber' => $CPMISNumber, 'ovcVLCopies' => $ovcVLCopies, 'baselineOvcVlDate' => $baselineOvcVlDate,
             'dateDiscontinuedFromOVC' => $dateDiscontinuedFromOVC, 'statusAtOVCDiscontinuation' => $statusAtOVCDiscontinuation,
             'enrolledInOTZ' => $enrolledInOTZ, 'dateEnrolledInOTZ' => $dateEnrolledInOTZ,
             'OTZArtRegimen' => $OTZArtRegimen, 'OTZVL' => $OTZVL, 'OTZVLDate' => $OTZVLDate, 
@@ -100,8 +104,9 @@ try {
             'dateDiscontinuedFromOTZ' => $dateDiscontinuedFromOTZ, 'enrolledInPAMA' => $enrolledInPAMA,
             'dateEnrolledInPAMA' => $dateEnrolledInPAMA, 'caregiverInSameFacility' => $caregiverInSameFacility,
             'caregiverType' => $caregiverType, 'caregiver1CCC' => $caregiver1CCC,
-            'caregiver2CCC' => $caregiver2CCC, 'caregiverVL' => $caregiverVL, 'caregiverVLDate' => $caregiverVLDate,
-            'caregiverVLStatus' => $caregiverVLStatus, 'PAMAStatus3' => $PAMAStatus3,
+            'caregiver2CCC' => $caregiver2CCC, 'caregiver1VL' => $caregiver1VL, 'caregiver1VLDate' => $caregiver1VLDate,
+            'caregiver2VL' => $caregiver2VL, 'caregiver2VLDate' => $caregiver2VLDate,
+            'caregiver1VLStatus' => $caregiverVL1Status, 'PAMAStatus3' => $PAMAStatus3,
             'PAMAStatus6' => $PAMAStatus6, 'PAMAStatus12' => $PAMAStatus12, 'PAMAStatus24' => $PAMAStatus24,
             'PAMAStatusCurrent' => $PAMAStatusCurrent, 'PAMAStatusTransition' => $PAMAStatusTransition,
             'dateDiscontinuedFromPAMA' => $dateDiscontinuedFromPAMA, 'comment' => $comment
