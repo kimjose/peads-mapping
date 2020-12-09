@@ -1,4 +1,4 @@
-const otzmodulesdiv = document.getElementById("otzmodulesdiv");
+// const otzmodulesdiv = document.getElementById("otzmodulesdiv");
 const userName = document.getElementById("userName");
 const lastLoginDate = document.getElementById("lastLoginDate");
 const dataEntryDate = document.getElementById("dataEntryDate");
@@ -28,7 +28,9 @@ const isLDL1 = document.getElementById("isLDL1");
 const vlcopiesInput = document.getElementById("vlcopies");
 const vldateInput = document.getElementById("vldate");
 // const vloutcomestatusInput = document.getElementById("vloutcomestatus");
-const currentvlstatustSelect = document.getElementById("currentvlstatustSelect");
+const currentvlstatustSelect = document.getElementById(
+  "currentvlstatustSelect"
+);
 const isZScoreCheck = document.getElementById("isZScore");
 const isMUACCheck = document.getElementById("isMUAC");
 const isBMICheck = document.getElementById("isBMI");
@@ -62,6 +64,7 @@ const otzVlDateInput = document.getElementById("otzvldate");
 const otzNextAppointmentDateInput = document.getElementById("otzNextAppointmentDate");
 const otzLastAttendDateInput = document.getElementById("otzlastAttendDate");
 const artAssessmentSelect = document.getElementById("artassessmentSelect");
+const otzModulesSelect = document.getElementById("modulesSelect");
 const otzTransitionStatusSelect = document.getElementById(
   "otzTransitionStatusSelect"
 );
@@ -107,7 +110,7 @@ $("input[type=checkbox]").change(function () {
   //   //   motherchkbox.checked = false;
   //   // }
 
-  if ($('#motherchkbox').is(':checked') && $('#fatherchkbox').is(':checked')) {
+  if ($("#motherchkbox").is(":checked") && $("#fatherchkbox").is(":checked")) {
     caregiver1cccnoInput.disabled = false;
     caregiver2cccnoInput.disabled = false;
   }
@@ -161,7 +164,7 @@ addNewPatient.addEventListener("click", () => {
 });
 
 initialize();
-$('#currentoiSelect').select2();
+$("#currentoiSelect").select2();
 
 $.ajax({
   dataType: "json",
@@ -169,15 +172,14 @@ $.ajax({
   success: function (data) {
     var opportunisticInfections = data.opportunisticInfections;
     opportunisticInfections.sort();
-    opportunisticInfections.forEach(oi => {
+    opportunisticInfections.forEach((oi) => {
       let option = document.createElement("option");
       option.setAttribute("value", oi);
       option.appendChild(document.createTextNode(oi));
       currentoiSelect.appendChild(option);
     });
-  }
+  },
 });
-
 
 btnSearch.addEventListener("click", () => loadPreviousObservation());
 
@@ -197,9 +199,9 @@ function initialize() {
   var d = new Date().toLocaleString();
   dataEntryDate.innerHTML = d;
 
-  isLDL1.addEventListener('click', () => {
+  isLDL1.addEventListener("click", () => {
     if (isLDL1.checked) {
-      vlcopiesInput.value = '';
+      vlcopiesInput.value = "";
       vlcopiesInput.disabled = true;
     } else {
       vlcopiesInput.disabled = false;
@@ -215,21 +217,21 @@ function initialize() {
     }
   });
 
-  isBMICheck.addEventListener('click', () => {
+  isBMICheck.addEventListener("click", () => {
     if (isBMICheck.checked) {
       isZScoreCheck.checked = false;
       isMUACCheck.checked = false;
     }
   });
 
-  isZScoreCheck.addEventListener('click', () => {
+  isZScoreCheck.addEventListener("click", () => {
     if (isZScoreCheck.checked) {
       isBMICheck.checked = false;
       isMUACCheck.checked = false;
     }
   });
 
-  isMUACCheck.addEventListener('click', () => {
+  isMUACCheck.addEventListener("click", () => {
     if (isMUACCheck.checked) {
       isBMICheck.checked = false;
       isZScoreCheck.checked = false;
@@ -249,8 +251,15 @@ function initialize() {
       var code = mResponse.code;
       if (code == 200) {
         var modules = mResponse.data;
+        for (let i = 0; i < modules.length; i++) {
+          const module = modules[i];
+          let option = document.createElement("option");
+          option.setAttribute("value", module.id);
+          option.appendChild(document.createTextNode(module.name));
+          otzModulesSelect.appendChild(option);
         // console.log(modules);
-        loadtocheckbox(modules);
+        // loadtocheckbox(modules);
+        }
       } else {
         //todo: display error message
       }
@@ -278,7 +287,7 @@ function initialize() {
     },
   });
 
-  $('#facilitySelect').select2();
+  $("#facilitySelect").select2();
 
   $.ajax({
     type: "GET",
@@ -300,36 +309,36 @@ function initialize() {
   });
 }
 
-function loadtocheckbox(modules) {
-  for (var i = 0; i < modules.length; i++) {
-    let module = modules[i];
-    // console.log(module.name);
+// function loadtocheckbox(modules) {
+//   for (var i = 0; i < modules.length; i++) {
+//     let module = modules[i];
+//     // console.log(module.name);
 
-    // create the div container for the checkbox
-    var checkboxdiv = document.createElement("div");
-    checkboxdiv.classList.add("custom-control");
-    checkboxdiv.classList.add("custom-checkbox");
-    checkboxdiv.classList.add("ml-2");
+//     // create the div container for the checkbox
+//     var checkboxdiv = document.createElement("div");
+//     checkboxdiv.classList.add("custom-control");
+//     checkboxdiv.classList.add("custom-checkbox");
+//     checkboxdiv.classList.add("ml-2");
 
-    //create checkbox
-    var checkBox = document.createElement("input");
-    checkBox.setAttribute("type", "checkbox");
-    checkBox.classList.add("custom-control-input");
-    checkBox.setAttribute("id", module.id);
+//     //create checkbox
+//     var checkBox = document.createElement("input");
+//     checkBox.setAttribute("type", "checkbox");
+//     checkBox.classList.add("custom-control-input");
+//     checkBox.setAttribute("id", module.id);
 
-    // create a label for the checkbox
-    var label = document.createElement("label");
-    label.setAttribute("for", module.id);
-    label.classList.add("custom-control-label");
+//     // create a label for the checkbox
+//     var label = document.createElement("label");
+//     label.setAttribute("for", module.id);
+//     label.classList.add("custom-control-label");
 
-    label.appendChild(document.createTextNode(module.name));
+//     label.appendChild(document.createTextNode(module.name));
 
-    checkboxdiv.appendChild(checkBox);
-    checkboxdiv.appendChild(label);
+//     checkboxdiv.appendChild(checkBox);
+//     checkboxdiv.appendChild(label);
 
-    otzmodulesdiv.appendChild(checkboxdiv);
-  }
-}
+//     otzmodulesdiv.appendChild(checkboxdiv);
+//   }
+// }
 
 function loadPreviousObservation() {
   let cccNo = cccNoInput.value;
@@ -455,9 +464,9 @@ function loadObsData(observation) {
   isZScoreCheck.checked = false;
   isMUACCheck.checked = false;
   isBMICheck.checked = false;
-  if (observation.vlScoreType == 'ZScore') isZScoreCheck.checked = true;
-  else if (observation.vlScoreType == 'MUAC') isMUACCheck.checked = true;
-  else if (observation.vlScoreType == 'BMI') isBMICheck.checked = true;
+  if (observation.vlScoreType == "ZScore") isZScoreCheck.checked = true;
+  else if (observation.vlScoreType == "MUAC") isMUACCheck.checked = true;
+  else if (observation.vlScoreType == "BMI") isBMICheck.checked = true;
 
   zscoreInput.value = observation.latestZScore;
   var opprtunisticInfections = currentoiSelect.options;
@@ -583,14 +592,21 @@ function loadObsData(observation) {
   }
   otzLastAttendDateInput.value = observation.lastAttendDate;
   otzNextAppointmentDateInput.value = observation.nextAppointmentDate;
-  var modulesCompleted = JSON.parse(observation.completedOTZModules);
-  console.log(modulesCompleted);
-  var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
-  checkBoxes.forEach((checkBox) => {
-    if (modulesCompleted.indexOf(checkBox.getAttribute("id")) != -1) {
-      checkBox.checked = true;
+  var otzModules = otzModulesSelect.options;
+  for (var i = 0; i < otzModules.length; i++) {
+    const otzModule = otzModules[i];
+    if (otzModule.value == observation.completedOTZModules) {
+      otzModulesSelect.selectedIndex = i;
     }
-  });
+  }
+  // var modulesCompleted = JSON.parse(observation.completedOTZModules);
+  // console.log(modulesCompleted);
+  // var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
+  // checkBoxes.forEach((checkBox) => {
+  //   if (modulesCompleted.indexOf(checkBox.getAttribute("id")) != -1) {
+  //     checkBox.checked = true;
+  //   }
+  // });
   var tranStatOptions = otzTransitionStatusSelect.options;
   for (var i = 0; i < tranStatOptions.length; i++) {
     const tranStatOption = tranStatOptions[i];
@@ -690,7 +706,7 @@ function loadObsData(observation) {
  *
  * @return {array[ boolean, string ]}
  */
-function verify() { }
+function verify() {}
 
 function submitData() {
   // submitPatientData();
@@ -708,14 +724,14 @@ function submitData() {
     ].value;
   let vlDate = vldateInput.value;
   let vlCopies = isLDL1.checked ? "LDL" : vlcopiesInput.value;
-  let vlOutcome = "Not Done"
+  let vlOutcome = "Not Done";
   if (isLDL1.checked || vlcopiesInput.value < 1000) vlOutcome = "Supressed";
   else if (vlCopies.value >= 1000) vlOutcome = "Not Supressed";
   // let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
-  let vlScoreType = '';
-  if (isBMICheck.checked) vlScoreType = 'BMI';
-  else if (isZScoreCheck.checked) vlScoreType = 'ZScore';
-  else if (isMUACCheck.checked) vlScoreType = 'MUAC';
+  let vlScoreType = "";
+  if (isBMICheck.checked) vlScoreType = "BMI";
+  else if (isZScoreCheck.checked) vlScoreType = "ZScore";
+  else if (isMUACCheck.checked) vlScoreType = "MUAC";
   let latestZScore = zscoreInput.value;
   let opportunisticInfection =
     currentoiSelect.options[currentoiSelect.selectedIndex].value;
@@ -778,14 +794,14 @@ function submitData() {
     let nextAppointmentDate = otzNextAppointmentDateInput.value;
   let ArtAdherenceAssessment =
     artAssessmentSelect.options[artAssessmentSelect.selectedIndex].value;
-  let completedOTZModules = [];
-  var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
-  checkBoxes.forEach((checkBox) => {
-    if (checkBox.checked == true) {
-      completedOTZModules.push(checkBox.getAttribute("id"));
-    }
-  });
-  console.log(completedOTZModules);
+  // let completedOTZModules = [];
+  // var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
+  // checkBoxes.forEach((checkBox) => {
+  //   if (checkBox.checked == true) {
+  //     completedOTZModules.push(checkBox.getAttribute("id"));
+  //   }
+  // });
+  // console.log(completedOTZModules);
   let statusAtOTZTransition =
     otzTransitionStatusSelect.options[otzTransitionStatusSelect.selectedIndex]
       .value;
@@ -935,7 +951,7 @@ function submitPatientData() {
       startRegimen: startRegimen,
       dsa: dsa,
       startkaletra: startkaletra,
-      newpatient: newpatient
+      newpatient: newpatient,
     },
     success: function (response) {
       var mResponse = JSON.parse(response);
@@ -954,67 +970,69 @@ function submitPatientData() {
 }
 
 var text_max = 100;
-$('#count_message').html('0 / ' + text_max);
+$("#count_message").html("0 / " + text_max);
 
-$('#commentArea').keyup(function () {
-  var text_length = $('#commentArea').val().length;
+$("#commentArea").keyup(function () {
+  var text_length = $("#commentArea").val().length;
   var text_remaining = text_max - text_length;
 
-  $('#count_message').html(text_length + ' / ' + text_max);
+  $("#count_message").html(text_length + " / " + text_max);
 });
 /**
- * 
- * @param {boolean} disableOptions 
+ *
+ * @param {boolean} disableOptions
  */
 function ovcOptionChanged(disableOptions = false) {
-  var selectedValue = ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
+  var selectedValue =
+    ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
   var ovcFields = document.querySelectorAll(".ovcClass");
   if (selectedValue == "Yes") {
     if (disableOptions) ovcenrolledSelect.disabled = true;
-    ovcFields.forEach(ovcField => {
+    ovcFields.forEach((ovcField) => {
       ovcField.removeAttribute("disabled");
     });
   } else {
-    ovcFields.forEach(ovcField => {
+    ovcFields.forEach((ovcField) => {
       ovcField.setAttribute("disabled", "");
     });
   }
 }
 
-
 /**
- * 
- * @param {boolean} disableOptions 
+ *
+ * @param {boolean} disableOptions
  */
 function otzOptionChanged(disableOptions = false) {
-  var selectedValue = otzenrolledSelect.options[otzenrolledSelect.selectedIndex].value;
+  var selectedValue =
+    otzenrolledSelect.options[otzenrolledSelect.selectedIndex].value;
   var otzFields = document.querySelectorAll(".otzClass");
   if (selectedValue == "Yes") {
     if (disableOptions) otzenrolledSelect.readOnly = true;
-    otzFields.forEach(otzField => {
+    otzFields.forEach((otzField) => {
       otzField.removeAttribute("disabled");
     });
   } else {
-    otzFields.forEach(otzField => {
+    otzFields.forEach((otzField) => {
       otzField.setAttribute("disabled", "");
     });
   }
 }
 
 /**
- * 
- * @param {boolean} disableOptions 
+ *
+ * @param {boolean} disableOptions
  */
 function pamaOptionChanged(disableOptions = false) {
-  var selectedValue = pamaEnrolledSelect.options[pamaEnrolledSelect.selectedIndex].value;
+  var selectedValue =
+    pamaEnrolledSelect.options[pamaEnrolledSelect.selectedIndex].value;
   var pamaFields = document.querySelectorAll(".pamaClass");
   if (selectedValue == "Yes") {
     if (disableOptions) pamaEnrolledSelect.readOnly = true;
-    pamaFields.forEach(pamaField => {
+    pamaFields.forEach((pamaField) => {
       pamaField.removeAttribute("disabled");
     });
   } else {
-    pamaFields.forEach(pamaField => {
+    pamaFields.forEach((pamaField) => {
       pamaField.setAttribute("disabled", "");
     });
   }

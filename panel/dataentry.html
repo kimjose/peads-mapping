@@ -464,11 +464,17 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Current Viral Load Copies</td>
                                                         <td class="d-inline-block col-8">
-                                                            <div>
-                                                                <input type="checkbox" id="isLDL1">
-                                                                <label for="isLDL1" value="LDL">LDL</label>
+                                                            <div class="float-left">
+                                                                <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="isLDL1">
+                                                                    <label for="isLDL1" value="LDL"
+                                                                        class="custom-control-label">LDL</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="float-right" style="width: 80%;">
                                                                 <input type="number" name="vlcopies"
-                                                                    class="form-control" style="width: 100%;"
+                                                                    class="form-control"
                                                                     placeholder="Enter Current Viral Load Copies"
                                                                     id="vlcopies">
                                                             </div>
@@ -591,7 +597,7 @@
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
                                                                 <option value="Transition to Adult Care">Transition to
-                                                                    Adult Care
+                                                                    Adult Care (20+)
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -618,8 +624,23 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">VL Ressult</td>
-                                                        <td class="d-inline-block col-8"></td>
+                                                        <td class="d-inline-block col-4">VL Result</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <div class="float-left">
+                                                                <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="isLDL2">
+                                                                    <label for="isLDL2" value="LDL"
+                                                                        class="custom-control-label">LDL</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="float-right" style="width: 80%;">
+                                                                <input type="number" name="vlcopies"
+                                                                    class="form-control"
+                                                                    placeholder="Enter Current Viral Load Copies"
+                                                                    id="vlcopies" disabled>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -694,7 +715,7 @@
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
                                                                 <option value="Transition to Adult Care">Transition to
-                                                                    Adult Care
+                                                                    Adult Care (20+)
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -754,9 +775,20 @@
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Baseline OTZ VL</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="number" name="otzvl"
-                                                                class="form-control otzClass" disabled
-                                                                placeholder="Enter OTZ VL (cps/ml)" id="otzvl">
+                                                            <div class="float-left">
+                                                                <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="isLDL4">
+                                                                    <label for="isLDL4" value="LDL"
+                                                                        class="custom-control-label">LDL</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="float-right" style="width: 80%;">
+                                                                <input type="number" name="otzvl"
+                                                                    class="form-control otzClass" disabled
+                                                                    placeholder="Enter OTZ VL (cps/ml)" id="otzvl">
+                                                            </div>
+
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -817,10 +849,13 @@
                                                         <td class="d-inline-block col-4">Last Completed OTZ Modules
                                                         </td>
                                                         <td class="d-inline-block col-8">
-                                                            <div class="form-group otzClass" disabled
+                                                            <select class="form-control otzClass" id="modulesSelect" disabled>
+                                                                <option value="" hidden>Select Module</option>
+                                                            </select>
+                                                            <!-- <div class="form-group otzClass" disabled
                                                                 id="otzmodulesdiv">
 
-                                                            </div>
+                                                            </div> -->
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -833,9 +868,9 @@
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition
-                                                                    to Adult Care
+                                                                <option value="Transition to Adult Care">Transition to Adult Care (20+)
                                                                 </option>
+                                                                <option value="Opted Out">Opted Out</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -908,17 +943,20 @@
                                                             <div class="custom-control custom-checkbox ml-2">
                                                                 <input type="checkbox" class="custom-control-input pamaClass" disabled
                                                                     id='motherchkbox'>
-                                                                <label for="motherchkbox" class="custom-control-label">Mother</label>
+                                                                <label for="motherchkbox"
+                                                                    class="custom-control-label">Mother</label>
                                                             </div>
                                                             <div class="custom-control custom-checkbox ml-2">
                                                                 <input type="checkbox" class="custom-control-input pamaClass" disabled
                                                                     id='fatherchkbox'>
-                                                                <label for="fatherchkbox" class="custom-control-label">Father</label>
+                                                                <label for="fatherchkbox"
+                                                                    class="custom-control-label">Father</label>
                                                             </div>
                                                             <div class="custom-control custom-checkbox ml-2">
                                                                 <input type="checkbox" class="custom-control-input pamaClass" disabled
                                                                     id='guardianchkbox'>
-                                                                <label for="guardianchkbox" class="custom-control-label">Guardian</label>
+                                                                <label for="guardianchkbox"
+                                                                    class="custom-control-label">Guardian</label>
                                                             </div>
 
                                                         </td>
@@ -947,9 +985,20 @@
                                                             (cps/ml)
                                                         </td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="number" name="caregivervl"
-                                                                class="form-control pamaClass" disabled
-                                                                placeholder="Enter Caregiver VL" id="caregivervl">
+                                                            <div class="float-left">
+                                                                <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="isLDL5">
+                                                                    <label for="isLDL5" value="LDL"
+                                                                        class="custom-control-label">LDL</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="float-right" style="width: 80%;">
+                                                                <input type="number" name="caregivervl"
+                                                                    class="form-control pamaClass" disabled
+                                                                    placeholder="Enter Caregiver VL" id="caregivervl">
+                                                            </div>
+
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -1049,7 +1098,7 @@
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
                                                                 <option value="Transition to Adult Care">Transition to
-                                                                    Adult Care
+                                                                    Adult Care (20+)
                                                                 </option>
                                                             </select>
                                                         </td>
@@ -1066,7 +1115,7 @@
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
                                                                 <option value="Transition to Adult Care">Transition to
-                                                                    Adult Care
+                                                                    Adult Care (20+)
                                                                 </option>
                                                             </select>
                                                         </td>
