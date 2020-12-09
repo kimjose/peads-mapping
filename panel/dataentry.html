@@ -556,6 +556,7 @@
                                                                 <option value="Partial/Ongoing">Partial/ongoing
                                                                     disclosure</option>
                                                                 <option value="Not started">Not started</option>
+                                                                <option value="NA">Not Applicable</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -610,7 +611,7 @@
                                             <table class="table table-bordered table-info">
                                                 <thead>
                                                     <tr class="row m-0">
-                                                        <th class="d-inline-block col-12 text-center">Latest Viral Load
+                                                        <th class="d-inline-block col-12 text-center">CAL Latest Viral Load
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -640,6 +641,207 @@
                                                                     placeholder="Enter Current Viral Load Copies"
                                                                     id="vlcopies" disabled>
                                                             </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-info">
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">PAMA Caregiver Latest Viral Load
+                                                        </th>
+                                                        <th class="d-inline-block col-12 text-center">
+                                                            <div class="custom-control custom-checkbox ml-2">
+                                                                <input type="checkbox" class="custom-control-input pamaClass" disabled
+                                                                    id='motherchkbox'>
+                                                                <label for="motherchkbox"
+                                                                    class="custom-control-label">Mother</label>
+                                                            </div>
+
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">CCC Number</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="caregiver1cccno"
+                                                                class="form-control" disabled
+                                                                placeholder="Enter Mother's CCC No"
+                                                                id="caregiver1cccno">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Baseline Viral Load</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <div class="float-left">
+                                                                <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="isLDLmother" disabled>
+                                                                    <label for="isLDLmother" value="LDL"
+                                                                        class="custom-control-label">LDL</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="float-right" style="width: 80%;">
+                                                                <input type="number" name="vlcopies"
+                                                                    class="form-control"
+                                                                    placeholder="Enter Current Viral Load Copies"
+                                                                    id="mothervlcopies" disabled>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Baseline VL</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="ovcenrollmentdate"
+                                                                class="form-control" id="motherlastvlDate"
+                                                                disabled>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Mother Current viral load status
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="mothervlstatustSelect"
+                                                                class="form-control" disabled>
+                                                                <option value="" hidden>Select Status</option>
+                                                                <option value="Supressed">Supressed</option>
+                                                                <option value="Not Supressed">Not Supressed</option>
+                                                                <option value="No viral load">No Viral Load</option>
+                                                                <option value="" selected></option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">
+                                                            <div class="custom-control custom-checkbox ml-2">
+                                                                <input type="checkbox" class="custom-control-input pamaClass" disabled
+                                                                    id='fatherchkbox'>
+                                                                <label for="fatherchkbox"
+                                                                    class="custom-control-label">Father</label>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">CCC Number</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="caregiver2cccno"
+                                                                class="form-control" disabled
+                                                                placeholder="Enter Father's CCC No"
+                                                                id="caregiver2cccno">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Baseline Viral Load</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <div class="float-left">
+                                                                <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="isLDLfather">
+                                                                    <label for="isLDLfather" value="LDL"
+                                                                        class="custom-control-label">LDL</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="float-right" style="width: 80%;">
+                                                                <input type="number" name="vlcopies"
+                                                                    class="form-control"
+                                                                    placeholder="Enter Current Viral Load Copies"
+                                                                    id="fathervlcopies" disabled>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Baseline VL</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="ovcenrollmentdate"
+                                                                class="form-control" id="fatherlastvlDate"
+                                                                disabled>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Father Current viral load status
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="fathervlstatustSelect"
+                                                                class="form-control" disabled>
+                                                                <option value="" hidden>Select Status</option>
+                                                                <option value="Supressed">Supressed</option>
+                                                                <option value="Not Supressed">Not Supressed</option>
+                                                                <option value="No viral load">No Viral Load</option>
+                                                                <option value="" selected></option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">
+                                                            <div class="custom-control custom-checkbox ml-2">
+                                                                <input type="checkbox" class="custom-control-input pamaClass" disabled
+                                                                    id='guardianchkbox'>
+                                                                <label for="guardianchkbox"
+                                                                    class="custom-control-label">Guardian</label>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">CCC Number</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="caregiver3cccno"
+                                                                class="form-control" disabled
+                                                                placeholder="Enter Guradian's CCC No"
+                                                                id="caregiver3cccno">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Baseline Viral Load</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <div class="float-left">
+                                                                <div class="custom-control custom-checkbox ml-2">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="isLDLguardian">
+                                                                    <label for="isLDLguardian" value="LDL"
+                                                                        class="custom-control-label">LDL</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="float-right" style="width: 80%;">
+                                                                <input type="number" name="vlcopies"
+                                                                    class="form-control"
+                                                                    placeholder="Enter Current Viral Load Copies"
+                                                                    id="guardianvlcopies" disabled>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Baseline VL</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="ovcenrollmentdate"
+                                                                class="form-control" id="guardianlastvlDate"
+                                                                disabled>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Guardian Current viral load status
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="guardianvlstatustSelect"
+                                                                class="form-control" disabled>
+                                                                <option value="" hidden>Select Status</option>
+                                                                <option value="Supressed">Supressed</option>
+                                                                <option value="Not Supressed">Not Supressed</option>
+                                                                <option value="No viral load">No Viral Load</option>
+                                                                <option value="" selected></option>
+                                                            </select>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -693,7 +895,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Current OVC VL Copies</td>
+                                                        <td class="d-inline-block col-4">Baseline OVC Viral Load</td>
                                                         <td class="d-inline-block col-8">
                                                                 <input type="checkbox" class="ovcClass" disabled id="isLDL2">
                                                                 <label for="isLDL2" value="LDL">LDL</label>
@@ -701,6 +903,16 @@
                                                                     class="form-control ovcClass" style="width: 100%;"
                                                                     placeholder="Enter Current Viral Load Copies"
                                                                     id="ovcVLcopies">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Baseline OVC VL
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="otzvldate"
+                                                                class="form-control otzClass" disabled
+                                                                placeholder="Enter Date of Baseline OVC VL"
+                                                                id="ovcvldate">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -714,9 +926,7 @@
                                                                 <option value="Transfer Out">Transfer Out</option>
                                                                 <option value="LTFU">LTFU</option>
                                                                 <option value="Dead">Dead</option>
-                                                                <option value="Transition to Adult Care">Transition to
-                                                                    Adult Care (20+)
-                                                                </option>
+                                                                <option value="Opted Out">Opted Out</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -814,21 +1024,12 @@
                                                         </td>
                                                     </tr> -->
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date of last attendance</td>
+                                                        <td class="d-inline-block col-4">Date of last Clinical/ART Visit</td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="date" name="otzenrollmentdate"
                                                                 class="form-control otzClass" disabled
                                                                 placeholder="Enter Date Enrolled in OTZ"
                                                                 id="otzlastAttendDate">
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date of Next Appointement</td>
-                                                        <td class="d-inline-block col-8">
-                                                            <input type="date" name="otzenrollmentdate"
-                                                                class="form-control otzClass" disabled
-                                                                placeholder="Enter Date Enrolled in OTZ"
-                                                                id="otzNextAppointmentDate">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -843,6 +1044,15 @@
                                                                 <option value="Unsatisfactory">Unsatisfactory
                                                                 </option>
                                                             </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Next Appointement</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="otzenrollmentdate"
+                                                                class="form-control otzClass" disabled
+                                                                placeholder="Enter Date Enrolled in OTZ"
+                                                                id="otzNextAppointmentDate">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -931,16 +1141,16 @@
                                                             </select>
                                                         </td>
                                                     </tr>
-                                                    <tr class="row m-0">
+                                                    <!-- <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Type of PAMA Caregiver</td>
-                                                        <td class="d-inline-block col-8">
+                                                        <td class="d-inline-block col-8"> -->
                                                             <!-- <select id="caregivertypeSelect" class="form-control pamaClass" disabled>
                                                                 <option value="" hidden>Select Type</option>
                                                                 <option value="Mother">Mother</option>
                                                                 <option value="Father">Father</option>
                                                                 <option value="Guardian">Guardian</option>
                                                             </select> -->
-                                                            <div class="custom-control custom-checkbox ml-2">
+                                                            <!-- <div class="custom-control custom-checkbox ml-2">
                                                                 <input type="checkbox" class="custom-control-input pamaClass" disabled
                                                                     id='motherchkbox'>
                                                                 <label for="motherchkbox"
@@ -957,11 +1167,11 @@
                                                                     id='guardianchkbox'>
                                                                 <label for="guardianchkbox"
                                                                     class="custom-control-label">Guardian</label>
-                                                            </div>
+                                                            </div> -->
 
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="row m-0">
+                                                        <!-- </td>
+                                                    </tr> -->
+                                                    <!-- <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Mother's CCC Number</td>
                                                         <td class="d-inline-block col-8">
                                                             <input type="number" name="caregiver1cccno"
@@ -1011,8 +1221,8 @@
                                                                 placeholder="Enter Date Discontinued from OVC care"
                                                                 id="caregivervlddate">
                                                         </td>
-                                                    </tr>
-                                                    <tr class="row m-0">
+                                                    </tr> -->
+                                                    <!-- <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Care giver Current viral
                                                             laod
                                                             status
@@ -1027,7 +1237,7 @@
                                                                 <option value="" selected></option>
                                                             </select>
                                                         </td>
-                                                    </tr>
+                                                    </tr> -->
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">PAMA status_at 3month after
                                                             enrollment</td>

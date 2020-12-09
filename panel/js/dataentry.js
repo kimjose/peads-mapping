@@ -77,6 +77,13 @@ const caregiverenrolledSelect = document.getElementById(
 // const caregivertypeSelect = document.getElementById("caregivertypeSelect");
 const caregiver1cccnoInput = document.getElementById("caregiver1cccno");
 const caregiver2cccnoInput = document.getElementById("caregiver2cccno");
+const caregiver3cccnoInput = document.getElementById("caregiver3cccno");
+const mothervlcopiesInput = document.getElementById("mothervlcopies");
+const motherlastvlDateInput = document.getElementById("motherlastvlDate");
+const fathervlcopiesInput = document.getElementById("fathervlcopies");
+const fatherlastvlDateInput = document.getElementById("fatherlastvlDate");
+const guardianvlcopiesInput = document.getElementById("guardianvlcopies");
+const guardianlastvlDateInput = document.getElementById("guardianlastvlDate");
 const caregivervlInput = document.getElementById("caregivervl");
 const caregivervlddateInput = document.getElementById("caregivervlddate");
 const caregivervlstatustSelect = document.getElementById(
@@ -104,16 +111,16 @@ const guardianchkbox = document.getElementById("guardianchkbox");
 const fatherchkbox = document.getElementById("fatherchkbox");
 const motherchkbox = document.getElementById("motherchkbox");
 
-$("input[type=checkbox]").change(function () {
+// $("input[type=checkbox]").change(function () {
   //   // if ($('guardianchkbox').is(':checked')) {
   //   //   fatherchkbox.checked = false;
   //   //   motherchkbox.checked = false;
   //   // }
 
-  if ($("#motherchkbox").is(":checked") && $("#fatherchkbox").is(":checked")) {
-    caregiver1cccnoInput.disabled = false;
-    caregiver2cccnoInput.disabled = false;
-  }
+  // if ($("#motherchkbox").is(":checked") && $("#fatherchkbox").is(":checked")) {
+  //   caregiver1cccnoInput.disabled = false;
+  //   caregiver2cccnoInput.disabled = false;
+  // }
 
   //   // if ($('#motherchkbox').is(':checked')) {
   //   //   guardianchkbox.checked = false;
@@ -126,14 +133,26 @@ $("input[type=checkbox]").change(function () {
   //   //   fatherchkbox.checked = false;
   //   //   motherchkbox.checked = false;
   //   // }
-});
+// });
 
 guardianchkbox.addEventListener("click", () => {
   if (guardianchkbox.checked) {
     fatherchkbox.checked = false;
     motherchkbox.checked = false;
+    // caregiver1cccnoInput.disabled = true;
+    caregiver3cccnoInput.disabled = false;
+    guardianvlcopiesInput.disabled = false;
+    guardianlastvlDateInput.disabled = false;
     caregiver1cccnoInput.disabled = true;
+    mothervlcopiesInput.disabled = true;
+    motherlastvlDateInput.disabled = true;
     caregiver2cccnoInput.disabled = true;
+    fathervlcopiesInput.disabled = true;
+    fatherlastvlDateInput.disabled = true;
+  } else {
+    caregiver3cccnoInput.disabled = true;
+    guardianvlcopiesInput.disabled = true;
+    guardianlastvlDateInput.disabled = true;
   }
 });
 
@@ -141,15 +160,33 @@ motherchkbox.addEventListener("click", () => {
   if (motherchkbox.checked) {
     guardianchkbox.checked = false;
     caregiver1cccnoInput.disabled = false;
-    caregiver2cccnoInput.disabled = true;
+    mothervlcopiesInput.disabled = false;
+    motherlastvlDateInput.disabled = false;
+    caregiver3cccnoInput.disabled = true;
+    guardianvlcopiesInput.disabled = true;
+    guardianlastvlDateInput.disabled = true;
+    // caregiver2cccnoInput.disabled = true;
+  } else {
+    caregiver1cccnoInput.disabled = true;
+    mothervlcopiesInput.disabled = true;
+    motherlastvlDateInput.disabled = true;
   }
 });
 
 fatherchkbox.addEventListener("click", () => {
   if (fatherchkbox.checked) {
     guardianchkbox.checked = false;
-    caregiver1cccnoInput.disabled = true;
+    // caregiver1cccnoInput.disabled = true;
     caregiver2cccnoInput.disabled = false;
+    fathervlcopiesInput.disabled = false;
+    fatherlastvlDateInput.disabled = false;
+    caregiver3cccnoInput.disabled = true;
+    guardianvlcopiesInput.disabled = true;
+    guardianlastvlDateInput.disabled = true;
+  } else {
+    caregiver2cccnoInput.disabled = true;
+    fathervlcopiesInput.disabled = true;
+    fatherlastvlDateInput.disabled = true;
   }
 });
 
