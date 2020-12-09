@@ -42,13 +42,15 @@ try {
         $caregiver1VLStatus = $_POST['caregiver1VLStatus'];
         $caregiver2VL = $_POST['caregiver2VL'];
         $caregiver2VLDate = $_POST['caregiver2VLDate'];
-        $caregiver2VLStatus = $_POST['caregiver2VLStatus'];
+       // $caregiver2VLStatus = $_POST['caregiver2VLStatus'];
         $PAMAStatus3 = $_POST['PAMAStatus3'];
 
-
+        
         $OTZArtRegimen = $_POST['OTZArtRegimen'];
         $OTZVL = $_POST['OTZVL'];
         $OTZVLDate = $_POST['OTZVLDate'];
+        $lastAttendDate = $_POST['lastAttendDate'];
+        $nextAppointmentDate = $_POST['nextAppointmentDate'];
         $ArtAdherenceAssessment = $_POST['ArtAdherenceAssessment'];
         $completedOTZModules = $_POST['completedOTZModules'];
         $statusAtOTZTransition = $_POST['statusAtOTZTransition'];
@@ -106,7 +108,7 @@ try {
             'caregiverType' => $caregiverType, 'caregiver1CCC' => $caregiver1CCC,
             'caregiver2CCC' => $caregiver2CCC, 'caregiver1VL' => $caregiver1VL, 'caregiver1VLDate' => $caregiver1VLDate,
             'caregiver2VL' => $caregiver2VL, 'caregiver2VLDate' => $caregiver2VLDate,
-            'caregiver1VLStatus' => $caregiverVL1Status, 'PAMAStatus3' => $PAMAStatus3,
+            'caregiver1VLStatus' => $caregiver1VLStatus, 'PAMAStatus3' => $PAMAStatus3,
             'PAMAStatus6' => $PAMAStatus6, 'PAMAStatus12' => $PAMAStatus12, 'PAMAStatus24' => $PAMAStatus24,
             'PAMAStatusCurrent' => $PAMAStatusCurrent, 'PAMAStatusTransition' => $PAMAStatusTransition,
             'dateDiscontinuedFromPAMA' => $dateDiscontinuedFromPAMA, 'comment' => $comment

@@ -49,6 +49,7 @@ const ovcEnrollmentDateInput = document.getElementById("ovcEnrollmentDate");
 const cpmisNumberInput = document.getElementById("cpmisNumber");
 const isLDL2 = document.getElementById("isLDL2");
 const ovcVLcopiesInput = document.getElementById("ovcVLcopies");
+const ovcVLDateInput = document.getElementById("ovcvldate");
 const ovcDiscontinuedDateInput = document.getElementById("ovcDiscontinuedDate");
 const ovcDiscontinuationStatusSelect = document.getElementById(
   "ovcDiscontinuationStatusSelect"
@@ -79,8 +80,31 @@ const caregiverenrolledSelect = document.getElementById(
 const caregiver1cccnoInput = document.getElementById("caregiver1cccno");
 const caregiver2cccnoInput = document.getElementById("caregiver2cccno");
 const isLDL5 = document.getElementById("isLDL5");
+const caregiver3cccnoInput = document.getElementById("caregiver3cccno");
+// const mothervlcopiesInput = document.getElementById("mothervlcopies");
+// const motherlastvlDateInput = document.getElementById("motherlastvlDate");
+// const fathervlcopiesInput = document.getElementById("fathervlcopies");
+// const fatherlastvlDateInput = document.getElementById("fatherlastvlDate");
+// const guardianvlcopiesInput = document.getElementById("guardianvlcopies");
+// const guardianlastvlDateInput = document.getElementById("guardianlastvlDate");
 const caregivervlInput = document.getElementById("caregivervl");
 const caregivervlddateInput = document.getElementById("caregivervlddate");
+
+const tbodyMother = document.getElementById("tbodyMother");
+const isLDLmother = document.getElementById("isLDLmother");
+const motherVlCopiesInput = document.getElementById("mothervlcopies");
+const motherlastvlDateInput = document.getElementById("motherlastvlDate");
+
+const tbodyFather = document.getElementById("tbodyFather");
+const isLDLfather = document.getElementById("isLDLfather");
+const fatherVlCopiesInput = document.getElementById("fathervlcopies");
+const fatherlastvlDateInput = document.getElementById("fatherlastvlDate");
+
+const tbodyGuardian = document.getElementById("tbodyGuardian");
+const isLDLguardian = document.getElementById("isLDLguardian");
+const guardianVlCopiesInput = document.getElementById("guardianvlcopies");
+const guardianlastvlDate = document.getElementById("guardianlastvlDate");
+
 const caregivervlstatustSelect = document.getElementById(
   "caregivervlstatustSelect"
 );
@@ -106,52 +130,125 @@ const guardianchkbox = document.getElementById("guardianchkbox");
 const fatherchkbox = document.getElementById("fatherchkbox");
 const motherchkbox = document.getElementById("motherchkbox");
 
-$("input[type=checkbox]").change(function () {
-  //   // if ($('guardianchkbox').is(':checked')) {
-  //   //   fatherchkbox.checked = false;
-  //   //   motherchkbox.checked = false;
-  //   // }
+// $("input[type=checkbox]").change(function () {
+//   // if ($('guardianchkbox').is(':checked')) {
+//   //   fatherchkbox.checked = false;
+//   //   motherchkbox.checked = false;
+//   // }
 
-  if ($("#motherchkbox").is(":checked") && $("#fatherchkbox").is(":checked")) {
-    caregiver1cccnoInput.disabled = false;
-    caregiver2cccnoInput.disabled = false;
-  }
+// if ($("#motherchkbox").is(":checked") && $("#fatherchkbox").is(":checked")) {
+//   caregiver1cccnoInput.disabled = false;
+//   caregiver2cccnoInput.disabled = false;
+// }
 
-  //   // if ($('#motherchkbox').is(':checked')) {
-  //   //   guardianchkbox.checked = false;
-  //   // }
-  //   // if ($('#fatherchkbox').is(':checked')) {
-  //   //   guardianchkbox.checked = false;
-  //   // }
+//   // if ($('#motherchkbox').is(':checked')) {
+//   //   guardianchkbox.checked = false;
+//   // }
+//   // if ($('#fatherchkbox').is(':checked')) {
+//   //   guardianchkbox.checked = false;
+//   // }
 
-  //   // if ($('guardianchkbox').is(':checked')) {
-  //   //   fatherchkbox.checked = false;
-  //   //   motherchkbox.checked = false;
-  //   // }
-});
-
+//   // if ($('guardianchkbox').is(':checked')) {
+//   //   fatherchkbox.checked = false;
+//   //   motherchkbox.checked = false;
+//   // }
+// });
+/*
 guardianchkbox.addEventListener("click", () => {
   if (guardianchkbox.checked) {
     fatherchkbox.checked = false;
     motherchkbox.checked = false;
+    // caregiver1cccnoInput.disabled = true;
+    caregiver3cccnoInput.disabled = false;
+    guardianvlcopiesInput.disabled = false;
+    guardianlastvlDateInput.disabled = false;
     caregiver1cccnoInput.disabled = true;
+    mothervlcopiesInput.disabled = true;
+    motherlastvlDateInput.disabled = true;
     caregiver2cccnoInput.disabled = true;
+    fathervlcopiesInput.disabled = true;
+    fatherlastvlDateInput.disabled = true;
+  } else {
+    caregiver3cccnoInput.disabled = true;
+    guardianvlcopiesInput.disabled = true;
+    guardianlastvlDateInput.disabled = true;
   }
+});*/
+motherchkbox.addEventListener('change', () => {
+  guardianchkbox.checked = false;
+  caregiverChanged();
 });
-
+isLDLmother.addEventListener('change', () => {
+  if(isLDLmother.checked) {
+    motherVlCopiesInput.value = '';
+    motherVlCopiesInput.readOnly = true;
+  } else motherVlCopiesInput.readOnly = true;
+});
+fatherchkbox.addEventListener('change', () => {
+  guardianchkbox.checked = false;
+  caregiverChanged();
+});
+isLDLfather.addEventListener('change', () => {
+  if(isLDLfather.checked) {
+    fatherVlCopiesInput.value = '';
+    fatherVlCopiesInput.readOnly = true;
+  } else fatherVlCopiesInput.readOnly = false;
+});
+guardianchkbox.addEventListener('change', () => {
+  tbodyFather.checked = false;
+  tbodyMother.checked = false;
+  caregiverChanged();
+});
+isLDLguardian.addEventListener('change', () => {
+  if(isLDLguardian.checked) {
+    guardianVlCopiesInput.value = '';
+    guardianVlCopiesInput.readOnly = true;
+  } else guardianVlCopiesInput.readOnly = false;
+});
+function caregiverChanged() {
+  if (guardianchkbox.checked) {
+    tbodyGuardian.removeAttribute('hidden');
+  } else tbodyGuardian.setAttribute('hidden', '');
+  if (fatherchkbox.checked) {
+    tbodyFather.removeAttribute('hidden');
+  } else tbodyFather.setAttribute('hidden', '');
+  if (motherchkbox.checked) {
+    tbodyMother.removeAttribute('hidden');
+  } else tbodyMother.setAttribute('hidden', '');
+}
+/*
 motherchkbox.addEventListener("click", () => {
   if (motherchkbox.checked) {
+    $("#tbodyMother").removeAttribute('hidden');
     guardianchkbox.checked = false;
     caregiver1cccnoInput.disabled = false;
-    caregiver2cccnoInput.disabled = true;
+    mothervlcopiesInput.disabled = false;
+    motherlastvlDateInput.disabled = false;
+    caregiver3cccnoInput.disabled = true;
+    guardianvlcopiesInput.disabled = true;
+    guardianlastvlDateInput.disabled = true;
+    // caregiver2cccnoInput.disabled = true;
+  } else {
+    caregiver1cccnoInput.disabled = true;
+    mothervlcopiesInput.disabled = true;
+    motherlastvlDateInput.disabled = true;
   }
 });
-
+*/
 fatherchkbox.addEventListener("click", () => {
   if (fatherchkbox.checked) {
     guardianchkbox.checked = false;
-    caregiver1cccnoInput.disabled = true;
+    // caregiver1cccnoInput.disabled = true;
     caregiver2cccnoInput.disabled = false;
+    fathervlcopiesInput.disabled = false;
+    fatherlastvlDateInput.disabled = false;
+    caregiver3cccnoInput.disabled = true;
+    guardianvlcopiesInput.disabled = true;
+    guardianlastvlDateInput.disabled = true;
+  } else {
+    caregiver2cccnoInput.disabled = true;
+    fathervlcopiesInput.disabled = true;
+    fatherlastvlDateInput.disabled = true;
   }
 });
 
@@ -227,17 +324,17 @@ function initialize() {
       otzVlInput.readOnly = false;
     }
   });
-
-  isLDL5.addEventListener('click', () => {
-    if (isLDL5.checked) {
-      caregivervlInput.value = '';
-      caregivervlInput.readOnly = true;
-    } else {
-      caregivervlInput.readOnly = false;
-    }
-  });
-
-
+  /*
+    isLDL5.addEventListener('click', () => {
+      if (isLDL5.checked) {
+        caregivervlInput.value = '';
+        caregivervlInput.readOnly = true;
+      } else {
+        caregivervlInput.readOnly = false;
+      }
+    });
+  
+  */
   isBMICheck.addEventListener("click", () => {
     if (isBMICheck.checked) {
       isZScoreCheck.checked = false;
@@ -625,14 +722,6 @@ function loadObsData(observation) {
       otzModulesSelect.selectedIndex = i;
     }
   }
-  // var modulesCompleted = JSON.parse(observation.completedOTZModules);
-  // console.log(modulesCompleted);
-  // var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
-  // checkBoxes.forEach((checkBox) => {
-  //   if (modulesCompleted.indexOf(checkBox.getAttribute("id")) != -1) {
-  //     checkBox.checked = true;
-  //   }
-  // });
   var tranStatOptions = otzTransitionStatusSelect.options;
   for (var i = 0; i < tranStatOptions.length; i++) {
     const tranStatOption = tranStatOptions[i];
@@ -666,29 +755,75 @@ function loadObsData(observation) {
       caregivertypeSelect.selectedIndex = i;
     }
   }*/
+
   let cgType = observation.caregiverType;
-  if (cgType == "Mother") motherchkbox.checked = true;
-  else if (cgType == "Father") fatherchkbox.checked = true;
-  else if (cgType == "Guardian") guardianchkbox.checked = true;
+  if (cgType == "Mother") {
+    motherchkbox.checked = true;
+    guardianchkbox.checked = false;
+    caregiverChanged();
+    caregiver1cccnoInput.value = observation.caregiver1CCC;
+    if (observation.caregiver1VL == "LDL") {
+      isLDLmother.checked = true;
+      motherVlCopiesInput.value = '';
+      motherVlCopiesInput.readOnly = true;
+    } else motherVlCopiesInput.value = observation.caregiver1VL;
+    motherlastvlDateInput.value = observation.caregiver1VLDate;
+  }
+  else if (cgType == "Father") {
+    fatherchkbox.checked = true;
+    guardianchkbox.checked = false;
+    caregiverChanged();
+    caregiver2cccnoInput.value = observation.caregiver2CCC;
+    if (observation.caregiver2VL == "LDL") {
+      isLDLfather.checked = true;
+      fatherVlCopiesInput.value = '';
+      fatherVlCopiesInput.readOnly = true;
+    } else fatherVlCopiesInput.value = observation.caregiver2VL;
+  }
+  else if (cgType == "Guardian") {
+    guardianchkbox.checked = true;
+    fatherchkbox.checked = false;
+    motherchkbox.checked = false;
+    caregiverChanged();
+    caregiver3cccnoInput.value = observation.caregiver1CCC;
+    if (observation.caregiver1VL == "LDL") {
+      isLDLguardian.checked = true;
+      guardianVlCopiesInput.value = '';
+      guardianVlCopiesInput.readOnly = true;
+    } else guardianlastvlDate.value = observation.caregiver1VL;
+    guardianlastvlDate.value = observation.caregiver1VLDate;
+  }
   else if (cgType == "Mother + Father") {
     motherchkbox.checked = true;
     fatherchkbox.checked = true;
+    guardianchkbox.checked = false;
+    caregiverChanged();
+    caregiver1cccnoInput.value = observation.caregiver1CCC;
+    caregiver2cccnoInput.value = observation.caregiver2CCC;
+    if (observation.caregiver1VL == "LDL") {
+      isLDLmother.checked = true;
+      motherVlCopiesInput.value = '';
+      motherVlCopiesInput.readOnly = true;
+    } else motherVlCopiesInput.value = observation.caregiver1VL;
+    if (observation.caregiver2VL == "LDL") {
+      isLDLfather.checked = true;
+      fatherVlCopiesInput.value = '';
+      fatherVlCopiesInput.readOnly = true;
+    } else fatherVlCopiesInput.value = observation.caregiver2VL;
+    motherlastvlDateInput.value = observation.caregiver1VLDate;
+    fatherlastvlDateInput.value = observation.caregiver2VLDate;
   }
-  caregiver1cccnoInput.value = observation.caregiver1CCC;
-  caregiver2cccnoInput.value = observation.caregiver2CCC;
-  if (observation.caregiver1VL == "LDL") {
-    isLDL5.checked = true;
-    caregivervlInput.value = '';
-    caregivervlInput.readOnly = true;
-  } else caregivervlInput.value = observation.caregiver1VL;
-  caregivervlddateInput.value = observation.caregiver1VLDate;
-  var cgVLOptions = caregivervlstatustSelect.options;
+  // caregiver1cccnoInput.value = observation.caregiver1CCC;
+  // caregiver2cccnoInput.value = observation.caregiver2CCC;
+
+  // caregivervlddateInput.value = observation.caregiver1VLDate;
+ /* var cgVLOptions = caregivervlstatustSelect.options;
   for (var i = 0; i < cgVLOptions.length; i++) {
     const cgVLOption = cgVLOptions[i];
     if (cgVLOption.value == observation.caregiverType) {
       caregivervlstatustSelect.selectedIndex = i;
     }
-  }
+  }*/
   var pamaStatusOptions = pamastatusat3Select.options;
   for (var i = 0; i < pamaStatusOptions.length; i++) {
     const pamaStatusOption = pamaStatusOptions[i];
@@ -797,6 +932,7 @@ function submitData() {
   let dateEnrolledInOVC = ovcEnrollmentDateInput.value;
   let CPMISNumber = cpmisNumberInput.value;
   let ovcVLCopies = '';
+  let baselineOvcVlDate = ovcVLDateInput.value;
   if (isLDL2.checked) ovcVLCopies = "LDL";
   else ovcVLCopies = ovcVLcopiesInput.value;
   let dateDiscontinuedFromOVC = ovcDiscontinuedDateInput.value;
@@ -808,6 +944,7 @@ function submitData() {
   formData.append("dateEnrolledInOVC", dateEnrolledInOVC);
   formData.append("CPMISNumber", CPMISNumber);
   formData.append("ovcVLCopies", ovcVLCopies);
+  formData.append("baselineOvcVlDate", baselineOvcVlDate);
   formData.append("dateDiscontinuedFromOVC", dateDiscontinuedFromOVC);
   formData.append("statusAtOVCDiscontinuation", statusAtOVCDiscontinuation);
 
@@ -867,17 +1004,33 @@ function submitData() {
   else if (motherchkbox.checked && fatherchkbox.checked) caregiverType = "Mother + Father";
   else if (motherchkbox.checked) caregiverType = "Mother";
   else if (fatherchkbox.checked) caregiverType = "Father";
-  let caregiver1CCC = caregiver1cccnoInput.value;
+  let caregiver1CCC = '';
   let caregiver2CCC = caregiver2cccnoInput.value;
   let caregiver1VL = '';
-  if (isLDL5.checked) caregiver1VL = "LDL";
-  else caregiver1VL = caregivervlInput.value;
-  let caregiver1VLDate = caregivervlddateInput.value;
-  let caregiver1VLStatus = caregivervlstatustSelect.value;
   let caregiver2VL = '';
-  if (isLDL6.checked) caregiver2VL = "LDL";
-  else caregiver2VL = caregiver2vlInput.value;
-  let caregiver2VLDate = caregiver2vlddateInput.value;
+
+  let caregiver1VLDate = '';
+  let caregiver1VLStatus = '';
+  let caregiver2VLDate = '';
+
+  if (guardianchkbox.checked) {
+    caregiver1CCC = caregiver3cccnoInput.value;
+    if (isLDLguardian.checked) caregiver1VL = "LDL";
+    else caregiver1VL = guardianVlCopiesInput.value;
+    caregiver1VLDate = guardianlastvlDate.value;
+  } else {
+    if (motherchkbox.checked) {
+      if (isLDLmother.checked) caregiver1VL = "LDL";
+      else caregiver1VL = motherVlCopiesInput.value;
+      caregiver1VLDate = motherlastvlDateInput.value;
+      caregiver1CCC = caregiver1cccnoInput.value;
+    }
+    if (fatherchkbox.checked) {
+      if (isLDLfather.checked) caregiver2VL = "LDL";
+      else caregiver2VL = fatherVlCopiesInput.value;
+      caregiver2VLDate = fatherlastvlDateInput.value;
+    }
+  }
   let PAMAStatus3 =
     pamastatusat3Select.options[pamastatusat3Select.selectedIndex].value;
   let PAMAStatus6 =
