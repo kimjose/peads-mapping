@@ -253,7 +253,7 @@ try {
         $cccNo = $_GET['cccNo'];
         $patient = Patient::where('cccNo', $cccNo)->first();
         if ($patient == null) throw new Exception("Patient not found", 404);
-        $facility = Facility::findOrFail($patient->facility);
+        $facility = Facility::where('mfl_code', $patient->facility);
         $patient['facilityData'] = $facility;
         $data = [];
         $data['patient'] = $patient;

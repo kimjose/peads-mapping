@@ -130,50 +130,6 @@ const guardianchkbox = document.getElementById("guardianchkbox");
 const fatherchkbox = document.getElementById("fatherchkbox");
 const motherchkbox = document.getElementById("motherchkbox");
 
-// $("input[type=checkbox]").change(function () {
-//   // if ($('guardianchkbox').is(':checked')) {
-//   //   fatherchkbox.checked = false;
-//   //   motherchkbox.checked = false;
-//   // }
-
-// if ($("#motherchkbox").is(":checked") && $("#fatherchkbox").is(":checked")) {
-//   caregiver1cccnoInput.disabled = false;
-//   caregiver2cccnoInput.disabled = false;
-// }
-
-//   // if ($('#motherchkbox').is(':checked')) {
-//   //   guardianchkbox.checked = false;
-//   // }
-//   // if ($('#fatherchkbox').is(':checked')) {
-//   //   guardianchkbox.checked = false;
-//   // }
-
-//   // if ($('guardianchkbox').is(':checked')) {
-//   //   fatherchkbox.checked = false;
-//   //   motherchkbox.checked = false;
-//   // }
-// });
-/*
-guardianchkbox.addEventListener("click", () => {
-  if (guardianchkbox.checked) {
-    fatherchkbox.checked = false;
-    motherchkbox.checked = false;
-    // caregiver1cccnoInput.disabled = true;
-    caregiver3cccnoInput.disabled = false;
-    guardianvlcopiesInput.disabled = false;
-    guardianlastvlDateInput.disabled = false;
-    caregiver1cccnoInput.disabled = true;
-    mothervlcopiesInput.disabled = true;
-    motherlastvlDateInput.disabled = true;
-    caregiver2cccnoInput.disabled = true;
-    fathervlcopiesInput.disabled = true;
-    fatherlastvlDateInput.disabled = true;
-  } else {
-    caregiver3cccnoInput.disabled = true;
-    guardianvlcopiesInput.disabled = true;
-    guardianlastvlDateInput.disabled = true;
-  }
-});*/
 motherchkbox.addEventListener('change', () => {
   guardianchkbox.checked = false;
   caregiverChanged();
@@ -195,8 +151,8 @@ isLDLfather.addEventListener('change', () => {
   } else fatherVlCopiesInput.readOnly = false;
 });
 guardianchkbox.addEventListener('change', () => {
-  tbodyFather.checked = false;
-  tbodyMother.checked = false;
+  motherchkbox.checked = false;
+  fatherchkbox.checked = false;
   caregiverChanged();
 });
 isLDLguardian.addEventListener('change', () => {
@@ -216,42 +172,6 @@ function caregiverChanged() {
     tbodyMother.removeAttribute('hidden');
   } else tbodyMother.setAttribute('hidden', '');
 }
-/*
-motherchkbox.addEventListener("click", () => {
-  if (motherchkbox.checked) {
-    $("#tbodyMother").removeAttribute('hidden');
-    guardianchkbox.checked = false;
-    caregiver1cccnoInput.disabled = false;
-    mothervlcopiesInput.disabled = false;
-    motherlastvlDateInput.disabled = false;
-    caregiver3cccnoInput.disabled = true;
-    guardianvlcopiesInput.disabled = true;
-    guardianlastvlDateInput.disabled = true;
-    // caregiver2cccnoInput.disabled = true;
-  } else {
-    caregiver1cccnoInput.disabled = true;
-    mothervlcopiesInput.disabled = true;
-    motherlastvlDateInput.disabled = true;
-  }
-});
-*/
-fatherchkbox.addEventListener("click", () => {
-  if (fatherchkbox.checked) {
-    guardianchkbox.checked = false;
-    // caregiver1cccnoInput.disabled = true;
-    caregiver2cccnoInput.disabled = false;
-    fathervlcopiesInput.disabled = false;
-    fatherlastvlDateInput.disabled = false;
-    caregiver3cccnoInput.disabled = true;
-    guardianvlcopiesInput.disabled = true;
-    guardianlastvlDateInput.disabled = true;
-  } else {
-    caregiver2cccnoInput.disabled = true;
-    fathervlcopiesInput.disabled = true;
-    fatherlastvlDateInput.disabled = true;
-  }
-});
-
 var dob, dateenrolled;
 var facilities;
 
@@ -395,7 +315,7 @@ function initialize() {
         for (let i = 0; i < regimens.length; i++) {
           const regimen = regimens[i];
           let option = document.createElement("option");
-          option.setAttribute("value", regimen.id);
+          option.setAttribute("value", regimen.name);
           option.appendChild(document.createTextNode(regimen.name));
           currentregimenSelect.appendChild(option);
           startregimenSelect.appendChild(option.cloneNode(true));

@@ -1,5 +1,6 @@
 {
     "opportunisticInfections": [
+        "None",
         "Pulmonary Tuberculosis",
         "Extra pulmonary TB",
         "Crytococcal meningitis",
@@ -37,6 +38,7 @@
         "Leishmaniasis",
         "Mycobacterium avium complex",
         "Salmonella septicemia, recurrent",
-        "Wasting syndrome attributed to HIV"
+        "Wasting syndrome attributed to HIV",
+        "Diarrhoea"
     ]
 }
