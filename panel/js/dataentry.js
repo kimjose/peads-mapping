@@ -6,6 +6,7 @@ const cccNoInput = document.getElementById("cccNo");
 const btnSearch = document.getElementById("btnSearch");
 const mflcodeInput = document.getElementById("mflcode");
 // const facilityInput = document.getElementById("facility");
+const facilitySelector = document.getElementById("facilitySelect");
 const countyInput = document.getElementById("county");
 const genderSelect = document.getElementById("genderSelect");
 const dobInput = document.getElementById("dob");
@@ -124,7 +125,6 @@ const pamaDiscontinuedDateInput = document.getElementById(
 const commentArea = document.getElementById("commentArea");
 const btnSubmit = document.getElementById("btnSubmit");
 const mappingform = document.getElementById("mappingform");
-const facilitySelector = document.getElementById("facilitySelect");
 const addNewPatient = document.getElementById("addNewPatient");
 const guardianchkbox = document.getElementById("guardianchkbox");
 const fatherchkbox = document.getElementById("fatherchkbox");
@@ -135,7 +135,7 @@ motherchkbox.addEventListener('change', () => {
   caregiverChanged();
 });
 isLDLmother.addEventListener('change', () => {
-  if(isLDLmother.checked) {
+  if (isLDLmother.checked) {
     motherVlCopiesInput.value = '';
     motherVlCopiesInput.readOnly = true;
   } else motherVlCopiesInput.readOnly = true;
@@ -145,7 +145,7 @@ fatherchkbox.addEventListener('change', () => {
   caregiverChanged();
 });
 isLDLfather.addEventListener('change', () => {
-  if(isLDLfather.checked) {
+  if (isLDLfather.checked) {
     fatherVlCopiesInput.value = '';
     fatherVlCopiesInput.readOnly = true;
   } else fatherVlCopiesInput.readOnly = false;
@@ -156,7 +156,7 @@ guardianchkbox.addEventListener('change', () => {
   caregiverChanged();
 });
 isLDLguardian.addEventListener('change', () => {
-  if(isLDLguardian.checked) {
+  if (isLDLguardian.checked) {
     guardianVlCopiesInput.value = '';
     guardianVlCopiesInput.readOnly = true;
   } else guardianVlCopiesInput.readOnly = false;
@@ -325,7 +325,7 @@ function initialize() {
     },
   });
 
-  $("#facilitySelect").select2();
+  // $("#facilitySelect").select2();
 
   $.ajax({
     type: "GET",
@@ -338,7 +338,7 @@ function initialize() {
         for (let i = 0; i < facilities.length; i++) {
           const facility = facilities[i];
           let option = document.createElement("option");
-          option.setAttribute("value", facility.id);
+          option.setAttribute("value", facility.mfl_code);
           option.appendChild(document.createTextNode(facility.name));
           facilitySelector.appendChild(option);
         }
@@ -392,18 +392,26 @@ function loadPreviousObservation() {
         let patient = mResponse.data.patient;
         var observation = mResponse.data.observation;
         var facil = patient.facility;
-        $("#facilitySelect").val(facil);
+        var facilities = facilitySelector.options;
+        for (var i = 0; i < facilities.length; i++) {
+          let facilityOption = facilities[i];
+          if (facilityOption.value == patient.facility) {
+            facilitySelector.selectedIndex = i;
+          }
+        }
+        // $("#facilitySelect").val(facil);
         // facilitySelector.disabled=true;
         // facilityInput.value = patient.facilityData.name;
         mflcodeInput.innerHTML = patient.facilityData.mfl_code;
         countyInput.innerHTML = patient.county;
-        var genders = genderSelect.options;
+        /*var genders = genderSelect.options;
         for (let i = 0; i < genders.length; i++) {
           const gender = genders[i];
           if (patient.sex == gender.value) {
             genderSelect.selectedIndex = i;
           }
-        }
+        }*/
+        $("#genderSelect").val(patient.sex);
         dobInput.value = patient.dob;
         dob = new Date(patient.dob);
         dateenrolled = new Date(patient.date_enrolled);
@@ -424,12 +432,13 @@ function loadPreviousObservation() {
         mflcodeInput.innerHTML = patient.facilityData.mfl_code;
         countyInput.innerHTML = patient.county;
         var genders = genderSelect.options;
-        for (let i = 0; i < genders.length; i++) {
+        $("#genderSelect").val(patient.sex);
+        /*for (let i = 0; i < genders.length; i++) {
           const gender = genders[i];
           if (patient.sex == gender.value) {
             genderSelect.selectedIndex = i;
           }
-        }
+        }*/
         dobInput.value = patient.dob;
         dob = new Date(patient.dob);
         dateenrolled = new Date(patient.date_enrolled);
@@ -737,13 +746,13 @@ function loadObsData(observation) {
   // caregiver2cccnoInput.value = observation.caregiver2CCC;
 
   // caregivervlddateInput.value = observation.caregiver1VLDate;
- /* var cgVLOptions = caregivervlstatustSelect.options;
-  for (var i = 0; i < cgVLOptions.length; i++) {
-    const cgVLOption = cgVLOptions[i];
-    if (cgVLOption.value == observation.caregiverType) {
-      caregivervlstatustSelect.selectedIndex = i;
-    }
-  }*/
+  /* var cgVLOptions = caregivervlstatustSelect.options;
+   for (var i = 0; i < cgVLOptions.length; i++) {
+     const cgVLOption = cgVLOptions[i];
+     if (cgVLOption.value == observation.caregiverType) {
+       caregivervlstatustSelect.selectedIndex = i;
+     }
+   }*/
   var pamaStatusOptions = pamastatusat3Select.options;
   for (var i = 0; i < pamaStatusOptions.length; i++) {
     const pamaStatusOption = pamaStatusOptions[i];
@@ -1103,7 +1112,7 @@ function ovcOptionChanged(disableOptions = false) {
   var selectedValue =
     ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
   var ovcFields = document.querySelectorAll(".ovcClass");
-  if (selectedValue == "Yes") {
+  if (selectedValue == "Y") {
     if (disableOptions) ovcenrolledSelect.disabled = true;
     ovcFields.forEach((ovcField) => {
       ovcField.removeAttribute("disabled");
@@ -1123,7 +1132,7 @@ function otzOptionChanged(disableOptions = false) {
   var selectedValue =
     otzenrolledSelect.options[otzenrolledSelect.selectedIndex].value;
   var otzFields = document.querySelectorAll(".otzClass");
-  if (selectedValue == "Yes") {
+  if (selectedValue == "Y") {
     otzFields.forEach((otzField) => {
       otzField.removeAttribute("disabled");
     });
@@ -1147,7 +1156,7 @@ function pamaOptionChanged(disableOptions = false) {
   var selectedValue =
     pamaEnrolledSelect.options[pamaEnrolledSelect.selectedIndex].value;
   var pamaFields = document.querySelectorAll(".pamaClass");
-  if (selectedValue == "Yes") {
+  if (selectedValue == "Y") {
     if (disableOptions) pamaEnrolledSelect.readOnly = true;
     pamaFields.forEach((pamaField) => {
       pamaField.removeAttribute("disabled");
