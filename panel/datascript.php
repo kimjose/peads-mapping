@@ -251,7 +251,7 @@ try {
         } else throw new Exception("Error Processing Request", 1);
     } elseif ($request == "load_prev_obs") {
         $cccNo = $_GET['cccNo'];
-        $patient = Patient::where('cccNo', $cccNo)->first();
+        $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
         if ($patient == null) throw new Exception("Patient not found", 404);
         $facility = Facility::where('mfl_code', $patient->facility)->first();
         $patient['facilityData'] = $facility;
