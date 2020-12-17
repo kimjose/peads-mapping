@@ -179,11 +179,20 @@ var newpatient = false;
 
 addNewPatient.addEventListener("click", () => {
   newpatient = true;
+  
+  mappingform.reset();
+  mflcodeInput.innerHTML = "";
+  currentageInput.innerHTML = "";
+  ageatenrollmentInput.innerHTML = "";
+  let cccNo = sessionStorage.getItem("cccNo");
+  console.log(cccNo);
+  cccNoInput.value = cccNo;
+
   $("#addpatientmodal").modal("hide");
 });
 
 initialize();
-$("#currentoiSelect").select2();
+// $("#currentoiSelect").select2();
 
 $.ajax({
   dataType: "json",
@@ -218,14 +227,31 @@ function initialize() {
   var d = new Date().toLocaleString();
   dataEntryDate.innerHTML = d;
 
+  const inputHandler = function(e) {
+    console.log(e.target.value);
+    if (e.target.value <1000) {
+      $("#currentvlstatustSelect").val("Supressed");
+    } else if (e.target.value >= 1000) {
+      $("#currentvlstatustSelect").val("NotSupressed");
+    }
+  }
+
+  vlcopiesInput.addEventListener('input', inputHandler);
+  vlcopiesInput.addEventListener('propertychange', inputHandler); // for IE8
+
   isLDL1.addEventListener("click", () => {
     if (isLDL1.checked) {
       vlcopiesInput.value = "";
       vlcopiesInput.disabled = true;
+      $("#currentvlstatustSelect").val("Supressed");
     } else {
       vlcopiesInput.disabled = false;
+      // $("#currentvlstatustSelect").val("");
     }
   });
+
+ 
+ 
 
   isLDL2.addEventListener('click', () => {
     if (isLDL2.checked) {
@@ -449,6 +475,7 @@ function loadPreviousObservation() {
         $("#startregimenSelect").val(patient.startRegimen);
         $("#startformulationSelect").val(patient.startKaletraFormulation);
       } else {
+        sessionStorage.setItem("cccNo", cccNo);
         $("#addpatientmodal").modal("show");
       }
     },
@@ -1041,10 +1068,19 @@ function showMflCode(str) {
   // console.log(facilities);
   for (let i = 0; i < facilities.length; i++) {
     var facility = facilities[i];
-    if (facility.id == str) {
+    if (facility.mfl_code == str) {
       mflcodeInput.innerHTML = facility.mfl_code;
       countyInput.innerHTML = facility.county;
     }
+  }
+}
+
+function showNumberInput(value) {
+  if (value == "Y") {
+    cpmisNumberInput.disabled = false;
+  }
+  else if (value == "N"){
+    cpmisNumberInput.disabled = true;
   }
 }
 
