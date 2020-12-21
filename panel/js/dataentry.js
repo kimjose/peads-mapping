@@ -406,6 +406,21 @@ function initialize() {
 
 function loadPreviousObservation() {
   let cccNo = cccNoInput.value;
+
+  $.ajax({
+    type: "GET",
+    url: "datascript?request=get_last_vls&cccNo=" + cccNo,
+    success: function (response) {
+      var mResponse = JSON.parse(response);
+      console.log(mResponse.data);
+      data = mResponse.data;
+      for (var i = 0; i < data.length; i++) {
+        let dataobj = data[i];
+        
+      }
+    }
+  });
+
   $.ajax({
     type: "GET",
     url: "datascript?request=load_prev_obs&cccNo=" + cccNo,
