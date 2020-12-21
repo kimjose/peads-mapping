@@ -267,7 +267,12 @@ try {
     } elseif ($request == "get_regimens") {
         $regimens = Regimen::all();
         echo myJsonResponse(200, "Regimens", $regimens);
-    }else throw new Exception("Invalid request.", -1);
+    } else if ($request == "get_last_vls") {
+        require_once "../models/LastVL.php";
+        $calcccno = $_GET["cccNo"];
+        $data = LastVL::where('cccCALHIV', $calcccno)->get();
+        echo myJsonResponse(200, "Data retrieved", $data);
+    } else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
     // http_response_code(400);
     echo myJsonResponse(400, $th->getMessage());
