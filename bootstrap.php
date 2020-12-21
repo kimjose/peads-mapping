@@ -6,8 +6,8 @@ $capsule->addConnection([
    "driver" => "mysql",
    "host" =>"127.0.0.1",
    "database" => "pediatric_mapping",
-   "username" => "root",
-   "password" => "root"
+   "username" => "admin",
+   "password" => "admin"
 ]);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();

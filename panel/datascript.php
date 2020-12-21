@@ -245,7 +245,7 @@ try {
         $password = $_POST['password'];
         $user = User::where('username', $username)->where('active', 1)->firstOrFail();
         if (password_verify($password, $user->password)) {
-            $user->last_login = date("d-m-Y h:i A", time());
+            $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
