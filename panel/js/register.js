@@ -1,17 +1,17 @@
 
 var btnRegister = document.getElementById('btnRegister');
-var inputUsername = document.getElementById('inputUsername');
+var inputNames = document.getElementById('inputNames');
 var inputPassword = document.getElementById('inputPassword');
 var inputRepeatPassword = document.getElementById('inputRepeatPassword');
 const loginError = document.getElementById("loginError");
 
 
 btnRegister.addEventListener('click', ()=>{
-    let username = inputUsername.value;
+    let names = inputNames.value;
     let password = inputPassword.value;
     let confirmPassword = inputRepeatPassword.value;
     let error = false;
-    if(username.length <1){
+    if(names.length <1){
         error = true;
     }
     if(password.length < 4){
@@ -25,8 +25,8 @@ btnRegister.addEventListener('click', ()=>{
         type : "POST",
         url: "datascript?request=register",
         data: {
-          username: username,
-          password: password
+            names: names,
+            password: password
         },
         success : function(){
             window.open("login.html");
