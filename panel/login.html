@@ -130,6 +130,9 @@
           } else {
             loginError.classList.add('errors-showing');
           }
+        },
+        error : function(err){
+            loginError.classList.add('errors-showing');
         }
       })
     });

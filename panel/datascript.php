@@ -117,9 +117,7 @@ try {
         $users = User::all();
         foreach ($users as $user) {
             $cadre = Cadre::findOrFail($user->cadre);
-            $facility = Facility::findOrFail($user->facility);
             $user['cadreName'] = $cadre->name;
-            $user['facilityName'] = $facility->name;
         }
         echo myJsonResponse(200, "Users retrieved", $users);
     } 
@@ -158,7 +156,7 @@ try {
         } else {
             User::create([
                 "username" => $username,
-                "firstname" => $firstname,
+                "firstName" => $firstname,
                 // "middlename" => $middlename,
                 "surname" => $surname,
                 // "gender" => $gender,
@@ -179,6 +177,13 @@ try {
             $user['facilityName'] = $facility->name;
         }
         echo myJsonResponse(200, "Here are the users.", $users);
+    } elseif($request == "register") {
+        $username = $_POST['username'];
+        $password =$_POST['password'];
+        $user = User::where('username', $username)->where('active', 0)->where('last_login', null)->firstOrFail();
+        $user->password = password_hash($password, PASSWORD_DEFAULT);
+        $user->active = 1;
+        $user->save();
     } elseif ($request == "save_patient_data") {
         $cccNo = $_POST['cccNo'];
         $facility = $_POST['facility'];
@@ -247,11 +252,16 @@ try {
         if (password_verify($password, $user->password)) {
             $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
+            session_start();
+            $_SESSION['user'] = $user;
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
     } elseif ($request == "load_prev_obs") {
+        session_start();
+        $user = $_SESSION['user'];
+        $facility = $user['facility'];
         $cccNo = $_GET['cccNo'];
-        $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
+        $patient = Patient::where('cccNo', $cccNo)->where('facility', $facility)->orderBy('id', 'desc')->first();
         if ($patient == null) throw new Exception("Patient not found", 404);
         $facility = Facility::where('mfl_code', $patient->facility)->first();
         $patient['facilityData'] = $facility;
@@ -274,6 +284,6 @@ try {
         echo myJsonResponse(200, "Data retrieved", $data);
     } else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
-    // http_response_code(400);
+    http_response_code(400);
     echo myJsonResponse(400, $th->getMessage());
 }
