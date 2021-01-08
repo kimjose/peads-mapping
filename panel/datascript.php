@@ -256,7 +256,7 @@ try {
         $password = $_POST['password'];
         $user = User::where('names',  $names)->where('active', 1)->firstOrFail();
         if (password_verify($password, $user->password)) {
-            $user->last_login = date("Y:m:d h:i:s", time());
+//            $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
             session_start();
             $_SESSION['user'] = $user;
