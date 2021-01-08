@@ -1,6 +1,8 @@
 {
     "require": {
-        "illuminate/database": "^7.30"
+        "illuminate/database": "^7.30",
+        "setasign/fpdf": "^1.8",
+        "phpoffice/phpspreadsheet": "^1.16"
     },
     "autoload": {
         "classmap": [
