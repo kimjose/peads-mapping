@@ -120,7 +120,8 @@ try {
             $user['cadreName'] = $cadre->name;
         }
         echo myJsonResponse(200, "Users retrieved", $users);
-    } /*******Users Management**** */
+    }
+    /*******Users Management**** */
     elseif ($request == "save_user") {
         $username = $_POST['username'];
         $firstname = $_POST['firstname'];
@@ -176,7 +177,7 @@ try {
             $user['facilityName'] = $facility->name;
         }
         echo myJsonResponse(200, "Here are the users.", $users);
-    }  elseif ($request == "save_patient_data") {
+    } elseif ($request == "save_patient_data") {
         $cccNo = $_POST['cccNo'];
         $facility = $_POST['facility'];
         $county = $_POST['county'];
@@ -227,7 +228,6 @@ try {
         $patients = Patient::all();
 
         echo myJsonResponse(200, 'Patients Retrieved', $patients);
-
     } elseif ($request == "get_cadres") {
         $cadres = Cadre::all();
         echo myJsonResponse(200, "Cadres retrieved", $cadres);
@@ -235,14 +235,15 @@ try {
         require_once "../models/Facility.php";
         session_start();
         $user = $_SESSION['user'];
-        $assignedFacilities = AssignedFacility::where('userID', $user['facility'])->get();
+        $assignedFacilities = AssignedFacility::where('userID', $user['id'])->get();
         $facilities = [];
         foreach ($assignedFacilities as $assignedFacility) {
             $facility = Facility::where('mfl_code', $assignedFacility->facility)->firstOrFail();
             array_push($facilities, $facility);
         }
         echo myJsonResponse(200, "Facilities retrieved", $facilities);
-    } /*************Authentication */
+    }
+    /*************Authentication */
     elseif ($request == 'register') {
         $names = $_POST['names'];
         $password = $_POST['password'];
@@ -264,11 +265,14 @@ try {
     } elseif ($request == "load_prev_obs") {
         session_start();
         $user = $_SESSION['user'];
-        $facility = $user['facility'];
+        $assignedFacilities = AssignedFacility::select('facility')->where("userID", $user['id'])->get();
+
         $cccNo = $_GET['cccNo'];
-        $patient = Patient::where('cccNo', $cccNo)->where('facility', $facility)->orderBy('id', 'desc')->first();
+        $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
+
         if ($patient == null) throw new Exception("Patient not found", 404);
-        session_start();
+        // echo json_encode($patient);
+        // session_start();
         $user = $_SESSION['user'];
         $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $user['id'])->where('deleted', 0)->firstOrFail();
         $facility = Facility::where('mfl_code', $patient->facility)->first();
