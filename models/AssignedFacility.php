@@ -8,4 +8,6 @@ class AssignedFacility extends Model {
 
     protected $fillable = ['userID', 'facility', 'cadre','deleted'];
 
+    public $timestamps = false;
+
 }

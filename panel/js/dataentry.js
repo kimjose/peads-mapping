@@ -222,7 +222,7 @@ function initialize() {
   var loggedinuser = JSON.parse(userObject);
   console.log(loggedinuser);
 
-  userName.innerText = loggedinuser.firstName + " " + loggedinuser.surname;
+  userName.innerText = loggedinuser.names;
   lastLoginDate.innerHTML = loggedinuser.last_login;
   var d = new Date().toLocaleString();
   dataEntryDate.innerHTML = d;

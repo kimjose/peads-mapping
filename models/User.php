@@ -7,4 +7,8 @@ class User extends Model {
     public $table = 'users';
 
     protected $fillable = ['names','cadre', 'password','last_login','active'];
+
+    public $hidden = ['password'];
+
+    public $timestamps = false;
 }

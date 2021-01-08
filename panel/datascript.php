@@ -176,14 +176,7 @@ try {
             $user['facilityName'] = $facility->name;
         }
         echo myJsonResponse(200, "Here are the users.", $users);
-    } elseif($request == "register") {
-        $username = $_POST['username'];
-        $password =$_POST['password'];
-        $user = User::where('username', $username)->where('active', 0)->where('last_login', null)->firstOrFail();
-        $user->password = password_hash($password, PASSWORD_DEFAULT);
-        $user->active = 1;
-        $user->save();
-    } elseif ($request == "save_patient_data") {
+    }  elseif ($request == "save_patient_data") {
         $cccNo = $_POST['cccNo'];
         $facility = $_POST['facility'];
         $county = $_POST['county'];
@@ -253,14 +246,14 @@ try {
     elseif ($request == 'register') {
         $names = $_POST['names'];
         $password = $_POST['password'];
-        $user = User::where('names', $names)->findOrFail();
+        $user = User::where('names', $names)->firstOrFail();
         $user->password = password_hash($password, PASSWORD_DEFAULT);
         $user->active = 1;
         $user->save();
     } elseif ($request == 'login') {
-        $username = $_POST['username'];
+        $names = $_POST['names'];
         $password = $_POST['password'];
-        $user = User::where('username', $username)->where('active', 1)->firstOrFail();
+        $user = User::where('names',  $names)->where('active', 1)->firstOrFail();
         if (password_verify($password, $user->password)) {
             $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
