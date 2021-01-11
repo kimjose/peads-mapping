@@ -47,6 +47,7 @@ const statusAtTransitionSelect = document.getElementById(
 );
 const ovcenrolledSelect = document.getElementById("ovcenrolledSelect");
 const ovcEnrollmentDateInput = document.getElementById("ovcEnrollmentDate");
+const ovcCpmisSelect = document.getElementById("ovcCpmisSelect");
 const cpmisNumberInput = document.getElementById("cpmisNumber");
 const isLDL2 = document.getElementById("isLDL2");
 const ovcVLcopiesInput = document.getElementById("ovcVLcopies");
@@ -841,6 +842,8 @@ function loadObsData(observation) {
  * @return {array[ boolean, string ]}
  */
 function verify() {
+    var error = false;
+    var errorMessage = '';
     var formData = new FormData();
 
     //Changing information-------->
@@ -882,6 +885,7 @@ function verify() {
     //OVC---->
     let enrolledInOVC = ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
     let dateEnrolledInOVC = ovcEnrollmentDateInput.value;
+    let ovcWithCpmisNo = ovcCpmisSelect.options[ovcCpmisSelect.selectedIndex].value;
     let CPMISNumber = cpmisNumberInput.value;
     let ovcVLCopies = '';
     let baselineOvcVlDate = ovcVLDateInput.value;
@@ -889,6 +893,17 @@ function verify() {
     else ovcVLCopies = ovcVLcopiesInput.value;
     let dateDiscontinuedFromOVC = ovcDiscontinuedDateInput.value;
     let statusAtOVCDiscontinuation = ovcDiscontinuationStatusSelect.options[ovcDiscontinuationStatusSelect.selectedIndex].value;
+    if (enrolledInOVC === 'Y'){//Tests for OVC enrollred
+        if (dateEnrolledInOVC == null || dateEnrolledInOVC === "") {
+            error = true;
+            errorMessage += "Enter date enrolled in OVC.\n"
+        }
+        if (ovcWithCpmisNo === 'Y' && CPMISNumber === ''){
+            error = true;
+            errorMessage += "Enter date enrolled in OVC.\n"
+        }
+
+    }
     formData.append("enrolledInOVC", enrolledInOVC);
     formData.append("dateEnrolledInOVC", dateEnrolledInOVC);
     formData.append("CPMISNumber", CPMISNumber);
@@ -896,6 +911,7 @@ function verify() {
     formData.append("baselineOvcVlDate", baselineOvcVlDate);
     formData.append("dateDiscontinuedFromOVC", dateDiscontinuedFromOVC);
     formData.append("statusAtOVCDiscontinuation", statusAtOVCDiscontinuation);
+
 
     //OTZ---->
     let enrolledInOTZ = otzenrolledSelect.options[otzenrolledSelect.selectedIndex].value;
