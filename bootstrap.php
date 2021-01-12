@@ -7,7 +7,7 @@ $capsule->addConnection([
    "host" =>"127.0.0.1",
    "database" => "pediatric_mapping",
    "username" => "root",
-   "password" => "root"
+   "password" => ""
 ]);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
