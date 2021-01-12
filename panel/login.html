@@ -45,7 +45,7 @@
                   <form class="user" onsubmit="event.preventDefault();">
                     <div class="form-group">
                       <input type="text" class="form-control form-control-user" id="inputUsername"
-                        aria-describedby="emailHelp" placeholder="Enter Username..." required>
+                        aria-describedby="emailHelp" placeholder="Enter your names..." required>
                     </div>
                     <div class="form-group">
                       <input type="password" class="form-control form-control-user" id="inputPassword"
@@ -117,7 +117,7 @@
         type: "POST",
         url: "datascript?request=login",
         data: {
-          username: username,
+          names: username,
           password: password
         },
         success: function (response) {
@@ -130,6 +130,9 @@
           } else {
             loginError.classList.add('errors-showing');
           }
+        },
+        error : function(err){
+            loginError.classList.add('errors-showing');
         }
       })
     });

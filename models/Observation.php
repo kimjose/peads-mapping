@@ -11,7 +11,7 @@ class Observation extends Model
     protected $table = 'observations';
 
     protected $fillable = [
-        'patientCCC', 'userId', 'currentRegimen', 'regimenLine', 'regimenStartDate',  'kaletraFormulation', 'vlDate', 'vlCopies', 'vlOutcome',
+        'patientCCC','mflCode', 'userId', 'currentRegimen', 'regimenLine', 'regimenStartDate',  'kaletraFormulation', 'vlDate', 'vlCopies', 'vlOutcome',
         'vlScoreType','latestZScore', 'opportunisticInfection', 'disclosureStatus', 'iptStatus', 'schooling', 'statusAtTransition', 'enrolledInOVC',
         'dateEnrolledInOVC', 'CPMISNumber', 'ovcVLCopies','baselineOvcVlDate', 'dateDiscontinuedFromOVC', 'statusAtOVCDiscontinuation', 'enrolledInOTZ', 'dateEnrolledInOTZ',
         'OTZArtRegimen', 'OTZVL', 'OTZVLDate', 'missedLastAppointment','lastAttendDate', 'nextAppointmentDate', 'ArtAdherenceAssessment', 'completedOTZModules', 'statusAtOTZTransition',

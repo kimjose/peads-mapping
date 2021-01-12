@@ -9,6 +9,7 @@ require_once "../models/Cadre.php";
 require_once "../models/Facility.php";
 require_once __DIR__ . "/../models/Patient.php";
 require_once __DIR__ . "/../models/Facility.php";
+require_once __DIR__ . "/../models/AssignedFacility.php";
 
 $request = $_GET['request'];
 $response = [];
@@ -29,7 +30,6 @@ try {
         $comment = $_POST['comment'];
 
 
-
         $dateDiscontinuedFromOTZ = $_POST['dateDiscontinuedFromOTZ'];
         $enrolledInPAMA = $_POST['enrolledInPAMA'];
         $dateEnrolledInPAMA = $_POST['dateEnrolledInPAMA'];
@@ -42,10 +42,10 @@ try {
         $caregiver1VLStatus = $_POST['caregiver1VLStatus'];
         $caregiver2VL = $_POST['caregiver2VL'];
         $caregiver2VLDate = $_POST['caregiver2VLDate'];
-       // $caregiver2VLStatus = $_POST['caregiver2VLStatus'];
+        // $caregiver2VLStatus = $_POST['caregiver2VLStatus'];
         $PAMAStatus3 = $_POST['PAMAStatus3'];
 
-        
+
         $OTZArtRegimen = $_POST['OTZArtRegimen'];
         $OTZVL = $_POST['OTZVL'];
         $OTZVLDate = $_POST['OTZVLDate'];
@@ -100,7 +100,7 @@ try {
             'dateEnrolledInOVC' => $dateEnrolledInOVC, 'CPMISNumber' => $CPMISNumber, 'ovcVLCopies' => $ovcVLCopies, 'baselineOvcVlDate' => $baselineOvcVlDate,
             'dateDiscontinuedFromOVC' => $dateDiscontinuedFromOVC, 'statusAtOVCDiscontinuation' => $statusAtOVCDiscontinuation,
             'enrolledInOTZ' => $enrolledInOTZ, 'dateEnrolledInOTZ' => $dateEnrolledInOTZ,
-            'OTZArtRegimen' => $OTZArtRegimen, 'OTZVL' => $OTZVL, 'OTZVLDate' => $OTZVLDate, 
+            'OTZArtRegimen' => $OTZArtRegimen, 'OTZVL' => $OTZVL, 'OTZVLDate' => $OTZVLDate,
             'lastAttendDate' => $lastAttendDate, 'nextAppointmentDate' => $nextAppointmentDate,
             'ArtAdherenceAssessment' => $ArtAdherenceAssessment, 'completedOTZModules' => $completedOTZModules, 'statusAtOTZTransition' => $statusAtOTZTransition,
             'dateDiscontinuedFromOTZ' => $dateDiscontinuedFromOTZ, 'enrolledInPAMA' => $enrolledInPAMA,
@@ -117,13 +117,10 @@ try {
         $users = User::all();
         foreach ($users as $user) {
             $cadre = Cadre::findOrFail($user->cadre);
-            $facility = Facility::findOrFail($user->facility);
             $user['cadreName'] = $cadre->name;
-            $user['facilityName'] = $facility->name;
         }
         echo myJsonResponse(200, "Users retrieved", $users);
-    } 
-    /*******Users Management**** */
+    } /*******Users Management**** */
     elseif ($request == "save_user") {
         $username = $_POST['username'];
         $firstname = $_POST['firstname'];
@@ -158,7 +155,7 @@ try {
         } else {
             User::create([
                 "username" => $username,
-                "firstname" => $firstname,
+                "firstName" => $firstname,
                 // "middlename" => $middlename,
                 "surname" => $surname,
                 // "gender" => $gender,
@@ -179,7 +176,7 @@ try {
             $user['facilityName'] = $facility->name;
         }
         echo myJsonResponse(200, "Here are the users.", $users);
-    } elseif ($request == "save_patient_data") {
+    }  elseif ($request == "save_patient_data") {
         $cccNo = $_POST['cccNo'];
         $facility = $_POST['facility'];
         $county = $_POST['county'];
@@ -220,7 +217,7 @@ try {
                     "dateStartedART" => $dsa,
                     "startRegimen" => $startRegimen,
                     "startKaletraFormulation" => $startkaletra
-    
+
                 ]);
             }
         } else {
@@ -236,23 +233,44 @@ try {
         echo myJsonResponse(200, "Cadres retrieved", $cadres);
     } elseif ($request == "get_facilities") {
         require_once "../models/Facility.php";
-        $facilities = Facility::all();
+        session_start();
+        $user = $_SESSION['user'];
+        $assignedFacilities = AssignedFacility::where('userID', $user['facility'])->get();
+        $facilities = [];
+        foreach ($assignedFacilities as $assignedFacility) {
+            $facility = Facility::where('mfl_code', $assignedFacility->facility)->firstOrFail();
+            array_push($facilities, $facility);
+        }
         echo myJsonResponse(200, "Facilities retrieved", $facilities);
-    } 
-    /*************Authentication */
-    elseif ($request == 'login') {
-        $username = $_POST['username'];
+    } /*************Authentication */
+    elseif ($request == 'register') {
+        $names = $_POST['names'];
         $password = $_POST['password'];
-        $user = User::where('username', $username)->where('active', 1)->firstOrFail();
+        $user = User::where('names', $names)->firstOrFail();
+        $user->password = password_hash($password, PASSWORD_DEFAULT);
+        $user->active = 1;
+        $user->save();
+    } elseif ($request == 'login') {
+        $names = $_POST['names'];
+        $password = $_POST['password'];
+        $user = User::where('names',  $names)->where('active', 1)->firstOrFail();
         if (password_verify($password, $user->password)) {
-            $user->last_login = date("d-m-Y h:i A", time());
+//            $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
+            session_start();
+            $_SESSION['user'] = $user;
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
     } elseif ($request == "load_prev_obs") {
+        session_start();
+        $user = $_SESSION['user'];
+        $facility = $user['facility'];
         $cccNo = $_GET['cccNo'];
-        $patient = Patient::where('cccNo', $cccNo)->first();
+        $patient = Patient::where('cccNo', $cccNo)->where('facility', $facility)->orderBy('id', 'desc')->first();
         if ($patient == null) throw new Exception("Patient not found", 404);
+        session_start();
+        $user = $_SESSION['user'];
+        $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $user['id'])->where('deleted', 0)->firstOrFail();
         $facility = Facility::where('mfl_code', $patient->facility)->first();
         $patient['facilityData'] = $facility;
         $data = [];
@@ -274,6 +292,6 @@ try {
         echo myJsonResponse(200, "Data retrieved", $data);
     } else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
-    // http_response_code(400);
+    http_response_code(400);
     echo myJsonResponse(400, $th->getMessage());
 }
