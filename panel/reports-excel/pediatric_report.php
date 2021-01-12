@@ -197,7 +197,7 @@ $styleHeading = array(
         )
     )
 );
-$sheet->getStyle('A1:BJ1')->applyFromArray($styleHeading);
+$sheet->getStyle('A1:BL1')->applyFromArray($styleHeading);
 foreach (range('A', $sheet->getHighestColumn()) as $col){
     $sheet->getColumnDimension($col)->setAutoSize(true);
 }
