@@ -265,7 +265,6 @@ try {
     } elseif ($request == "load_prev_obs") {
         session_start();
         $user = $_SESSION['user'];
-        $assignedFacilities = AssignedFacility::select('facility')->where("userID", $user['id'])->get();
 
         $cccNo = $_GET['cccNo'];
         $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
