@@ -131,6 +131,15 @@ const guardianchkbox = document.getElementById("guardianchkbox");
 const fatherchkbox = document.getElementById("fatherchkbox");
 const motherchkbox = document.getElementById("motherchkbox");
 
+const calvldate = document.getElementById("calvldate");
+const calvl = document.getElementById("calvl");
+const mothervldate = document.getElementById("mothervldate");
+const mothervl = document.getElementById("mothervl");
+const fathervldate = document.getElementById("fathervldate");
+const fathervl = document.getElementById("fathervl");
+const guardianvldate = document.getElementById("guardianvldate");
+const guardianvl = document.getElementById("guardianvl");
+
 motherchkbox.addEventListener('change', () => {
     guardianchkbox.checked = false;
     caregiverChanged();
@@ -374,37 +383,6 @@ function initialize() {
     });
 }
 
-// function loadtocheckbox(modules) {
-//   for (var i = 0; i < modules.length; i++) {
-//     let module = modules[i];
-//     // console.log(module.name);
-
-//     // create the div container for the checkbox
-//     var checkboxdiv = document.createElement("div");
-//     checkboxdiv.classList.add("custom-control");
-//     checkboxdiv.classList.add("custom-checkbox");
-//     checkboxdiv.classList.add("ml-2");
-
-//     //create checkbox
-//     var checkBox = document.createElement("input");
-//     checkBox.setAttribute("type", "checkbox");
-//     checkBox.classList.add("custom-control-input");
-//     checkBox.setAttribute("id", module.id);
-
-//     // create a label for the checkbox
-//     var label = document.createElement("label");
-//     label.setAttribute("for", module.id);
-//     label.classList.add("custom-control-label");
-
-//     label.appendChild(document.createTextNode(module.name));
-
-//     checkboxdiv.appendChild(checkBox);
-//     checkboxdiv.appendChild(label);
-
-//     otzmodulesdiv.appendChild(checkboxdiv);
-//   }
-// }
-
 function loadPreviousObservation() {
     let cccNo = cccNoInput.value;
 
@@ -415,9 +393,37 @@ function loadPreviousObservation() {
             var mResponse = JSON.parse(response);
             console.log(mResponse.data);
             data = mResponse.data;
+
+            calvldate.innerHTML = null;
+            calvl.innerHTML = null;
+            mothervldate.innerHTML = null;
+            mothervl.innerHTML = null;
+            fathervldate.innerHTML = null;
+            fathervl.innerHTML = null;
+            guardianvldate.innerHTML = null;
+            guardianvl.innerHTML = null;
+            
             for (var i = 0; i < data.length; i++) {
                 let dataobj = data[i];
-
+                console.log(dataobj);
+                if (dataobj !== null) {
+                    if (dataobj.type == 'cal') {
+                        calvldate.innerHTML = dataobj.vlDate;
+                        calvl.innerHTML = dataobj.vlCopies;
+                    }
+                    if (dataobj.type == 'mother') {
+                        mothervldate.innerHTML = dataobj.vlDate;
+                        mothervl.innerHTML = dataobj.vlCopies;
+                    }
+                    if (dataobj.type == 'father') {
+                        fathervldate.innerHTML = dataobj.vlDate;
+                        fathervl.innerHTML = dataobj.vlCopies;
+                    }
+                    if (dataobj.type == 'guardian') {
+                        guardianvldate.innerHTML = dataobj.vlDate;
+                        guardianvl.innerHTML = dataobj.vlCopies;
+                    }
+                }
             }
         }
     });
@@ -441,18 +447,8 @@ function loadPreviousObservation() {
                         facilitySelector.selectedIndex = i;
                     }
                 }
-                // $("#facilitySelect").val(facil);
-                // facilitySelector.disabled=true;
-                // facilityInput.value = patient.facilityData.name;
                 mflcodeInput.innerHTML = patient.facilityData.mfl_code;
                 countyInput.innerHTML = patient.county;
-                /*var genders = genderSelect.options;
-                for (let i = 0; i < genders.length; i++) {
-                  const gender = genders[i];
-                  if (patient.sex == gender.value) {
-                    genderSelect.selectedIndex = i;
-                  }
-                }*/
                 $("#genderSelect").val(patient.sex);
                 dobInput.value = patient.dob;
                 dob = new Date(patient.dob);
@@ -469,18 +465,10 @@ function loadPreviousObservation() {
                 let patient = mResponse.data.patient;
                 var facil = patient.facility;
                 $("#facilitySelect").val(facil);
-                // facilitySelector.disabled=true;
-                // facilityInput.value = patient.facilityData.name;
                 mflcodeInput.innerHTML = patient.facilityData.mfl_code;
                 countyInput.innerHTML = patient.county;
                 var genders = genderSelect.options;
                 $("#genderSelect").val(patient.sex);
-                /*for (let i = 0; i < genders.length; i++) {
-                  const gender = genders[i];
-                  if (patient.sex == gender.value) {
-                    genderSelect.selectedIndex = i;
-                  }
-                }*/
                 dobInput.value = patient.dob;
                 dob = new Date(patient.dob);
                 dateenrolled = new Date(patient.date_enrolled);

@@ -291,7 +291,15 @@ try {
     } else if ($request == "get_last_vls") {
         require_once "../models/LastVL.php";
         $calcccno = $_GET["cccNo"];
-        $data = LastVL::where('cccCALHIV', $calcccno)->get();
+        $data = [];
+        $caldata = LastVL::where('cccCALHIV', $calcccno)->where('type', 'cal')->orderBy('vlDate', 'desc')->first();
+        array_push($data, $caldata);
+        $motherdata = LastVL::where('cccCALHIV', $calcccno)->where('type', 'mother')->orderBy('vlDate', 'desc')->first();
+        array_push($data, $motherdata);
+        $fatherdata = LastVL::where('cccCALHIV', $calcccno)->where('type', 'father')->orderBy('vlDate', 'desc')->first();
+        array_push($data, $fatherdata);
+        $guardiandata = LastVL::where('cccCALHIV', $calcccno)->where('type', 'guardian')->orderBy('vlDate', 'desc')->first();
+        array_push($data, $guardiandata);
         echo myJsonResponse(200, "Data retrieved", $data);
     } else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {

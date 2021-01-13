@@ -203,8 +203,8 @@ foreach (range('A', $sheet->getHighestColumn()) as $col){
 }
 
 
-//this is for MS Office Excel 2007 xlsx format ==>
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+//this is for MS Office Excel xlsx format header==>
+header('Content-Type: application/vnd.ms-excel');
 header('Content-Disposition: attachment; filename="patients_pediatric_report2.xlsx"');
 header('Cache-Control: max-age=0');
 
