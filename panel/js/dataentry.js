@@ -139,6 +139,7 @@ const fathervldate = document.getElementById("fathervldate");
 const fathervl = document.getElementById("fathervl");
 const guardianvldate = document.getElementById("guardianvldate");
 const guardianvl = document.getElementById("guardianvl");
+const errorDiv = document.querySelector("#error-modal");
 
 motherchkbox.addEventListener('change', () => {
     guardianchkbox.checked = false;
@@ -184,6 +185,16 @@ function caregiverChanged() {
     } else tbodyMother.setAttribute('hidden', '');
 }
 
+function handleError(errorCode, errorMessage) {
+    if (errorCode === 401) window.location.replace("login.html");
+    else {
+        errorDiv.querySelector("p").innerText = errorMessage;
+        errorDiv.style.display = "block";
+    }
+}
+document.getElementById("errorModalDismiss").addEventListener('click', () => {
+    errorDiv.style.display = "none";
+});
 var dob, dateenrolled;
 var facilities;
 
@@ -219,6 +230,9 @@ $.ajax({
             currentoiSelect.appendChild(option);
         });
     },
+    error: (error) =>{
+        handleError(error.status, error.message);
+    }
 });
 
 btnSearch.addEventListener("click", () => loadPreviousObservation());
@@ -335,9 +349,10 @@ function initialize() {
                     // loadtocheckbox(modules);
                 }
             } else {
-                //todo: display error message
+                handleError(code, mResponse.message);
             }
         },
+        error: error => handleError(error.status, error.message)
     });
 
     $.ajax({
@@ -356,9 +371,13 @@ function initialize() {
                     currentregimenSelect.appendChild(option);
                     startregimenSelect.appendChild(option.cloneNode(true));
                     otzregimenSelect.appendChild(option.cloneNode(true));
+                    startRegimenDialogSelect.appendChild(option.cloneNode(true));
                 }
+            }else {
+                handleError(code, mResponse.message);
             }
         },
+        error: error => handleError(error.status, error.message)
     });
 
     // $("#facilitySelect").select2();
@@ -377,15 +396,22 @@ function initialize() {
                     option.setAttribute("value", facility.mfl_code);
                     option.appendChild(document.createTextNode(facility.name));
                     facilitySelector.appendChild(option);
+                    facilityDialogSelect.appendChild(option.cloneNode(true));
                 }
+            }else {
+                handleError(code, mResponse.message);
             }
         },
+        error: error => handleError(error.status, error.message)
     });
 }
 
 function loadPreviousObservation() {
     let cccNo = cccNoInput.value;
-
+    if (cccNo.length < 10 || cccNo.length > 10) {
+        alert("Enter a valid CCC number");
+        return;
+    }
     $.ajax({
         type: "GET",
         url: "datascript?request=get_last_vls&cccNo=" + cccNo,
@@ -425,7 +451,8 @@ function loadPreviousObservation() {
                     }
                 }
             }
-        }
+        },
+        error: error => handleError(error.status, error.message)
     });
 
     $.ajax({
@@ -437,6 +464,7 @@ function loadPreviousObservation() {
             let code = mResponse.code;
             if (code == 200) {
                 //Ok data
+                btnSubmit.removeAttribute("disabled")
                 let patient = mResponse.data.patient;
                 var observation = mResponse.data.observation;
                 var facil = patient.facility;
@@ -454,6 +482,17 @@ function loadPreviousObservation() {
                 dob = new Date(patient.dob);
                 dateenrolled = new Date(patient.date_enrolled);
                 getAge(dob, dateenrolled);
+                let currentAge = calculateAgeDifference(dob);
+                if (currentAge < 10 || currentAge > 19) {//disable OTZ
+                    otzenrolledSelect.setAttribute("disabled", "")
+                } else {
+                    if (otzenrolledSelect.hasAttribute("disabled")) otzenrolledSelect.removeAttribute("disabled");
+                }
+                if (currentAge > 15) {//disable pama
+                    pamaEnrolledSelect.setAttribute("disabled", "");
+                } else {
+                    if (pamaEnrolledSelect.hasAttribute("disabled")) pamaEnrolledSelect.removeAttribute("disabled")
+                }
                 dohdInput.value = patient.date_of_hiv_diagnosis;
                 decInput.value = patient.date_enrolled;
                 dsaInput.value = patient.dateStartedART;
@@ -462,6 +501,7 @@ function loadPreviousObservation() {
                 loadObsData(observation);
             } else if (code == 201) {
                 //Empty obs
+                btnSubmit.removeAttribute("disabled")
                 let patient = mResponse.data.patient;
                 var facil = patient.facility;
                 $("#facilitySelect").val(facil);
@@ -483,11 +523,11 @@ function loadPreviousObservation() {
                 $("#addpatientmodal").modal("show");
             }
         },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest);
-            console.log(textStatus);
-            console.log(errorThrown);
-        },
+        error: error => {
+            sessionStorage.setItem("cccNo", cccNo);
+            $("#addpatientmodal").modal("show");
+            handleError(error.status, "Error encountered.")
+        }
     });
 }
 
@@ -507,6 +547,12 @@ function getAge(dob, dateenrolled) {
 
     console.log(agewhenenrolled);
     ageatenrollmentInput.innerHTML = agewhenenrolled + " years";
+}
+
+function calculateAgeDifference(date1, date2 = null) {
+    let startDate = new Date(date1);
+    let endDate = date2 == null ? new Date() : new Date(date2);
+    return endDate.getTime() - startDate.getTime();
 }
 
 function loadObsData(observation) {
@@ -678,6 +724,9 @@ function loadObsData(observation) {
     var otzModules = otzModulesSelect.options;
     for (var i = 0; i < otzModules.length; i++) {
         const otzModule = otzModules[i];
+        if (otzModule.value < observation.completedOTZModules){
+            otzModule.setAttribute("disabled", "");
+        }
         if (otzModule.value == observation.completedOTZModules) {
             otzModulesSelect.selectedIndex = i;
         }
@@ -955,7 +1004,7 @@ function verify() {
     else if (motherchkbox.checked) caregiverType = "Mother";
     else if (fatherchkbox.checked) caregiverType = "Father";
     let caregiver1CCC = '';
-    let caregiver2CCC = caregiver2cccnoInput.value;
+    let caregiver2CCC = '';
     let caregiver1VL = '';
     let caregiver2VL = '';
 
@@ -968,19 +1017,33 @@ function verify() {
         if (isLDLguardian.checked) caregiver1VL = "LDL";
         else caregiver1VL = guardianVlCopiesInput.value;
         caregiver1VLDate = guardianlastvlDate.value;
+        if (caregiver1CCC !== '' && caregiver1CCC.length !== 10){
+            error = true;
+            errorMessage += "Enter a valid Guardian CCC number.\n"
+        }
     } else {
         if (motherchkbox.checked) {
             if (isLDLmother.checked) caregiver1VL = "LDL";
             else caregiver1VL = motherVlCopiesInput.value;
             caregiver1VLDate = motherlastvlDateInput.value;
             caregiver1CCC = caregiver1cccnoInput.value;
+            if (caregiver1CCC !== '' && caregiver1CCC.length !== 10){
+                error = true;
+                errorMessage += "Enter a valid mother CCC number.\n"
+            }
         }
         if (fatherchkbox.checked) {
             if (isLDLfather.checked) caregiver2VL = "LDL";
             else caregiver2VL = fatherVlCopiesInput.value;
+            caregiver2CCC = caregiver2cccnoInput.value;
             caregiver2VLDate = fatherlastvlDateInput.value;
+            if (caregiver1CCC !== '' && caregiver1CCC.length !== 10){
+                error = true;
+                errorMessage += "Enter a valid father CCC number.\n"
+            }
         }
     }
+
     let PAMAStatus3 = pamastatusat3Select.options[pamastatusat3Select.selectedIndex].value;
     let PAMAStatus6 = pamastatusat6Select.options[pamastatusat6Select.selectedIndex].value;
     let PAMAStatus12 = pamastatusat12Select.options[pamastatusat12Select.selectedIndex].value;
@@ -989,203 +1052,9 @@ function verify() {
     let PAMAStatusTransition = pamaStatusAtTransitionSelect.options[pamaStatusAtTransitionSelect.selectedIndex].value;
     let dateDiscontinuedFromPAMA = pamaDiscontinuedDateInput.value;
     let comment = commentArea.value;
-    if (enrolledInPAMA === 'Y'){
+    if (enrolledInPAMA === 'Y') {
 
     }
-    formData.append("enrolledInPAMA", enrolledInPAMA);
-    formData.append("dateEnrolledInPAMA", dateEnrolledInPAMA);
-    formData.append("caregiverInSameFacility", caregiverInSameFacility);
-    formData.append("caregiverType", caregiverType);
-    formData.append("caregiver1CCC", caregiver1CCC);
-    formData.append("caregiver2CCC", caregiver2CCC);
-    formData.append("caregiver1VL", caregiver1VL);
-    formData.append("caregiver1VLDate", caregiver1VLDate);
-    formData.append("caregiver2VL", caregiver2VL);
-    formData.append("caregiver2VLDate", caregiver2VLDate);
-    formData.append("caregiver1VLStatus", caregiver1VLStatus);
-    formData.append("PAMAStatus3", PAMAStatus3);
-    formData.append("PAMAStatus6", PAMAStatus6);
-    formData.append("PAMAStatus12", PAMAStatus12);
-    formData.append("PAMAStatus24", PAMAStatus24);
-    formData.append("PAMAStatusCurrent", PAMAStatusCurrent);
-    formData.append("PAMAStatusTransition", PAMAStatusTransition);
-    formData.append("dateDiscontinuedFromPAMA", dateDiscontinuedFromPAMA);
-    formData.append("comment", comment);
-
-}
-
-function submitData() {
-    // submitPatientData();
-    var formData = new FormData();
-
-    //Changing information-------->
-    let currentRegimen =
-        currentregimenSelect.options[currentregimenSelect.selectedIndex].value;
-    let regimenLine =
-        regimenlineSelect.options[regimenlineSelect.selectedIndex].value;
-    let regimenStartDate = dscrInput.value;
-    let kaletraFormulation =
-        currentKaletraformulationSelect.options[
-            currentKaletraformulationSelect.selectedIndex
-            ].value;
-    let vlDate = vldateInput.value;
-    let vlCopies = isLDL1.checked ? "LDL" : vlcopiesInput.value;
-    let vlOutcome = "Not Done";
-    if (isLDL1.checked || vlcopiesInput.value < 1000) vlOutcome = "Supressed";
-    else if (vlCopies.value >= 1000) vlOutcome = "Not Supressed";
-    // let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
-    let vlScoreType = "";
-    if (isBMICheck.checked) vlScoreType = "BMI";
-    else if (isZScoreCheck.checked) vlScoreType = "ZScore";
-    else if (isMUACCheck.checked) vlScoreType = "MUAC";
-    let latestZScore = zscoreInput.value;
-    let opportunisticInfection =
-        currentoiSelect.options[currentoiSelect.selectedIndex].value;
-    let disclosureStatus =
-        disclosureStatusSelect.options[disclosureStatusSelect.selectedIndex].value;
-    let iptStatus = iptstatusSelect.options[iptstatusSelect.selectedIndex].value;
-    let schooling =
-        schoolingstatusSelect.options[schoolingstatusSelect.selectedIndex].value;
-    let statusAtTransition =
-        statusAtTransitionSelect.options[statusAtTransitionSelect.selectedIndex]
-            .value;
-    formData.append("currentRegimen", currentRegimen);
-    formData.append("regimenLine", regimenLine);
-    formData.append("regimenStartDate", regimenStartDate);
-    formData.append("kaletraFormulation", kaletraFormulation);
-    formData.append("vlDate", vlDate);
-    formData.append("vlCopies", vlCopies);
-    formData.append("vlOutcome", vlOutcome);
-    formData.append("vlScoreType", vlScoreType);
-    formData.append("latestZScore", latestZScore);
-    formData.append("opportunisticInfection", opportunisticInfection);
-    formData.append("disclosureStatus", disclosureStatus);
-    formData.append("iptStatus", iptStatus);
-    formData.append("schooling", schooling);
-    formData.append("statusAtTransition", statusAtTransition);
-
-    //OVC---->
-    let enrolledInOVC =
-        ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
-    let dateEnrolledInOVC = ovcEnrollmentDateInput.value;
-    let CPMISNumber = cpmisNumberInput.value;
-    let ovcVLCopies = '';
-    let baselineOvcVlDate = ovcVLDateInput.value;
-    if (isLDL2.checked) ovcVLCopies = "LDL";
-    else ovcVLCopies = ovcVLcopiesInput.value;
-    let dateDiscontinuedFromOVC = ovcDiscontinuedDateInput.value;
-    let statusAtOVCDiscontinuation =
-        ovcDiscontinuationStatusSelect.options[
-            ovcDiscontinuationStatusSelect.selectedIndex
-            ].value;
-    formData.append("enrolledInOVC", enrolledInOVC);
-    formData.append("dateEnrolledInOVC", dateEnrolledInOVC);
-    formData.append("CPMISNumber", CPMISNumber);
-    formData.append("ovcVLCopies", ovcVLCopies);
-    formData.append("baselineOvcVlDate", baselineOvcVlDate);
-    formData.append("dateDiscontinuedFromOVC", dateDiscontinuedFromOVC);
-    formData.append("statusAtOVCDiscontinuation", statusAtOVCDiscontinuation);
-
-    //OTZ---->
-    let enrolledInOTZ =
-        otzenrolledSelect.options[otzenrolledSelect.selectedIndex].value;
-    let dateEnrolledInOTZ = otzEnrollmentDateInput.value;
-    let OTZArtRegimen =
-        otzregimenSelect.options[otzregimenSelect.selectedIndex].value;
-    let OTZVL = '';
-    if (isLDL4.checked) OTZVL = "LDL";
-    else OTZVL = otzVlInput.value;
-    let OTZVLDate = otzVlDateInput.value;
-    /*let missedLastAppointment =
-      missedLastAppointmentSelect.options[
-        missedLastAppointmentSelect.selectedIndex
-      ].value;*/
-    let lastAttendDate = otzLastAttendDateInput.value;
-    let nextAppointmentDate = otzNextAppointmentDateInput.value;
-    let ArtAdherenceAssessment =
-        artAssessmentSelect.options[artAssessmentSelect.selectedIndex].value;
-    let completedOTZModules = otzModulesSelect.options[otzModulesSelect.selectedIndex].value;
-    // let completedOTZModules = [];
-    // var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
-    // checkBoxes.forEach((checkBox) => {
-    //   if (checkBox.checked == true) {
-    //     completedOTZModules.push(checkBox.getAttribute("id"));
-    //   }
-    // });
-    // console.log(completedOTZModules);
-    let statusAtOTZTransition =
-        otzTransitionStatusSelect.options[otzTransitionStatusSelect.selectedIndex]
-            .value;
-    let dateDiscontinuedFromOTZ = otzDiscontinuedDateInput.value;
-    formData.append("enrolledInOTZ", enrolledInOTZ);
-    formData.append("dateEnrolledInOTZ", dateEnrolledInOTZ);
-    formData.append("OTZArtRegimen", OTZArtRegimen);
-    formData.append("OTZVL", OTZVL);
-    formData.append("OTZVLDate", OTZVLDate);
-    // formData.append("missedLastAppointment", missedLastAppointment);
-    formData.append("lastAttendDate", lastAttendDate);
-    formData.append("nextAppointmentDate", nextAppointmentDate);
-    formData.append("ArtAdherenceAssessment", ArtAdherenceAssessment);
-    formData.append("completedOTZModules", completedOTZModules);
-    formData.append("statusAtOTZTransition", statusAtOTZTransition);
-    formData.append("dateDiscontinuedFromOTZ", dateDiscontinuedFromOTZ);
-
-    //pama--->const caregiverenrolledSelect = document.getElementById("caregiverenrolledSelect");
-    let enrolledInPAMA =
-        pamaEnrolledSelect.options[pamaEnrolledSelect.selectedIndex].value;
-    let dateEnrolledInPAMA = pamaEnrollmentDateInput.value;
-    let caregiverInSameFacility =
-        caregiverenrolledSelect.options[caregiverenrolledSelect.selectedIndex]
-            .value;
-    let caregiverType = ''
-    if (guardianchkbox.checked) caregiverType = "Guardian";
-    else if (motherchkbox.checked && fatherchkbox.checked) caregiverType = "Mother + Father";
-    else if (motherchkbox.checked) caregiverType = "Mother";
-    else if (fatherchkbox.checked) caregiverType = "Father";
-    let caregiver1CCC = '';
-    let caregiver2CCC = caregiver2cccnoInput.value;
-    let caregiver1VL = '';
-    let caregiver2VL = '';
-
-    let caregiver1VLDate = '';
-    let caregiver1VLStatus = '';
-    let caregiver2VLDate = '';
-
-    if (guardianchkbox.checked) {
-        caregiver1CCC = caregiver3cccnoInput.value;
-        if (isLDLguardian.checked) caregiver1VL = "LDL";
-        else caregiver1VL = guardianVlCopiesInput.value;
-        caregiver1VLDate = guardianlastvlDate.value;
-    } else {
-        if (motherchkbox.checked) {
-            if (isLDLmother.checked) caregiver1VL = "LDL";
-            else caregiver1VL = motherVlCopiesInput.value;
-            caregiver1VLDate = motherlastvlDateInput.value;
-            caregiver1CCC = caregiver1cccnoInput.value;
-        }
-        if (fatherchkbox.checked) {
-            if (isLDLfather.checked) caregiver2VL = "LDL";
-            else caregiver2VL = fatherVlCopiesInput.value;
-            caregiver2VLDate = fatherlastvlDateInput.value;
-        }
-    }
-    let PAMAStatus3 =
-        pamastatusat3Select.options[pamastatusat3Select.selectedIndex].value;
-    let PAMAStatus6 =
-        pamastatusat6Select.options[pamastatusat6Select.selectedIndex].value;
-    let PAMAStatus12 =
-        pamastatusat12Select.options[pamastatusat12Select.selectedIndex].value;
-    let PAMAStatus24 =
-        pamastatusat24Select.options[pamastatusat24Select.selectedIndex].value;
-    let PAMAStatusCurrent =
-        currentPamaStatusSelect.options[currentPamaStatusSelect.selectedIndex]
-            .value;
-    let PAMAStatusTransition =
-        pamaStatusAtTransitionSelect.options[
-            pamaStatusAtTransitionSelect.selectedIndex
-            ].value;
-    let dateDiscontinuedFromPAMA = pamaDiscontinuedDateInput.value;
-    let comment = commentArea.value;
     formData.append("enrolledInPAMA", enrolledInPAMA);
     formData.append("dateEnrolledInPAMA", dateEnrolledInPAMA);
     formData.append("caregiverInSameFacility", caregiverInSameFacility);
@@ -1209,9 +1078,219 @@ function submitData() {
     //Other data------>
     let patientCCC = cccNoInput.value;
     let userId = 1;
+    let mflCode = facilitySelector.options[facilitySelector.selectedIndex].value;
     formData.append("patientCCC", patientCCC);
     formData.append("userId", userId);
+    formData.append("mflCode", mflCode);
 
+    if (error) {
+        handleError(-1, errorMessage);
+    }else {
+        submitData(formData);
+    }
+}
+
+function submitData(formData = null) {
+    // submitPatientData();
+    if (formData == null) {
+        var formData = new FormData();
+
+        //Changing information-------->
+        let currentRegimen =
+            currentregimenSelect.options[currentregimenSelect.selectedIndex].value;
+        let regimenLine =
+            regimenlineSelect.options[regimenlineSelect.selectedIndex].value;
+        let regimenStartDate = dscrInput.value;
+        let kaletraFormulation =
+            currentKaletraformulationSelect.options[
+                currentKaletraformulationSelect.selectedIndex
+                ].value;
+        let vlDate = vldateInput.value;
+        let vlCopies = isLDL1.checked ? "LDL" : vlcopiesInput.value;
+        let vlOutcome = "Not Done";
+        if (isLDL1.checked || vlcopiesInput.value < 1000) vlOutcome = "Supressed";
+        else if (vlCopies.value >= 1000) vlOutcome = "Not Supressed";
+        // let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
+        let vlScoreType = "";
+        if (isBMICheck.checked) vlScoreType = "BMI";
+        else if (isZScoreCheck.checked) vlScoreType = "ZScore";
+        else if (isMUACCheck.checked) vlScoreType = "MUAC";
+        let latestZScore = zscoreInput.value;
+        let opportunisticInfection =
+            currentoiSelect.options[currentoiSelect.selectedIndex].value;
+        let disclosureStatus =
+            disclosureStatusSelect.options[disclosureStatusSelect.selectedIndex].value;
+        let iptStatus = iptstatusSelect.options[iptstatusSelect.selectedIndex].value;
+        let schooling =
+            schoolingstatusSelect.options[schoolingstatusSelect.selectedIndex].value;
+        let statusAtTransition =
+            statusAtTransitionSelect.options[statusAtTransitionSelect.selectedIndex]
+                .value;
+        formData.append("currentRegimen", currentRegimen);
+        formData.append("regimenLine", regimenLine);
+        formData.append("regimenStartDate", regimenStartDate);
+        formData.append("kaletraFormulation", kaletraFormulation);
+        formData.append("vlDate", vlDate);
+        formData.append("vlCopies", vlCopies);
+        formData.append("vlOutcome", vlOutcome);
+        formData.append("vlScoreType", vlScoreType);
+        formData.append("latestZScore", latestZScore);
+        formData.append("opportunisticInfection", opportunisticInfection);
+        formData.append("disclosureStatus", disclosureStatus);
+        formData.append("iptStatus", iptStatus);
+        formData.append("schooling", schooling);
+        formData.append("statusAtTransition", statusAtTransition);
+
+        //OVC---->
+        let enrolledInOVC =
+            ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
+        let dateEnrolledInOVC = ovcEnrollmentDateInput.value;
+        let CPMISNumber = cpmisNumberInput.value;
+        let ovcVLCopies = '';
+        let baselineOvcVlDate = ovcVLDateInput.value;
+        if (isLDL2.checked) ovcVLCopies = "LDL";
+        else ovcVLCopies = ovcVLcopiesInput.value;
+        let dateDiscontinuedFromOVC = ovcDiscontinuedDateInput.value;
+        let statusAtOVCDiscontinuation =
+            ovcDiscontinuationStatusSelect.options[
+                ovcDiscontinuationStatusSelect.selectedIndex
+                ].value;
+        formData.append("enrolledInOVC", enrolledInOVC);
+        formData.append("dateEnrolledInOVC", dateEnrolledInOVC);
+        formData.append("CPMISNumber", CPMISNumber);
+        formData.append("ovcVLCopies", ovcVLCopies);
+        formData.append("baselineOvcVlDate", baselineOvcVlDate);
+        formData.append("dateDiscontinuedFromOVC", dateDiscontinuedFromOVC);
+        formData.append("statusAtOVCDiscontinuation", statusAtOVCDiscontinuation);
+
+        //OTZ---->
+        let enrolledInOTZ =
+            otzenrolledSelect.options[otzenrolledSelect.selectedIndex].value;
+        let dateEnrolledInOTZ = otzEnrollmentDateInput.value;
+        let OTZArtRegimen =
+            otzregimenSelect.options[otzregimenSelect.selectedIndex].value;
+        let OTZVL = '';
+        if (isLDL4.checked) OTZVL = "LDL";
+        else OTZVL = otzVlInput.value;
+        let OTZVLDate = otzVlDateInput.value;
+        /*let missedLastAppointment =
+          missedLastAppointmentSelect.options[
+            missedLastAppointmentSelect.selectedIndex
+          ].value;*/
+        let lastAttendDate = otzLastAttendDateInput.value;
+        let nextAppointmentDate = otzNextAppointmentDateInput.value;
+        let ArtAdherenceAssessment =
+            artAssessmentSelect.options[artAssessmentSelect.selectedIndex].value;
+        let completedOTZModules = otzModulesSelect.options[otzModulesSelect.selectedIndex].value;
+        // let completedOTZModules = [];
+        // var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
+        // checkBoxes.forEach((checkBox) => {
+        //   if (checkBox.checked == true) {
+        //     completedOTZModules.push(checkBox.getAttribute("id"));
+        //   }
+        // });
+        // console.log(completedOTZModules);
+        let statusAtOTZTransition =
+            otzTransitionStatusSelect.options[otzTransitionStatusSelect.selectedIndex]
+                .value;
+        let dateDiscontinuedFromOTZ = otzDiscontinuedDateInput.value;
+        formData.append("enrolledInOTZ", enrolledInOTZ);
+        formData.append("dateEnrolledInOTZ", dateEnrolledInOTZ);
+        formData.append("OTZArtRegimen", OTZArtRegimen);
+        formData.append("OTZVL", OTZVL);
+        formData.append("OTZVLDate", OTZVLDate);
+        // formData.append("missedLastAppointment", missedLastAppointment);
+        formData.append("lastAttendDate", lastAttendDate);
+        formData.append("nextAppointmentDate", nextAppointmentDate);
+        formData.append("ArtAdherenceAssessment", ArtAdherenceAssessment);
+        formData.append("completedOTZModules", completedOTZModules);
+        formData.append("statusAtOTZTransition", statusAtOTZTransition);
+        formData.append("dateDiscontinuedFromOTZ", dateDiscontinuedFromOTZ);
+
+        //pama--->const caregiverenrolledSelect = document.getElementById("caregiverenrolledSelect");
+        let enrolledInPAMA =
+            pamaEnrolledSelect.options[pamaEnrolledSelect.selectedIndex].value;
+        let dateEnrolledInPAMA = pamaEnrollmentDateInput.value;
+        let caregiverInSameFacility =
+            caregiverenrolledSelect.options[caregiverenrolledSelect.selectedIndex]
+                .value;
+        let caregiverType = ''
+        if (guardianchkbox.checked) caregiverType = "Guardian";
+        else if (motherchkbox.checked && fatherchkbox.checked) caregiverType = "Mother + Father";
+        else if (motherchkbox.checked) caregiverType = "Mother";
+        else if (fatherchkbox.checked) caregiverType = "Father";
+        let caregiver1CCC = '';
+        let caregiver2CCC = caregiver2cccnoInput.value;
+        let caregiver1VL = '';
+        let caregiver2VL = '';
+
+        let caregiver1VLDate = '';
+        let caregiver1VLStatus = '';
+        let caregiver2VLDate = '';
+
+        if (guardianchkbox.checked) {
+            caregiver1CCC = caregiver3cccnoInput.value;
+            if (isLDLguardian.checked) caregiver1VL = "LDL";
+            else caregiver1VL = guardianVlCopiesInput.value;
+            caregiver1VLDate = guardianlastvlDate.value;
+        } else {
+            if (motherchkbox.checked) {
+                if (isLDLmother.checked) caregiver1VL = "LDL";
+                else caregiver1VL = motherVlCopiesInput.value;
+                caregiver1VLDate = motherlastvlDateInput.value;
+                caregiver1CCC = caregiver1cccnoInput.value;
+            }
+            if (fatherchkbox.checked) {
+                if (isLDLfather.checked) caregiver2VL = "LDL";
+                else caregiver2VL = fatherVlCopiesInput.value;
+                caregiver2VLDate = fatherlastvlDateInput.value;
+            }
+        }
+        let PAMAStatus3 =
+            pamastatusat3Select.options[pamastatusat3Select.selectedIndex].value;
+        let PAMAStatus6 =
+            pamastatusat6Select.options[pamastatusat6Select.selectedIndex].value;
+        let PAMAStatus12 =
+            pamastatusat12Select.options[pamastatusat12Select.selectedIndex].value;
+        let PAMAStatus24 =
+            pamastatusat24Select.options[pamastatusat24Select.selectedIndex].value;
+        let PAMAStatusCurrent =
+            currentPamaStatusSelect.options[currentPamaStatusSelect.selectedIndex]
+                .value;
+        let PAMAStatusTransition =
+            pamaStatusAtTransitionSelect.options[
+                pamaStatusAtTransitionSelect.selectedIndex
+                ].value;
+        let dateDiscontinuedFromPAMA = pamaDiscontinuedDateInput.value;
+        let comment = commentArea.value;
+        formData.append("enrolledInPAMA", enrolledInPAMA);
+        formData.append("dateEnrolledInPAMA", dateEnrolledInPAMA);
+        formData.append("caregiverInSameFacility", caregiverInSameFacility);
+        formData.append("caregiverType", caregiverType);
+        formData.append("caregiver1CCC", caregiver1CCC);
+        formData.append("caregiver2CCC", caregiver2CCC);
+        formData.append("caregiver1VL", caregiver1VL);
+        formData.append("caregiver1VLDate", caregiver1VLDate);
+        formData.append("caregiver2VL", caregiver2VL);
+        formData.append("caregiver2VLDate", caregiver2VLDate);
+        formData.append("caregiver1VLStatus", caregiver1VLStatus);
+        formData.append("PAMAStatus3", PAMAStatus3);
+        formData.append("PAMAStatus6", PAMAStatus6);
+        formData.append("PAMAStatus12", PAMAStatus12);
+        formData.append("PAMAStatus24", PAMAStatus24);
+        formData.append("PAMAStatusCurrent", PAMAStatusCurrent);
+        formData.append("PAMAStatusTransition", PAMAStatusTransition);
+        formData.append("dateDiscontinuedFromPAMA", dateDiscontinuedFromPAMA);
+        formData.append("comment", comment);
+
+        //Other data------>
+        let patientCCC = cccNoInput.value;
+        let userId = 1;
+        let mflCode = facilitySelector.options[facilitySelector.selectedIndex].value;
+        formData.append("patientCCC", patientCCC);
+        formData.append("userId", userId);
+        formData.append("mflCode", mflCode);
+    }
     $.ajax({
         type: "POST",
         url: "datascript?request=submit_form",
@@ -1221,6 +1300,7 @@ function submitData() {
         success: function (response) {
             clearForm();
         },
+        error: error => handleError(error.status, error.message)
     });
 
     /********************************
@@ -1301,12 +1381,12 @@ function submitPatientData() {
             let code = mResponse.code;
             if (code == 200) {
                 console.log(mResponse.data);
-                submitData();
+                verify();
             } else {
                 //todo: display error
             }
         },
-        fail: (XMLHttpRequest, textStatus, errorThrown) => {
+        error: (XMLHttpRequest, textStatus, errorThrown) => {
             alert(errorThrown.message);
         },
     });

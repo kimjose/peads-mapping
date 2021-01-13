@@ -21,6 +21,7 @@ try {
         echo myJsonResponse(200, "Modules retrieved", $modules);
     } elseif ($request == "submit_form") {
         $userId = $_POST['userId'];
+        $mflCode = $_POST['mflCode'];
         $PAMAStatus6 = $_POST['PAMAStatus6'];
         $PAMAStatus12 = $_POST['PAMAStatus12'];
         $PAMAStatus24 = $_POST['PAMAStatus24'];
@@ -85,7 +86,7 @@ try {
 
 
         Observation::create([
-            'patientCCC' => $patientCCC, 'userId' => $userId,
+            'patientCCC' => $patientCCC, 'userId' => $userId, 'mflCode' => $mflCode,
             'currentRegimen' => $currentRegimen,
             'regimenLine' => $regimenLine,
             'regimenStartDate' => $regimenStartDate,
@@ -120,9 +121,7 @@ try {
             $user['cadreName'] = $cadre->name;
         }
         echo myJsonResponse(200, "Users retrieved", $users);
-    }
-    /*******Users Management**** */
-    elseif ($request == "save_user") {
+    } elseif ($request == "save_user") {
         $username = $_POST['username'];
         $firstname = $_POST['firstname'];
         $surname = $_POST['surname'];
@@ -242,8 +241,46 @@ try {
             array_push($facilities, $facility);
         }
         echo myJsonResponse(200, "Facilities retrieved", $facilities);
-    }
-    /*************Authentication */
+    } elseif ($request == "get_transfer_patient") {
+        $cccNo = $_GET['cccNo'];
+        session_start();
+        $user = $_SESSION['user'];
+        $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
+        if ($patient == null) {
+            echo myJsonResponse(201, "Patient not found.");
+            return;
+        }
+        $observation = Observation::where('patientCCC', $patient->cccNo)->where('mflCode', $patient->facility)->orderBy('id', 'desc')->first();
+        if ($observation == null || $observation->statusAtTransition != "Transfer Out") echo myJsonResponse(202, "Patient status is not transfer out.");
+        else echo myJsonResponse(200, "Patient Data", $patient);
+    } elseif ($request == "transfer_in") {
+        $cccNo = $_POST['cccNo'];
+        $facility = $_POST['facility'];
+        $f = Facility::where('mfl_code', $facility)->firstOrFail();
+        $patientData = $_POST;
+        $patientData['county'] = $f->county;
+        //check if the patient exists
+        //check if the patient is transferred out and mark to
+        //create new entry
+
+        $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
+        if ($patient != null) {
+            $observation = Observation::where('patientCCC', $patient->cccNo)->where('mflCode', $patient->facility)->orderBy('id', 'desc')->first();
+            if ($observation == null || $observation->statusAtTransition != "Transfer Out") echo myJsonResponse(202, "Patient status is not transfer out.");
+            else {
+                $patient->transferred_out = 1;
+                $patient->save();
+                $observation->statusAtTransition = "Active";
+                $observation->save();
+                Patient::create($patientData);
+                echo myJsonResponse(200, "Patient added successfully");
+            }
+        } else {
+            print_r($patientData);
+            $patient = Patient::create($patientData);
+            echo myJsonResponse(200, "Patient added successfully +" . $patient);
+        }
+    } /*************Authentication */
     elseif ($request == 'register') {
         $names = $_POST['names'];
         $password = $_POST['password'];
@@ -254,9 +291,9 @@ try {
     } elseif ($request == 'login') {
         $names = $_POST['names'];
         $password = $_POST['password'];
-        $user = User::where('names',  $names)->where('active', 1)->firstOrFail();
+        $user = User::where('names', $names)->where('active', 1)->firstOrFail();
         if (password_verify($password, $user->password)) {
-//            $user->last_login = date("Y:m:d h:i:s", time());
+            $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
             session_start();
             $_SESSION['user'] = $user;
@@ -265,13 +302,9 @@ try {
     } elseif ($request == "load_prev_obs") {
         session_start();
         $user = $_SESSION['user'];
-
         $cccNo = $_GET['cccNo'];
         $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
-
         if ($patient == null) throw new Exception("Patient not found", 404);
-        // echo json_encode($patient);
-        // session_start();
         $user = $_SESSION['user'];
         $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $user['id'])->where('deleted', 0)->firstOrFail();
         $facility = Facility::where('mfl_code', $patient->facility)->first();
@@ -304,5 +337,6 @@ try {
     } else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
     http_response_code(400);
+    logError($th->getCode(), $th->getMessage());
     echo myJsonResponse(400, $th->getMessage());
 }
