@@ -136,21 +136,15 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
+                    <div class="input-group">
 
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" id="addPatient" data-toggle="modal"
+                                    data-target="#addPatientDialog">
+                                <i class="fas fa-plus fa-sm"></i> Add Patient / Transfer In
+                            </button>
                         </div>
-                    </form>
-
+                    </div>
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -222,6 +216,17 @@
                     <!-- <br /> -->
 
                     <!-- DataTales Example -->
+
+                    <div class="error-class alert-danger alert-dismissable'" id="error-modal" style="display: none">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">Error encountered.</h5>
+                            <button type="button" id="errorModalDismiss" class="close" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <p>Err</p>
+                    </div>
                     <div class="card shadow mt-4 mb-4">
                         <div class="card-header py-3">
 
@@ -555,11 +560,11 @@
                                                         <td class="d-inline-block col-8">
                                                             <select id="disclosureStatusSelect" class="form-control">
                                                                 <option value="" hidden>Select Status</option>
-                                                                <option value="Full">Full disclosure</option>
-                                                                <option value="Partial/Ongoing">Partial/ongoing
+                                                                <option value="Fulldisclosure">Full disclosure</option>
+                                                                <option value="Partial/Ongoingdisclosure">Partial/ongoing
                                                                     disclosure</option>
                                                                 <option value="Not started">Not started</option>
-                                                                <option value="NA">Not Applicable</option>
+                                                                <option value="NA(below 5yrs)">Not Applicable</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -1464,7 +1469,7 @@
 
                             <div class="card-footer">
                                 <br />
-                                <button id="btnSubmit" class="btn btn-primary btn-user btn-block">
+                                <button id="btnSubmit" class="btn btn-primary btn-user btn-block" disabled>
                                     Submit Changes
                                 </button>
                                 <br />
@@ -1546,6 +1551,91 @@
         </div>
     </div>
 
+
+    <!-- add patient dialog -->
+    <div class="modal fade" id="addPatientDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Patient Patient</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="code.php" method="POST" onsubmit="event.preventDefault();" id="addPatientForm">
+
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>CCC Number</label>
+                            <input type="text" name="cccno" id="cccNoDialogInput" class="form-control"
+                                   placeholder="Enter CCC Number">
+                            <br>
+                            <button id="loadDataBtn" class="btn btn-primary">Load Data</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date" name="dob" id="dobDialogInput" class="form-control p-data"
+                                   placeholder="Enter Date of Birth">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="genderDailogSelect" class="form-control p-data">
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="facilityDialogSelect">Facility</label>
+                            <select name="facility" id="facilityDialogSelect" class="form-control">
+                                <option selected hidden value="">Select facility</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date of HIV Diagnosis</label>
+                            <input type="date" name="dob" id="dohdDialogInput" class="form-control p-data"
+                                   placeholder="Enter Date of Birth">
+                        </div>
+                        <div class="form-group">
+                            <label>Date enrolled into care</label>
+                            <input type="date" name="dob" id="deicDialogInput" class="form-control p-data"
+                                   placeholder="Enter Date of Birth">
+                        </div>
+                        <div class="form-group">
+                            <label for="startRegimenDialogSelect">Regimen</label>
+                            <select id="startRegimenDialogSelect" class="form-control p-data">
+                                <option selected hidden value="">Select Regimen</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dsaDialogInput">Date Started ART</label>
+                            <input type="date" name="dob" id="dsaDialogInput" class="form-control p-data"
+                                   placeholder="Enter Date of Birth">
+                        </div>
+                        <div class="form-group">
+                            <label for="startKaletraDialogSelect">Start Kaletra Formulation</label>
+                            <select id="startKaletraDialogSelect" class="form-control p-data">
+                                <option selected hidden value="">Select start kaletra formulation</option>
+                                <option value="LPV/r pellets">LPV/r pellets</option>
+                                <option value="LPV/r syrup">LPV/r syrup</option>
+                                <option value="LPV/r tabs">LPV/r tabs</option>
+                                <option value="N/A">N/A</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" name="savebtn" id="savePatientBtn" class="btn btn-primary" disabled
+                        >Save</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <!-- <script src="js/select2.min.js"></script> -->
@@ -1556,6 +1646,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    <script src="js/dataentryAddPatient.js"></script>
     <script src="js/dataentry.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 
