@@ -235,7 +235,7 @@ try {
         require_once "../models/Facility.php";
         session_start();
         $user = $_SESSION['user'];
-        $assignedFacilities = AssignedFacility::where('userID', $user['facility'])->get();
+        $assignedFacilities = AssignedFacility::where('userID', $user['id'])->get();
         $facilities = [];
         foreach ($assignedFacilities as $assignedFacility) {
             $facility = Facility::where('mfl_code', $assignedFacility->facility)->firstOrFail();
@@ -255,7 +255,7 @@ try {
         $password = $_POST['password'];
         $user = User::where('names',  $names)->where('active', 1)->firstOrFail();
         if (password_verify($password, $user->password)) {
-//            $user->last_login = date("Y:m:d h:i:s", time());
+            $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
             session_start();
             $_SESSION['user'] = $user;
@@ -264,11 +264,9 @@ try {
     } elseif ($request == "load_prev_obs") {
         session_start();
         $user = $_SESSION['user'];
-        $facility = $user['facility'];
         $cccNo = $_GET['cccNo'];
-        $patient = Patient::where('cccNo', $cccNo)->where('facility', $facility)->orderBy('id', 'desc')->first();
+        $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
         if ($patient == null) throw new Exception("Patient not found", 404);
-        session_start();
         $user = $_SESSION['user'];
         $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $user['id'])->where('deleted', 0)->firstOrFail();
         $facility = Facility::where('mfl_code', $patient->facility)->first();
@@ -293,5 +291,6 @@ try {
     } else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
     http_response_code(400);
+    logError($th->getCode(), $th->getMessage());
     echo myJsonResponse(400, $th->getMessage());
 }
