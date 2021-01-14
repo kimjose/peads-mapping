@@ -116,8 +116,10 @@ try {
     } else if ($request == "get_users") {
         $users = User::all();
         foreach ($users as $user) {
-            $cadre = Cadre::findOrFail($user->cadre);
-            $user['cadreName'] = $cadre->name;
+            $facilities = AssignedFacility::where('userID', $user->id)->get();
+            $user['noOfFacilities'] = sizeof($facilities);
+            // $cadre = Cadre::findOrFail($user->cadre);
+            // $user['cadreName'] = $cadre->name;
         }
         echo myJsonResponse(200, "Users retrieved", $users);
     } /*******Users Management**** */

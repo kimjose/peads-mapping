@@ -48,7 +48,8 @@ function loadDataToTable(users) {
   for (var i = 0; i < users.length; i++) {
     let user = users[i];
     let names = user.names;
-    let cadre = user.cadreName;
+    // let cadre = user.cadreName;
+    let noOfFacilities = user.noOfFacilities;
     let statusid = user.active;
 
     var status = "";
@@ -62,8 +63,8 @@ function loadDataToTable(users) {
     var row = newBody.insertRow(i);
     row.insertCell(0).appendChild(document.createTextNode(i + 1));
     row.insertCell(1).appendChild(document.createTextNode(names));
-    row.insertCell(2).appendChild(document.createTextNode(cadre));
-    row.insertCell(3).appendChild(document.createTextNode("5"));
+    row.insertCell(2).appendChild(document.createTextNode('cadre'));
+    row.insertCell(3).appendChild(document.createTextNode(noOfFacilities));
     row.insertCell(4).appendChild(document.createTextNode(status));
   }
   userDataTable.appendChild(newBody);

@@ -1,6 +1,5 @@
 <?php
 
-
 require_once __DIR__ . "/../../models/User.php";
 require_once __DIR__ . "/../../models/Facility.php";
 require_once __DIR__ . "/../../models/AssignedFacility.php";
