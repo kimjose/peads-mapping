@@ -524,7 +524,8 @@ function getAge(dob, dateenrolled) {
 function calculateAgeDifference(date1, date2 = null) {
     let startDate = new Date(date1);
     let endDate = date2 == null ? new Date() : new Date(date2);
-    return endDate.getTime() - startDate.getTime();
+    let diff = endDate.getTime() - startDate.getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25))
 }
 
 function loadObsData(observation) {
