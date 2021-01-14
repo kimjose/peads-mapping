@@ -33,7 +33,7 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
             array_push($data, $pd);
         }
     }
-    $filename = "pediatric_report_";
+    $filename = "temp/pediatric_report_";
     $filename .= time();
     $filename .= ".xlsx";
     $writer = WriterEntityFactory::createXLSXWriter();

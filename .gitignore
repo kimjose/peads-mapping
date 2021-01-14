@@ -2,3 +2,4 @@ vendor/
 .idea
 bootstrap.php
 panel/logs
+panel/reports-excel/temp
