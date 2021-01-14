@@ -186,6 +186,7 @@ function caregiverChanged() {
 }
 
 function handleError(errorCode, errorMessage) {
+    document.querySelector("#overlay").style.display = 'none';
     if (errorCode === 401) window.location.replace("login.html");
     else {
         errorDiv.querySelector("p").innerText = errorMessage;
@@ -407,6 +408,7 @@ function initialize() {
 }
 
 function loadPreviousObservation() {
+
     let cccNo = cccNoInput.value;
     if (cccNo.length < 10 || cccNo.length > 10) {
         alert("Enter a valid CCC number");
@@ -483,6 +485,11 @@ function loadPreviousObservation() {
                 dateenrolled = new Date(patient.date_enrolled);
                 getAge(dob, dateenrolled);
                 let currentAge = calculateAgeDifference(dob);
+                if (currentAge > 17) {//disable OVC
+                    ovcenrolledSelect.setAttribute("disabled", "")
+                } else {
+                    if (ovcenrolledSelect.hasAttribute("disabled")) ovcenrolledSelect.removeAttribute("disabled");
+                }
                 if (currentAge < 10 || currentAge > 19) {//disable OTZ
                     otzenrolledSelect.setAttribute("disabled", "")
                 } else {
@@ -1301,6 +1308,8 @@ function submitData(formData = null) {
         contentType: false,
         success: function (response) {
             clearForm();
+            document.querySelector("#overlay").style.display = 'none';
+            location.reload();
         },
         error: error => handleError(error.status, error.message)
     });
@@ -1361,7 +1370,7 @@ function submitPatientData() {
     let startkaletra =
         startformulationSelect.options[startformulationSelect.selectedIndex].value;
 
-    // if (newpatient == false) {
+    document.querySelector("#overlay").style.display = 'flex';
     $.ajax({
         type: "POST",
         url: "datascript?request=save_patient_data",
@@ -1385,7 +1394,7 @@ function submitPatientData() {
                 console.log(mResponse.data);
                 verify();
             } else {
-                //todo: display error
+                handleError(code, mResponse.message);
             }
         },
         error: (XMLHttpRequest, textStatus, errorThrown) => {
