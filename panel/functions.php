@@ -25,5 +25,3 @@ function logError($code, $message)
     fwrite($handle, $data);
     fclose($handle);
 }
-
-?>
