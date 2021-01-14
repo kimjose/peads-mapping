@@ -234,7 +234,7 @@ try {
         require_once "../models/Facility.php";
         session_start();
         $user = $_SESSION['user'];
-        $assignedFacilities = AssignedFacility::where('userID', $user['id'])->get();
+        $assignedFacilities = AssignedFacility::where('userID', $user->id)->get();
         $facilities = [];
         foreach ($assignedFacilities as $assignedFacility) {
             $facility = Facility::where('mfl_code', $assignedFacility->facility)->firstOrFail();
@@ -306,7 +306,7 @@ try {
         $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
         if ($patient == null) throw new Exception("Patient not found", 404);
         $user = $_SESSION['user'];
-        $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $user['id'])->where('deleted', 0)->firstOrFail();
+        $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $user->id)->where('deleted', 0)->firstOrFail();
         $facility = Facility::where('mfl_code', $patient->facility)->first();
         $patient['facilityData'] = $facility;
         $data = [];
