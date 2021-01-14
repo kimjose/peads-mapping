@@ -8,7 +8,7 @@ require_once __DIR__ . "/../../models/Observation.php";
 session_start();
 $user = $_SESSION['user'];
 $user = User::findOrFail($user['id']);
-$assignedFacilities = AssignedFacility::select('facility')->where('userID', 39)->get();
+$assignedFacilities = AssignedFacility::select('facility')->where('userID', $user->id)->get();
 $facilities = [];
 foreach ($assignedFacilities as $assignedFacility) {
     array_push($facilities, $assignedFacility->facility);
