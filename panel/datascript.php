@@ -11,6 +11,8 @@ require_once __DIR__ . "/../models/Patient.php";
 require_once __DIR__ . "/../models/Facility.php";
 require_once __DIR__ . "/../models/AssignedFacility.php";
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 $request = $_GET['request'];
 $response = [];
 
@@ -260,9 +262,7 @@ try {
         $f = Facility::where('mfl_code', $facility)->firstOrFail();
         $patientData = $_POST;
         $patientData['county'] = $f->county;
-        //check if the patient exists
-        //check if the patient is transferred out and mark to
-        //create new entry
+        DB::beginTransaction();
 
         $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
         if ($patient != null) {
@@ -272,8 +272,9 @@ try {
                 $patient->transferred_out = 1;
                 $patient->save();
                 $observation->statusAtTransition = "Active";
-                $observation->save();
+                $observation->mflCode = $facility;
                 Patient::create($patientData);
+                Observation::create(json_decode($observation, true));
                 echo myJsonResponse(200, "Patient added successfully");
             }
         } else {
@@ -281,6 +282,7 @@ try {
             $patient = Patient::create($patientData);
             echo myJsonResponse(200, "Patient added successfully +" . $patient);
         }
+        DB::commit();
     } /*************Authentication */
     elseif ($request == 'register') {
         $names = $_POST['names'];
@@ -331,5 +333,6 @@ try {
 } catch (\Throwable $th) {
     http_response_code(400);
     logError($th->getCode(), $th->getMessage());
+    if ($th->getCode()) DB::rollback();
     echo myJsonResponse(400, $th->getMessage());
 }

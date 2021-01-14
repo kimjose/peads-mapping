@@ -543,6 +543,7 @@ function loadObsData(observation) {
             regimenlineSelect.selectedIndex = i;
         }
     }
+    vldateInput.value = observation.vlDate;
     dscrInput.value = observation.regimenStartDate;
     var kaletraFormulations = currentKaletraformulationSelect.options;
     for (var i = 0; i < kaletraFormulations.length; i++) {
