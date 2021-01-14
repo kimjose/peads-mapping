@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 class Cadre extends Model {
     public $table = 'cadre';
 
-    protected $fillable = ['name', 'description', 'permissions'];
+    protected $fillable = ['name', 'category'];
 
 }
