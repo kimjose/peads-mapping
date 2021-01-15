@@ -9,7 +9,7 @@ require_once __DIR__ . "/../../models/Observation.php";
 session_start();
 $user = $_SESSION['user'];
 $user = User::findOrFail($user['id']);
-$assignedFacilities = AssignedFacility::select('facility')->where('userID', 39)->get();
+$assignedFacilities = AssignedFacility::select('facility')->where('userID', $user->id)->get();
 $facilities = [];
 foreach ($assignedFacilities as $assignedFacility) {
     array_push($facilities, $assignedFacility->facility);
@@ -34,18 +34,15 @@ foreach ($patients as $patient) {
         $pData['patientCccNo'] = $patient->cccNo;
         $pData['gender'] = $patient->sex;
         $pData['dob'] = $patient->dob;
-        $pData['facility'] = $facility->mfl_code;
+        $pData['facilityCode'] = $facility->mfl_code;
+        $pData['facilityName'] = $facility->name;
         $pData['lastEntryDate'] = date_format($observation->created_at, 'Y-m-d H:i:s');
         array_push($data, $pData);
     }
 }
 
-//echo json_encode($data);
-//get patients in every facility
-//get patient data
 
-
-$fpdf = new FPDF('P', 'mm', 'A4');
+$fpdf = new FPDF('P', 'mm', 'A3');
 
 $fpdf->SetFont('Arial', 'B', 11);
 
@@ -56,7 +53,8 @@ $fpdf->cell(189, 20, "Patient Report", 0, 1, 'C');
 
 //Table Headers
 $fpdf->cell(27, 8, 'CCC No', 1, 0, 'C');
-$fpdf->cell(67, 8, 'Facility', 1, 0, 'C');
+$fpdf->cell(45, 8, 'Facility Code', 1, 0, 'C');
+$fpdf->cell(115, 8, 'Facility Name', 1, 0, 'C');
 $fpdf->cell(20, 8, 'Gender', 1, 0, 'C');
 $fpdf->cell(30, 8, 'Date Of Birth', 1, 0, 'C');
 $fpdf->cell(40, 8, 'Date of Last Entry', 1, 1, 'C');
@@ -64,7 +62,8 @@ $fpdf->cell(40, 8, 'Date of Last Entry', 1, 1, 'C');
 foreach ($data as $entry) {
 
     $fpdf->cell(27, 8, $entry['patientCccNo'], 1, 0, 'C');
-    $fpdf->cell(67, 8, $entry['facility'], 1, 0, 'C');
+    $fpdf->cell(45, 8, $entry['facilityCode'], 1, 0, 'C');
+    $fpdf->cell(115, 8, $entry['facilityName'], 1, 0, 'C');
     $fpdf->cell(20, 8, $entry['gender'], 1, 0, 'C');
     $fpdf->cell(30, 8, $entry['dob'], 1, 0, 'C');
     $fpdf->cell(40, 8, $entry['lastEntryDate'], 1, 1, 'C');
