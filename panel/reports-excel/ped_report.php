@@ -33,7 +33,7 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
             array_push($data, $pd);
         }
     }
-    $filename = "pediatric_report_";
+    $filename = "temp/pediatric_report_";
     $filename .= time();
     $filename .= ".xlsx";
     $writer = WriterEntityFactory::createXLSXWriter();
@@ -70,6 +70,7 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
         WriterEntityFactory::createCell("VL Date"),
         WriterEntityFactory::createCell("VL Copies"),
         WriterEntityFactory::createCell("VL Outcome"),
+        WriterEntityFactory::createCell("Weight"),
         WriterEntityFactory::createCell("VL Score Type"),
         WriterEntityFactory::createCell("Latest ZScore"),
         WriterEntityFactory::createCell("Opportunistic Infection"),
@@ -144,6 +145,7 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
             WriterEntityFactory::createCell($datum->vlDate),
             WriterEntityFactory::createCell($datum->vlCopies),
             WriterEntityFactory::createCell($datum->vlOutcome),
+            WriterEntityFactory::createCell($datum->weight),
             WriterEntityFactory::createCell($datum->vlScoreType),
             WriterEntityFactory::createCell($datum->latestZScore),
             WriterEntityFactory::createCell($datum->opportunisticInfection),

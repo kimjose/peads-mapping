@@ -32,6 +32,7 @@ const vldateInput = document.getElementById("vldate");
 const currentvlstatustSelect = document.getElementById(
     "currentvlstatustSelect"
 );
+const weightInput = document.getElementById("weightInput");
 const isZScoreCheck = document.getElementById("isZScore");
 const isMUACCheck = document.getElementById("isMUAC");
 const isBMICheck = document.getElementById("isBMI");
@@ -566,6 +567,7 @@ function loadObsData(observation) {
     } else vlcopiesInput.value = observation.vlCopies;
     // vloutcomestatusInput.value = observation.vlOutcome;
     $("#currentvlstatustSelect").val(observation.vlOutcome);
+    weightInput.value = observation.weight;
     isZScoreCheck.checked = false;
     isMUACCheck.checked = false;
     isBMICheck.checked = false;
@@ -874,6 +876,7 @@ function verify() {
     let vlOutcome = "Not Done";
     if (isLDL1.checked || vlcopiesInput.value < 1000) vlOutcome = "Supressed";
     else if (vlCopies.value >= 1000) vlOutcome = "Not Supressed";
+    let weight = weightInput.value;
     // let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
     let vlScoreType = "";
     if (isBMICheck.checked) vlScoreType = "BMI";
@@ -892,6 +895,7 @@ function verify() {
     formData.append("vlDate", vlDate);
     formData.append("vlCopies", vlCopies);
     formData.append("vlOutcome", vlOutcome);
+    formData.append("weight", weight);
     formData.append("vlScoreType", vlScoreType);
     formData.append("latestZScore", latestZScore);
     formData.append("opportunisticInfection", opportunisticInfection);
