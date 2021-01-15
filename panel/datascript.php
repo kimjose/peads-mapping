@@ -24,6 +24,7 @@ try {
     } elseif ($request == "submit_form") {
         $userId = $_POST['userId'];
         $mflCode = $_POST['mflCode'];
+        $weight = $_POST['weight'];
         $PAMAStatus6 = $_POST['PAMAStatus6'];
         $PAMAStatus12 = $_POST['PAMAStatus12'];
         $PAMAStatus24 = $_POST['PAMAStatus24'];
@@ -96,6 +97,7 @@ try {
             'vlDate' => $vlDate,
             'vlCopies' => $vlCopies,
             'vlOutcome' => $vlOutcome,
+            'weight' => $weight,
             'vlScoreType' => $vlScoreType,
             'latestZScore' => $latestZScore, 'opportunisticInfection' => $opportunisticInfection,
             'disclosureStatus' => $disclosureStatus, 'iptStatus' => $iptStatus, 'schooling' => $schooling,
