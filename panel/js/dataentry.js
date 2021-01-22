@@ -1143,7 +1143,7 @@ console.log(userObject.id)
     if (error) {
         handleError(-1, errorMessage);
     }else {
-        // submitData(formData);
+        submitData(formData);
     }
 }
 
