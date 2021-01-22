@@ -18,11 +18,13 @@ $response = [];
 
 try {
     if ($request == "get_otz_modules") {
+        require_once __DIR__ . "/../auth.php";
         require_once "../models/OTZModules.php";
         $modules = OTZModules::all();
         echo myJsonResponse(200, "Modules retrieved", $modules);
     } elseif ($request == "submit_form") {
-        $userId = $_POST['userId'];
+        require_once __DIR__ . "/../auth.php";
+        $userId = $loggedUser->id;
         $mflCode = $_POST['mflCode'];
         $weight = $_POST['weight'];
         $PAMAStatus6 = $_POST['PAMAStatus6'];
@@ -121,6 +123,8 @@ try {
     } else if ($request == "get_users") {
         $users = User::all();
         foreach ($users as $user) {
+            $facilities = AssignedFacility::where('userID', $user->id)->get();
+            $user['noOfFacilities'] = sizeof($facilities);
             $cadre = Cadre::findOrFail($user->cadre);
             $user['cadreName'] = $cadre->name;
         }
@@ -279,7 +283,7 @@ try {
                 echo myJsonResponse(200, "Patient added successfully");
             }
         } else {
-            print_r($patientData);
+            // print_r($patientData);
             $patient = Patient::create($patientData);
             echo myJsonResponse(200, "Patient added successfully +" . $patient);
         }

@@ -97,6 +97,7 @@ const tbodyMother = document.getElementById("tbodyMother");
 const isLDLmother = document.getElementById("isLDLmother");
 const motherVlCopiesInput = document.getElementById("mothervlcopies");
 const motherlastvlDateInput = document.getElementById("motherlastvlDate");
+const mothervlstatustSelect = document.getElementById("mothervlstatustSelect");
 
 const tbodyFather = document.getElementById("tbodyFather");
 const isLDLfather = document.getElementById("isLDLfather");
@@ -147,10 +148,18 @@ motherchkbox.addEventListener('change', () => {
     caregiverChanged();
 });
 isLDLmother.addEventListener('change', () => {
+    
     if (isLDLmother.checked) {
-        motherVlCopiesInput.value = '';
-        motherVlCopiesInput.readOnly = true;
-    } else motherVlCopiesInput.readOnly = true;
+    copiesValuesChanged(0, 'mothervlstatustSelect', motherVlCopiesInput)
+    } else motherVlCopiesInput.readOnly = false;
+});
+motherVlCopiesInput.addEventListener('input', ()=>{
+    let copiesValue = motherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'mothervlstatustSelect')
+});
+motherVlCopiesInput.addEventListener('propertychange', ()=>{
+    let copiesValue = motherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'mothervlstatustSelect')
 });
 fatherchkbox.addEventListener('change', () => {
     guardianchkbox.checked = false;
@@ -158,9 +167,16 @@ fatherchkbox.addEventListener('change', () => {
 });
 isLDLfather.addEventListener('change', () => {
     if (isLDLfather.checked) {
-        fatherVlCopiesInput.value = '';
-        fatherVlCopiesInput.readOnly = true;
+        copiesValuesChanged(0, 'fathervlstatustSelect', fatherVlCopiesInput)
     } else fatherVlCopiesInput.readOnly = false;
+});
+fatherVlCopiesInput.addEventListener('input', ()=>{
+    let copiesValue = fatherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'fathervlstatustSelect')
+});
+fatherVlCopiesInput.addEventListener('propertychange', ()=>{
+    let copiesValue = fatherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'fathervlstatustSelect')
 });
 guardianchkbox.addEventListener('change', () => {
     motherchkbox.checked = false;
@@ -169,10 +185,38 @@ guardianchkbox.addEventListener('change', () => {
 });
 isLDLguardian.addEventListener('change', () => {
     if (isLDLguardian.checked) {
-        guardianVlCopiesInput.value = '';
-        guardianVlCopiesInput.readOnly = true;
-    } else guardianVlCopiesInput.readOnly = false;
+        copiesValuesChanged(0, 'guardianvlstatustSelect', guardianVlCopiesInput);
+    } else {
+        guardianVlCopiesInput.readOnly = false;
+    }
 });
+guardianVlCopiesInput.addEventListener('input', ()=>{
+    let copiesValue = guardianVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'guardianvlstatustSelect');
+});
+guardianVlCopiesInput.addEventListener('propertychange', ()=>{
+    let copiesValue = guardianVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'guardianvlstatustSelect');
+});
+/****
+ * value, selector(id) , what to disable
+ */
+function copiesValuesChanged(copiesValue, selector, copiesInput = null){
+    if(copiesValue !== "" && copiesValue < 1000) {
+        $('#'+selector).val("Supressed");
+        if(copiesInput != null){
+            copiesInput.value = '';
+            copiesInput.readOnly = true;
+        }
+    } else if(copiesValue > 1000) {
+        $('#'+selector).val("Not Supressed");
+        if(copiesInput != null){
+            copiesInput.readOnly = false;
+        }
+    } else {
+        $('#'+selector).val("");
+    }
+}
 
 function caregiverChanged() {
     if (guardianchkbox.checked) {
@@ -242,7 +286,7 @@ btnSearch.addEventListener("click", () => loadPreviousObservation());
 btnSubmit.addEventListener("click", () => submitPatientData());
 
 function initialize() {
-    let userObject = sessionStorage.getItem("user");
+    var userObject = sessionStorage.getItem("user");
     if (userObject == null) {
         window.location.replace("login.html");
         return;
@@ -437,19 +481,19 @@ function loadPreviousObservation() {
                 console.log(dataobj);
                 if (dataobj !== null) {
                     if (dataobj.type == 'cal') {
-                        calvldate.innerHTML = dataobj.vlDate;
+                        calvldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
                         calvl.innerHTML = dataobj.vlCopies;
                     }
                     if (dataobj.type == 'mother') {
-                        mothervldate.innerHTML = dataobj.vlDate;
+                        mothervldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
                         mothervl.innerHTML = dataobj.vlCopies;
                     }
                     if (dataobj.type == 'father') {
-                        fathervldate.innerHTML = dataobj.vlDate;
+                        fathervldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
                         fathervl.innerHTML = dataobj.vlCopies;
                     }
                     if (dataobj.type == 'guardian') {
-                        guardianvldate.innerHTML = dataobj.vlDate;
+                        guardianvldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
                         guardianvl.innerHTML = dataobj.vlCopies;
                     }
                 }
@@ -1095,11 +1139,11 @@ function verify() {
     formData.append("patientCCC", patientCCC);
     formData.append("userId", userId);
     formData.append("mflCode", mflCode);
-
+console.log(userObject.id)
     if (error) {
         handleError(-1, errorMessage);
     }else {
-        submitData(formData);
+        // submitData(formData);
     }
 }
 
@@ -1298,7 +1342,7 @@ function submitData(formData = null) {
 
         //Other data------>
         let patientCCC = cccNoInput.value;
-        let userId = 1;
+        let userId = userObject.id;
         let mflCode = facilitySelector.options[facilitySelector.selectedIndex].value;
         formData.append("patientCCC", patientCCC);
         formData.append("userId", userId);
@@ -1426,7 +1470,7 @@ function ovcOptionChanged(disableOptions = false) {
         ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
     var ovcFields = document.querySelectorAll(".ovcClass");
     if (selectedValue == "Y") {
-        if (disableOptions) ovcenrolledSelect.disabled = true;
+        //if (disableOptions) ovcenrolledSelect.disabled = true;
         ovcFields.forEach((ovcField) => {
             ovcField.removeAttribute("disabled");
         });
