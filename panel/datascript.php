@@ -11,17 +11,22 @@ require_once __DIR__ . "/../models/Patient.php";
 require_once __DIR__ . "/../models/Facility.php";
 require_once __DIR__ . "/../models/AssignedFacility.php";
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 $request = $_GET['request'];
 $response = [];
 
 try {
     if ($request == "get_otz_modules") {
+        require_once __DIR__ . "/../auth.php";
         require_once "../models/OTZModules.php";
         $modules = OTZModules::all();
         echo myJsonResponse(200, "Modules retrieved", $modules);
     } elseif ($request == "submit_form") {
-        $userId = $_POST['userId'];
+        require_once __DIR__ . "/../auth.php";
+        $userId = $loggedUser->id;
         $mflCode = $_POST['mflCode'];
+        $weight = $_POST['weight'];
         $PAMAStatus6 = $_POST['PAMAStatus6'];
         $PAMAStatus12 = $_POST['PAMAStatus12'];
         $PAMAStatus24 = $_POST['PAMAStatus24'];
@@ -29,7 +34,6 @@ try {
         $PAMAStatusTransition = $_POST['PAMAStatusTransition'];
         $dateDiscontinuedFromPAMA = $_POST['dateDiscontinuedFromPAMA'];
         $comment = $_POST['comment'];
-
 
         $dateDiscontinuedFromOTZ = $_POST['dateDiscontinuedFromOTZ'];
         $enrolledInPAMA = $_POST['enrolledInPAMA'];
@@ -94,6 +98,7 @@ try {
             'vlDate' => $vlDate,
             'vlCopies' => $vlCopies,
             'vlOutcome' => $vlOutcome,
+            'weight' => $weight,
             'vlScoreType' => $vlScoreType,
             'latestZScore' => $latestZScore, 'opportunisticInfection' => $opportunisticInfection,
             'disclosureStatus' => $disclosureStatus, 'iptStatus' => $iptStatus, 'schooling' => $schooling,
@@ -119,8 +124,8 @@ try {
         foreach ($users as $user) {
             $facilities = AssignedFacility::where('userID', $user->id)->get();
             $user['noOfFacilities'] = sizeof($facilities);
-            // $cadre = Cadre::findOrFail($user->cadre);
-            // $user['cadreName'] = $cadre->name;
+            $cadre = Cadre::findOrFail($user->cadre);
+            $user['cadreName'] = $cadre->name;
         }
         echo myJsonResponse(200, "Users retrieved", $users);
     } elseif ($request == "save_user") {
@@ -208,7 +213,7 @@ try {
                 $patient->startKaletraFormulation = $startkaletra;
                 $patient->save();
             } else {
-                Patient::create([
+               /* Patient::create([
                     "cccNo" => $cccNo,
                     "facility" => $facility,
                     "county" => $county,
@@ -220,7 +225,7 @@ try {
                     "startRegimen" => $startRegimen,
                     "startKaletraFormulation" => $startkaletra
 
-                ]);
+                ]);*/
             }
         } else {
             echo "Enter Patient CCC Number";
@@ -261,9 +266,7 @@ try {
         $f = Facility::where('mfl_code', $facility)->firstOrFail();
         $patientData = $_POST;
         $patientData['county'] = $f->county;
-        //check if the patient exists
-        //check if the patient is transferred out and mark to
-        //create new entry
+        DB::beginTransaction();
 
         $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
         if ($patient != null) {
@@ -273,15 +276,17 @@ try {
                 $patient->transferred_out = 1;
                 $patient->save();
                 $observation->statusAtTransition = "Active";
-                $observation->save();
+                $observation->mflCode = $facility;
                 Patient::create($patientData);
+                Observation::create(json_decode($observation, true));
                 echo myJsonResponse(200, "Patient added successfully");
             }
         } else {
-            print_r($patientData);
+            // print_r($patientData);
             $patient = Patient::create($patientData);
             echo myJsonResponse(200, "Patient added successfully +" . $patient);
         }
+        DB::commit();
     } /*************Authentication */
     elseif ($request == 'register') {
         $names = $_POST['names'];
@@ -298,6 +303,7 @@ try {
             $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
             session_start();
+            $user['p'] = 'p';
             $_SESSION['user'] = $user;
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
@@ -313,7 +319,7 @@ try {
         $patient['facilityData'] = $facility;
         $data = [];
         $data['patient'] = $patient;
-        $observation = Observation::where('patientCCC', $patient->cccNo)->orderBy('id', 'desc')->first();
+        $observation = Observation::where('patientCCC', $patient->cccNo)->where('mflCode', $patient->facility)->orderBy('id', 'desc')->first();
         if ($observation == null) {
             echo myJsonResponse(201, "No Observation", $data);
         } else {
@@ -340,5 +346,6 @@ try {
 } catch (\Throwable $th) {
     http_response_code(400);
     logError($th->getCode(), $th->getMessage());
+    if ($th->getCode()) DB::rollback();
     echo myJsonResponse(400, $th->getMessage());
 }

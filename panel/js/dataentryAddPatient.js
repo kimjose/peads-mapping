@@ -41,11 +41,14 @@ loadDataBtn.addEventListener("click", ()=>{
                     });
                     cccNoDialogInput.setAttribute("disabled", "");
                     savePatientBtn.removeAttribute("disabled");
-                } else {
-
+                }  else {
                 }
-            } else if (code === 201){
-                alert("Patient not found. Do you wish to add a new patient")
+            } else if (code === 201) {
+                let r = confirm("Patient not found. Do you wish to add a new patient");
+                if (r) {
+                    cccNoDialogInput.setAttribute("disabled", "");
+                    savePatientBtn.removeAttribute("disabled");
+                }
             } else if (code === 202) {
                 alert("Patient status is not transfer out")
             }

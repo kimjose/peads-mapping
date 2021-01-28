@@ -32,6 +32,7 @@ const vldateInput = document.getElementById("vldate");
 const currentvlstatustSelect = document.getElementById(
     "currentvlstatustSelect"
 );
+const weightInput = document.getElementById("weightInput");
 const isZScoreCheck = document.getElementById("isZScore");
 const isMUACCheck = document.getElementById("isMUAC");
 const isBMICheck = document.getElementById("isBMI");
@@ -96,6 +97,7 @@ const tbodyMother = document.getElementById("tbodyMother");
 const isLDLmother = document.getElementById("isLDLmother");
 const motherVlCopiesInput = document.getElementById("mothervlcopies");
 const motherlastvlDateInput = document.getElementById("motherlastvlDate");
+const mothervlstatustSelect = document.getElementById("mothervlstatustSelect");
 
 const tbodyFather = document.getElementById("tbodyFather");
 const isLDLfather = document.getElementById("isLDLfather");
@@ -141,15 +143,25 @@ const guardianvldate = document.getElementById("guardianvldate");
 const guardianvl = document.getElementById("guardianvl");
 const errorDiv = document.querySelector("#error-modal");
 
+var userObject;
+
 motherchkbox.addEventListener('change', () => {
     guardianchkbox.checked = false;
     caregiverChanged();
 });
 isLDLmother.addEventListener('change', () => {
+    
     if (isLDLmother.checked) {
-        motherVlCopiesInput.value = '';
-        motherVlCopiesInput.readOnly = true;
-    } else motherVlCopiesInput.readOnly = true;
+    copiesValuesChanged(0, 'mothervlstatustSelect', motherVlCopiesInput)
+    } else motherVlCopiesInput.readOnly = false;
+});
+motherVlCopiesInput.addEventListener('input', ()=>{
+    let copiesValue = motherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'mothervlstatustSelect')
+});
+motherVlCopiesInput.addEventListener('propertychange', ()=>{
+    let copiesValue = motherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'mothervlstatustSelect')
 });
 fatherchkbox.addEventListener('change', () => {
     guardianchkbox.checked = false;
@@ -157,9 +169,16 @@ fatherchkbox.addEventListener('change', () => {
 });
 isLDLfather.addEventListener('change', () => {
     if (isLDLfather.checked) {
-        fatherVlCopiesInput.value = '';
-        fatherVlCopiesInput.readOnly = true;
+        copiesValuesChanged(0, 'fathervlstatustSelect', fatherVlCopiesInput)
     } else fatherVlCopiesInput.readOnly = false;
+});
+fatherVlCopiesInput.addEventListener('input', ()=>{
+    let copiesValue = fatherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'fathervlstatustSelect')
+});
+fatherVlCopiesInput.addEventListener('propertychange', ()=>{
+    let copiesValue = fatherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'fathervlstatustSelect')
 });
 guardianchkbox.addEventListener('change', () => {
     motherchkbox.checked = false;
@@ -168,10 +187,38 @@ guardianchkbox.addEventListener('change', () => {
 });
 isLDLguardian.addEventListener('change', () => {
     if (isLDLguardian.checked) {
-        guardianVlCopiesInput.value = '';
-        guardianVlCopiesInput.readOnly = true;
-    } else guardianVlCopiesInput.readOnly = false;
+        copiesValuesChanged(0, 'guardianvlstatustSelect', guardianVlCopiesInput);
+    } else {
+        guardianVlCopiesInput.readOnly = false;
+    }
 });
+guardianVlCopiesInput.addEventListener('input', ()=>{
+    let copiesValue = guardianVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'guardianvlstatustSelect');
+});
+guardianVlCopiesInput.addEventListener('propertychange', ()=>{
+    let copiesValue = guardianVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'guardianvlstatustSelect');
+});
+/****
+ * value, selector(id) , what to disable
+ */
+function copiesValuesChanged(copiesValue, selector, copiesInput = null){
+    if(copiesValue !== "" && copiesValue < 1000) {
+        $('#'+selector).val("Supressed");
+        if(copiesInput != null){
+            copiesInput.value = '';
+            copiesInput.readOnly = true;
+        }
+    } else if(copiesValue > 1000) {
+        $('#'+selector).val("Not Supressed");
+        if(copiesInput != null){
+            copiesInput.readOnly = false;
+        }
+    } else {
+        $('#'+selector).val("");
+    }
+}
 
 function caregiverChanged() {
     if (guardianchkbox.checked) {
@@ -186,6 +233,7 @@ function caregiverChanged() {
 }
 
 function handleError(errorCode, errorMessage) {
+    document.querySelector("#overlay").style.display = 'none';
     if (errorCode === 401) window.location.replace("login.html");
     else {
         errorDiv.querySelector("p").innerText = errorMessage;
@@ -240,7 +288,7 @@ btnSearch.addEventListener("click", () => loadPreviousObservation());
 btnSubmit.addEventListener("click", () => submitPatientData());
 
 function initialize() {
-    let userObject = sessionStorage.getItem("user");
+    userObject = sessionStorage.getItem("user");
     if (userObject == null) {
         window.location.replace("login.html");
         return;
@@ -407,6 +455,7 @@ function initialize() {
 }
 
 function loadPreviousObservation() {
+
     let cccNo = cccNoInput.value;
     if (cccNo.length < 10 || cccNo.length > 10) {
         alert("Enter a valid CCC number");
@@ -434,19 +483,23 @@ function loadPreviousObservation() {
                 console.log(dataobj);
                 if (dataobj !== null) {
                     if (dataobj.type == 'cal') {
-                        calvldate.innerHTML = dataobj.vlDate;
+                        calvldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // calvldate.innerHTML = dataobj.vlDate;
                         calvl.innerHTML = dataobj.vlCopies;
                     }
                     if (dataobj.type == 'mother') {
-                        mothervldate.innerHTML = dataobj.vlDate;
+                        mothervldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // mothervldate.innerHTML = dataobj.vlDate;
                         mothervl.innerHTML = dataobj.vlCopies;
                     }
                     if (dataobj.type == 'father') {
-                        fathervldate.innerHTML = dataobj.vlDate;
+                        fathervldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // fathervldate.innerHTML = dataobj.vlDate;
                         fathervl.innerHTML = dataobj.vlCopies;
                     }
                     if (dataobj.type == 'guardian') {
-                        guardianvldate.innerHTML = dataobj.vlDate;
+                        guardianvldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // guardianvldate.innerHTML = dataobj.vlDate;
                         guardianvl.innerHTML = dataobj.vlCopies;
                     }
                 }
@@ -483,6 +536,11 @@ function loadPreviousObservation() {
                 dateenrolled = new Date(patient.date_enrolled);
                 getAge(dob, dateenrolled);
                 let currentAge = calculateAgeDifference(dob);
+                if (currentAge > 17) {//disable OVC
+                    ovcenrolledSelect.setAttribute("disabled", "")
+                } else {
+                    if (ovcenrolledSelect.hasAttribute("disabled")) ovcenrolledSelect.removeAttribute("disabled");
+                }
                 if (currentAge < 10 || currentAge > 19) {//disable OTZ
                     otzenrolledSelect.setAttribute("disabled", "")
                 } else {
@@ -552,7 +610,8 @@ function getAge(dob, dateenrolled) {
 function calculateAgeDifference(date1, date2 = null) {
     let startDate = new Date(date1);
     let endDate = date2 == null ? new Date() : new Date(date2);
-    return endDate.getTime() - startDate.getTime();
+    let diff = endDate.getTime() - startDate.getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25))
 }
 
 function loadObsData(observation) {
@@ -571,6 +630,7 @@ function loadObsData(observation) {
             regimenlineSelect.selectedIndex = i;
         }
     }
+    vldateInput.value = observation.vlDate;
     dscrInput.value = observation.regimenStartDate;
     var kaletraFormulations = currentKaletraformulationSelect.options;
     for (var i = 0; i < kaletraFormulations.length; i++) {
@@ -585,6 +645,7 @@ function loadObsData(observation) {
     } else vlcopiesInput.value = observation.vlCopies;
     // vloutcomestatusInput.value = observation.vlOutcome;
     $("#currentvlstatustSelect").val(observation.vlOutcome);
+    weightInput.value = observation.weight;
     isZScoreCheck.checked = false;
     isMUACCheck.checked = false;
     isBMICheck.checked = false;
@@ -655,24 +716,25 @@ function loadObsData(observation) {
         }
     }
 
-    ovcOptionChanged(true);
+    ovcOptionChanged(false);
 
     ovcEnrollmentDateInput.value = observation.dateEnrolledInOVC;
     if (
         observation.dateEnrolledInOVC !== "" &&
         observation.dateEnrolledInOVC !== "0000-00-00"
     ) {
-        ovcEnrollmentDateInput.readOnly = true;
+        // ovcEnrollmentDateInput.readOnly = true;
     }
     cpmisNumberInput.value = observation.CPMISNumber;
     if (observation.CPMISNumber !== 0) {
-        cpmisNumberInput.readOnly = true;
+        // cpmisNumberInput.readOnly = true;
     }
     if (observation.ovcVLCopies == "LDL") {
         isLDL2.checked = true;
         ovcVLcopiesInput.value = '';
         ovcVLcopiesInput.readOnly = true;
     } else ovcVLcopiesInput.value = observation.ovcVLCopies
+    ovcVLDateInput.value = observation.baselineOvcVlDate;
     ovcDiscontinuedDateInput.value = observation.dateDiscontinuedFromOVC;
     var ovcDisStatuses = ovcDiscontinuationStatusSelect.options;
     for (var i = 0; i < ovcDisStatuses.length; i++) {
@@ -893,6 +955,7 @@ function verify() {
     let vlOutcome = "Not Done";
     if (isLDL1.checked || vlcopiesInput.value < 1000) vlOutcome = "Supressed";
     else if (vlCopies.value >= 1000) vlOutcome = "Not Supressed";
+    let weight = weightInput.value;
     // let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
     let vlScoreType = "";
     if (isBMICheck.checked) vlScoreType = "BMI";
@@ -911,6 +974,7 @@ function verify() {
     formData.append("vlDate", vlDate);
     formData.append("vlCopies", vlCopies);
     formData.append("vlOutcome", vlOutcome);
+    formData.append("weight", weight);
     formData.append("vlScoreType", vlScoreType);
     formData.append("latestZScore", latestZScore);
     formData.append("opportunisticInfection", opportunisticInfection);
@@ -1082,7 +1146,7 @@ function verify() {
     formData.append("patientCCC", patientCCC);
     formData.append("userId", userId);
     formData.append("mflCode", mflCode);
-
+console.log(userObject.id)
     if (error) {
         handleError(-1, errorMessage);
     }else {
@@ -1285,7 +1349,7 @@ function submitData(formData = null) {
 
         //Other data------>
         let patientCCC = cccNoInput.value;
-        let userId = 1;
+        let userId = userObject.id;
         let mflCode = facilitySelector.options[facilitySelector.selectedIndex].value;
         formData.append("patientCCC", patientCCC);
         formData.append("userId", userId);
@@ -1299,6 +1363,8 @@ function submitData(formData = null) {
         contentType: false,
         success: function (response) {
             clearForm();
+            document.querySelector("#overlay").style.display = 'none';
+            // location.reload();
         },
         error: error => handleError(error.status, error.message)
     });
@@ -1359,7 +1425,7 @@ function submitPatientData() {
     let startkaletra =
         startformulationSelect.options[startformulationSelect.selectedIndex].value;
 
-    // if (newpatient == false) {
+    document.querySelector("#overlay").style.display = 'flex';
     $.ajax({
         type: "POST",
         url: "datascript?request=save_patient_data",
@@ -1374,7 +1440,7 @@ function submitPatientData() {
             startRegimen: startRegimen,
             dsa: dsa,
             startkaletra: startkaletra,
-            newpatient: newpatient,
+            newpatient: false,
         },
         success: function (response) {
             var mResponse = JSON.parse(response);
@@ -1383,7 +1449,7 @@ function submitPatientData() {
                 console.log(mResponse.data);
                 verify();
             } else {
-                //todo: display error
+                handleError(code, mResponse.message);
             }
         },
         error: (XMLHttpRequest, textStatus, errorThrown) => {
@@ -1411,7 +1477,7 @@ function ovcOptionChanged(disableOptions = false) {
         ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
     var ovcFields = document.querySelectorAll(".ovcClass");
     if (selectedValue == "Y") {
-        if (disableOptions) ovcenrolledSelect.disabled = true;
+        //if (disableOptions) ovcenrolledSelect.disabled = true;
         ovcFields.forEach((ovcField) => {
             ovcField.removeAttribute("disabled");
         });

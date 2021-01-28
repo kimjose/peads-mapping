@@ -203,7 +203,18 @@
                         </div>
                         <p>Err</p>
                     </div>
+
+
+
+
                     <div class="card shadow mt-4 mb-4">
+                        <div class="card-body justify-content-center align-items-center">
+                            <div id="overlay">
+                                <div class="w-100 d-flex justify-content-center align-items-center">
+                                    <div class="spinner"></div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card-header py-3">
 
                             <h1 class="h3 mb-2 text-gray-800 text-center">Pedatric Mapping Application for Monitoring
@@ -484,6 +495,14 @@
                                                                 <option value="Supressed">Supressed</option>
                                                                 <option value="NotSupressed">Not Supressed</option>
                                                             </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Current Weight</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="number" name="inputWeight" class="form-control"
+                                                                   style="width: 100%;"
+                                                                   placeholder="Enter Current weight" id="weightInput">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -1446,7 +1465,7 @@
                             <div class="card-footer">
                                 <br />
                                 <button id="btnSubmit" class="btn btn-primary btn-user btn-block" disabled>
-                                    Submit Changes
+                                    Save Changes
                                 </button>
                                 <br />
                             </div>
@@ -1624,6 +1643,7 @@
     <script src="js/sb-admin-2.min.js"></script>
     <script src="js/dataentryAddPatient.js"></script>
     <script src="js/dataentry.js"></script>
+    <script src="js/moment.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 
 </body>
