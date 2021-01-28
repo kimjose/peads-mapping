@@ -35,7 +35,6 @@ try {
         $dateDiscontinuedFromPAMA = $_POST['dateDiscontinuedFromPAMA'];
         $comment = $_POST['comment'];
 
-
         $dateDiscontinuedFromOTZ = $_POST['dateDiscontinuedFromOTZ'];
         $enrolledInPAMA = $_POST['enrolledInPAMA'];
         $dateEnrolledInPAMA = $_POST['dateEnrolledInPAMA'];
@@ -214,7 +213,7 @@ try {
                 $patient->startKaletraFormulation = $startkaletra;
                 $patient->save();
             } else {
-                Patient::create([
+               /* Patient::create([
                     "cccNo" => $cccNo,
                     "facility" => $facility,
                     "county" => $county,
@@ -226,7 +225,7 @@ try {
                     "startRegimen" => $startRegimen,
                     "startKaletraFormulation" => $startkaletra
 
-                ]);
+                ]);*/
             }
         } else {
             echo "Enter Patient CCC Number";
@@ -304,6 +303,7 @@ try {
             $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
             session_start();
+            $user['p'] = 'p';
             $_SESSION['user'] = $user;
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
@@ -319,7 +319,7 @@ try {
         $patient['facilityData'] = $facility;
         $data = [];
         $data['patient'] = $patient;
-        $observation = Observation::where('patientCCC', $patient->cccNo)->orderBy('id', 'desc')->first();
+        $observation = Observation::where('patientCCC', $patient->cccNo)->where('mflCode', $patient->facility)->orderBy('id', 'desc')->first();
         if ($observation == null) {
             echo myJsonResponse(201, "No Observation", $data);
         } else {

@@ -143,6 +143,8 @@ const guardianvldate = document.getElementById("guardianvldate");
 const guardianvl = document.getElementById("guardianvl");
 const errorDiv = document.querySelector("#error-modal");
 
+var userObject;
+
 motherchkbox.addEventListener('change', () => {
     guardianchkbox.checked = false;
     caregiverChanged();
@@ -286,7 +288,7 @@ btnSearch.addEventListener("click", () => loadPreviousObservation());
 btnSubmit.addEventListener("click", () => submitPatientData());
 
 function initialize() {
-    var userObject = sessionStorage.getItem("user");
+    userObject = sessionStorage.getItem("user");
     if (userObject == null) {
         window.location.replace("login.html");
         return;
@@ -482,18 +484,22 @@ function loadPreviousObservation() {
                 if (dataobj !== null) {
                     if (dataobj.type == 'cal') {
                         calvldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // calvldate.innerHTML = dataobj.vlDate;
                         calvl.innerHTML = dataobj.vlCopies;
                     }
                     if (dataobj.type == 'mother') {
                         mothervldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // mothervldate.innerHTML = dataobj.vlDate;
                         mothervl.innerHTML = dataobj.vlCopies;
                     }
                     if (dataobj.type == 'father') {
                         fathervldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // fathervldate.innerHTML = dataobj.vlDate;
                         fathervl.innerHTML = dataobj.vlCopies;
                     }
                     if (dataobj.type == 'guardian') {
                         guardianvldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // guardianvldate.innerHTML = dataobj.vlDate;
                         guardianvl.innerHTML = dataobj.vlCopies;
                     }
                 }
@@ -710,24 +716,25 @@ function loadObsData(observation) {
         }
     }
 
-    ovcOptionChanged(true);
+    ovcOptionChanged(false);
 
     ovcEnrollmentDateInput.value = observation.dateEnrolledInOVC;
     if (
         observation.dateEnrolledInOVC !== "" &&
         observation.dateEnrolledInOVC !== "0000-00-00"
     ) {
-        ovcEnrollmentDateInput.readOnly = true;
+        // ovcEnrollmentDateInput.readOnly = true;
     }
     cpmisNumberInput.value = observation.CPMISNumber;
     if (observation.CPMISNumber !== 0) {
-        cpmisNumberInput.readOnly = true;
+        // cpmisNumberInput.readOnly = true;
     }
     if (observation.ovcVLCopies == "LDL") {
         isLDL2.checked = true;
         ovcVLcopiesInput.value = '';
         ovcVLcopiesInput.readOnly = true;
     } else ovcVLcopiesInput.value = observation.ovcVLCopies
+    ovcVLDateInput.value = observation.baselineOvcVlDate;
     ovcDiscontinuedDateInput.value = observation.dateDiscontinuedFromOVC;
     var ovcDisStatuses = ovcDiscontinuationStatusSelect.options;
     for (var i = 0; i < ovcDisStatuses.length; i++) {
@@ -1357,7 +1364,7 @@ function submitData(formData = null) {
         success: function (response) {
             clearForm();
             document.querySelector("#overlay").style.display = 'none';
-            location.reload();
+            // location.reload();
         },
         error: error => handleError(error.status, error.message)
     });
@@ -1433,7 +1440,7 @@ function submitPatientData() {
             startRegimen: startRegimen,
             dsa: dsa,
             startkaletra: startkaletra,
-            newpatient: newpatient,
+            newpatient: false,
         },
         success: function (response) {
             var mResponse = JSON.parse(response);
