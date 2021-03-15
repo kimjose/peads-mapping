@@ -304,6 +304,14 @@ try {
             $_SESSION['user'] = $user;
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
+    } elseif ($request == "get_facility_patients") {
+        $mflCode = $_GET['mfl_code'];
+        $patients = Patient::where('facility', $mflCode)->get();
+        foreach ($patients as $patient){
+            $observation = Observation::where('patientCCC', $patient->cccNo)->orderBy('id', 'desc')->first();
+            $patient['lastEntryDate'] =  date("d-m-Y G:i:s", strtotime($observation->created_at));
+        }
+        echo myJsonResponse(200, 'Patients', $patients);
     } elseif ($request == "load_prev_obs") {
         session_start();
         $user = $_SESSION['user'];

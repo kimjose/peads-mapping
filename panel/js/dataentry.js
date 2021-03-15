@@ -186,6 +186,7 @@ function handleError(errorCode, errorMessage) {
         errorDiv.style.display = "block";
     }
 }
+
 document.getElementById("errorModalDismiss").addEventListener('click', () => {
     errorDiv.style.display = "none";
 });
@@ -224,12 +225,19 @@ $.ajax({
             currentoiSelect.appendChild(option);
         });
     },
-    error: (error) =>{
+    error: (error) => {
         handleError(error.status, error.message);
     }
 });
 
-btnSearch.addEventListener("click", () => loadPreviousObservation());
+btnSearch.addEventListener("click", () => {
+    let cccNo = cccNoInput.value;
+    if (cccNo.length < 10 || cccNo.length > 10) {
+        alert("Enter a valid CCC number");
+        return;
+    }
+    loadPreviousObservation(cccNo)
+});
 
 btnSubmit.addEventListener("click", () => submitPatientData());
 
@@ -255,6 +263,7 @@ function initialize() {
             $("#currentvlstatustSelect").val("NotSupressed");
         }
     }
+
 
     vlcopiesInput.addEventListener('input', inputHandler);
     vlcopiesInput.addEventListener('propertychange', inputHandler); // for IE8
@@ -324,6 +333,10 @@ function initialize() {
     otzenrolledSelect.addEventListener('click', () => otzOptionChanged());
     pamaEnrolledSelect.addEventListener('click', () => pamaOptionChanged())
 
+    let load = false;
+    var modulesLoaded = false
+    var regimensLoaded = false
+    var facilitiesLoaded = false
     $.ajax({
         type: "GET",
         url: "datascript?request=get_otz_modules",
@@ -342,6 +355,7 @@ function initialize() {
                     // console.log(modules);
                     // loadtocheckbox(modules);
                 }
+                loadPatient();
             } else {
                 handleError(code, mResponse.message);
             }
@@ -367,7 +381,8 @@ function initialize() {
                     otzregimenSelect.appendChild(option.cloneNode(true));
                     startRegimenDialogSelect.appendChild(option.cloneNode(true));
                 }
-            }else {
+                loadPatient()
+            } else {
                 handleError(code, mResponse.message);
             }
         },
@@ -392,7 +407,8 @@ function initialize() {
                     facilitySelector.appendChild(option);
                     facilityDialogSelect.appendChild(option.cloneNode(true));
                 }
-            }else {
+                loadPatient()
+            } else {
                 handleError(code, mResponse.message);
             }
         },
@@ -400,13 +416,21 @@ function initialize() {
     });
 }
 
-function loadPreviousObservation() {
-
-    let cccNo = cccNoInput.value;
-    if (cccNo.length < 10 || cccNo.length > 10) {
-        alert("Enter a valid CCC number");
-        return;
+function loadPatient() {
+    if (facilitySelector.options.length > 1 &&
+        otzModulesSelect.options.length > 1 &&
+        currentregimenSelect.options.length > 1) {
+        let cccNo = sessionStorage.getItem('cccNo');
+        if (cccNo != null) {
+            cccNoInput.value = cccNo;
+            loadPreviousObservation(cccNo);
+        }
     }
+}
+
+function loadPreviousObservation(cccNo) {
+
+
     $.ajax({
         type: "GET",
         url: "datascript?request=get_last_vls&cccNo=" + cccNo,
@@ -707,7 +731,7 @@ function loadObsData(observation) {
     var otzModules = otzModulesSelect.options;
     for (var i = 0; i < otzModules.length; i++) {
         const otzModule = otzModules[i];
-        if (otzModule.value < observation.completedOTZModules){
+        if (otzModule.value < observation.completedOTZModules) {
             otzModule.setAttribute("disabled", "");
         }
         if (otzModule.value == observation.completedOTZModules) {
@@ -1002,7 +1026,7 @@ function verify() {
         if (isLDLguardian.checked) caregiver1VL = "LDL";
         else caregiver1VL = guardianVlCopiesInput.value;
         caregiver1VLDate = guardianlastvlDate.value;
-        if (caregiver1CCC !== '' && caregiver1CCC.length !== 10){
+        if (caregiver1CCC !== '' && caregiver1CCC.length !== 10) {
             error = true;
             errorMessage += "Enter a valid Guardian CCC number.\n"
         }
@@ -1012,7 +1036,7 @@ function verify() {
             else caregiver1VL = motherVlCopiesInput.value;
             caregiver1VLDate = motherlastvlDateInput.value;
             caregiver1CCC = caregiver1cccnoInput.value;
-            if (caregiver1CCC !== '' && caregiver1CCC.length !== 10){
+            if (caregiver1CCC !== '' && caregiver1CCC.length !== 10) {
                 error = true;
                 errorMessage += "Enter a valid mother CCC number.\n"
             }
@@ -1022,7 +1046,7 @@ function verify() {
             else caregiver2VL = fatherVlCopiesInput.value;
             caregiver2CCC = caregiver2cccnoInput.value;
             caregiver2VLDate = fatherlastvlDateInput.value;
-            if (caregiver1CCC !== '' && caregiver1CCC.length !== 10){
+            if (caregiver1CCC !== '' && caregiver1CCC.length !== 10) {
                 error = true;
                 errorMessage += "Enter a valid father CCC number.\n"
             }
@@ -1070,7 +1094,7 @@ function verify() {
 
     if (error) {
         handleError(-1, errorMessage);
-    }else {
+    } else {
         submitData(formData);
     }
 }
