@@ -11,26 +11,41 @@ require_once __DIR__ . "/../functions.php";
 
 
 
-session_start();
-$user = $_SESSION['user'];
+require_once "../../auth.php";
 
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Illuminate\Database\Capsule\Manager as DB;
 
 try {
-
-    $assignedFacilities = AssignedFacility::select('facility')->where('userID', $user->id)->get();
-
+    
     $data = [];
     $patients = [];
-    foreach ($assignedFacilities as $assignedFacility) {
-        $fPatients = Patient::where('facility', $assignedFacility->facility)->where('transferred_out', 0)->get();
-        $pds = DB::select("SELECT A.cccNo, A.county, A.facility, A.sex, A.dob, A.date_of_hiv_diagnosis, A.date_enrolled, A.dateStartedART, A.startRegimen, A.startKaletraFormulation,
-       B.*, D.name AS 'facilityName', E.`names` AS 'usernames' FROM patients A LEFT JOIN observations B ON A.cccNo = B.patientCCC AND 
-B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JOIN facilities D ON D.mfl_code = A.facility
-           LEFT JOIN users E ON E.id = B.userId WHERE A.transferred_out = 0 AND `facility`= " . $assignedFacility->facility);
-        foreach ($pds as $pd) {
-            array_push($data, $pd);
+
+    $permissionlist = $user->permissions;
+    if (in_array("3", $permissionlist)) {
+        $assignedFacilities = Facility::all();
+        foreach ($assignedFacilities as $assignedFacility) {
+            $fPatients = Patient::where('facility', $assignedFacility->mfl_code)->where('transferred_out', 0)->get();
+            $pds = DB::select("SELECT A.cccNo, A.county, A.facility, A.sex, A.dob, A.date_of_hiv_diagnosis, A.date_enrolled, A.dateStartedART, A.startRegimen, A.startKaletraFormulation,
+        B.*, D.name AS 'facilityName', E.`names` AS 'usernames', F.name AS 'lastOtzModuleCompleted' FROM patients A LEFT JOIN observations B ON A.cccNo = B.patientCCC AND 
+    B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JOIN facilities D ON D.mfl_code = A.facility
+            LEFT JOIN users E ON E.id = B.userId LEFT JOIN otz_modules F ON F.id = B.completedOTZModules WHERE A.transferred_out = 0 AND `facility`= " . $assignedFacility->mfl_code);
+            foreach ($pds as $pd) {
+                array_push($data, $pd);
+            }
+        }
+    } else {
+
+        $assignedFacilities = AssignedFacility::select('facility')->where('userID', $loggedUser->id)->get();
+        foreach ($assignedFacilities as $assignedFacility) {
+            $fPatients = Patient::where('facility', $assignedFacility->facility)->where('transferred_out', 0)->get();
+            $pds = DB::select("SELECT A.cccNo, A.county, A.facility, A.sex, A.dob, A.date_of_hiv_diagnosis, A.date_enrolled, A.dateStartedART, A.startRegimen, A.startKaletraFormulation,
+        B.*, D.name AS 'facilityName', E.`names` AS 'usernames', F.name AS 'lastOtzModuleCompleted' FROM patients A LEFT JOIN observations B ON A.cccNo = B.patientCCC AND 
+    B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JOIN facilities D ON D.mfl_code = A.facility
+            LEFT JOIN users E ON E.id = B.userId LEFT JOIN otz_modules F ON F.id = B.completedOTZModules WHERE A.transferred_out = 0 AND `facility`= " . $assignedFacility->facility);
+            foreach ($pds as $pd) {
+                array_push($data, $pd);
+            }
         }
     }
     $filename = "temp/pediatric_report_";
@@ -58,6 +73,7 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
         WriterEntityFactory::createCell("County"),
         WriterEntityFactory::createCell("Sex"),
         WriterEntityFactory::createCell("Date Of Birth"),
+        WriterEntityFactory::createCell("Age"),
         WriterEntityFactory::createCell("Date Of HIV Diagnosis"),
         WriterEntityFactory::createCell("Date of Enrollment"),
         WriterEntityFactory::createCell("Date Started ART"),
@@ -88,7 +104,7 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
         WriterEntityFactory::createCell("statusAtOVCDiscontinuation"),
 //=====>OTZ
         WriterEntityFactory::createCell("Enrolled In OTZ"),
-        WriterEntityFactory::createCell("Dte Enrolled In OTZ"),
+        WriterEntityFactory::createCell("Date Enrolled In OTZ"),
         WriterEntityFactory::createCell("OTZ Art Regimen"),
         WriterEntityFactory::createCell("OTZ VL"),
         WriterEntityFactory::createCell("OTZ VL Date"),
@@ -98,8 +114,11 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
         WriterEntityFactory::createCell("Completed OTZ Modules"),
         WriterEntityFactory::createCell("Status At OTZ Transition"),
         WriterEntityFactory::createCell("Date Discontinued From OTZ"),
+        /**PAMA Data */
         WriterEntityFactory::createCell("Enrolled In PAMA"),
         WriterEntityFactory::createCell("Date Enrolled In PAMA"),
+        WriterEntityFactory::createCell("pamaVLCopies"),
+        WriterEntityFactory::createCell("baselinePamaVlDate"),
         WriterEntityFactory::createCell("caregiverInSameFacility"),
         WriterEntityFactory::createCell("Caregiver Type"),
         WriterEntityFactory::createCell("Caregiver1 CCC"),
@@ -114,12 +133,23 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
         WriterEntityFactory::createCell("PAMA Status 12 Months"),
         WriterEntityFactory::createCell("PAMA Status 24 Months"),
         WriterEntityFactory::createCell("PAMA Status Current"),
-        WriterEntityFactory::createCell("PAMA Status At Transition"),
         WriterEntityFactory::createCell("Date Discontinued From PAMA"),
+        /**NimeCONFIRM data */
+        WriterEntityFactory::createCell("Enrolled to NimeCONFIRM"),
+        WriterEntityFactory::createCell("Date Enrolled to NimeCONFIRM"),
+        WriterEntityFactory::createCell("NimeCONFIRM User Mode"),
+        WriterEntityFactory::createCell("Date Discontinued From NimeCONFIRM"),
+        /**Audio DOTs data */
+        WriterEntityFactory::createCell("Enrolled to Audio DOTs"),
+        WriterEntityFactory::createCell("Date Enrolled to Audio DOTs"),
+        WriterEntityFactory::createCell("Audio DOTs Follow-up Personnel"),
+        WriterEntityFactory::createCell("Date Discontinued From Audio DOTs"),
+        
         WriterEntityFactory::createCell("comment"),
         WriterEntityFactory::createCell("created_at"),
         WriterEntityFactory::createCell("Facility Name"),
         WriterEntityFactory::createCell("User Name"),
+       
 
     ];
     $headerRow = WriterEntityFactory::createRow($headerCells, $boldRowStyle);
@@ -127,12 +157,20 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
     $writer->addRow($headerRow);
 
     foreach ($data as $datum) {
+        $dob = date("Y-m-d",strtotime($datum->dob));
+
+        $dobObject = new DateTime($dob);
+        $nowObject = new DateTime();
+
+        $diff = $dobObject->diff($nowObject);
+        $age = $diff->y;
         $rowCells = [
             WriterEntityFactory::createCell($datum->cccNo),
             WriterEntityFactory::createCell($datum->facility),
             WriterEntityFactory::createCell($datum->county),
             WriterEntityFactory::createCell($datum->sex),
             WriterEntityFactory::createCell($datum->dob),
+            WriterEntityFactory::createCell($age),
             WriterEntityFactory::createCell($datum->date_of_hiv_diagnosis),
             WriterEntityFactory::createCell($datum->date_enrolled),
             WriterEntityFactory::createCell($datum->dateStartedART),
@@ -170,11 +208,14 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
             WriterEntityFactory::createCell($datum->lastAttendDate),
             WriterEntityFactory::createCell($datum->nextAppointmentDate),
             WriterEntityFactory::createCell($datum->ArtAdherenceAssessment),
-            WriterEntityFactory::createCell($datum->completedOTZModules),
+            WriterEntityFactory::createCell($datum->lastOtzModuleCompleted),
             WriterEntityFactory::createCell($datum->statusAtOTZTransition),
             WriterEntityFactory::createCell($datum->dateDiscontinuedFromOTZ),
+//========>PAMA            
             WriterEntityFactory::createCell($datum->enrolledInPAMA),
             WriterEntityFactory::createCell($datum->dateEnrolledInPAMA),
+            WriterEntityFactory::createCell($datum->pamaVLCopies),
+            WriterEntityFactory::createCell($datum->baselinePamaVlDate),
             WriterEntityFactory::createCell($datum->caregiverInSameFacility),
             WriterEntityFactory::createCell($datum->caregiverType),
             WriterEntityFactory::createCell($datum->caregiver1CCC),
@@ -189,8 +230,18 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
             WriterEntityFactory::createCell($datum->PAMAStatus12),
             WriterEntityFactory::createCell($datum->PAMAStatus24),
             WriterEntityFactory::createCell($datum->PAMAStatusCurrent),
-            WriterEntityFactory::createCell($datum->PAMAStatusTransition),
             WriterEntityFactory::createCell($datum->dateDiscontinuedFromPAMA),
+//========>NimeCONFIRM
+            WriterEntityFactory::createCell($datum->enrolledInVDOT),
+            WriterEntityFactory::createCell($datum->dateEnrolledInVDOT),
+            WriterEntityFactory::createCell($datum->vdotUserMode),
+            WriterEntityFactory::createCell($datum->dateDiscontinuedFromVDOT),
+//========>Audio DOTs
+            WriterEntityFactory::createCell($datum->enrolledInADOT),
+            WriterEntityFactory::createCell($datum->dateEnrolledInADOT),
+            WriterEntityFactory::createCell($datum->followUpPersonnel),
+            WriterEntityFactory::createCell($datum->dateDiscontinuedFromADOT),
+
             WriterEntityFactory::createCell($datum->comment),
             WriterEntityFactory::createCell($datum->created_at),
             WriterEntityFactory::createCell($datum->facilityName),

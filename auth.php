@@ -1,5 +1,5 @@
 <?php
-require_once "functions.php";
+require_once "panel/functions.php";
 require_once __DIR__ . "/models/User.php";;
 session_start();
 if (!isset($_SESSION['user'])) {
@@ -7,5 +7,5 @@ if (!isset($_SESSION['user'])) {
     logError(401, "Unauthenticated access.");
     die(401);
 }
-
-$loggedUser = User::find($_SESSION['user']["id"]);
+$user = unserialize($_SESSION['user']);
+$loggedUser = User::findOrFail($user->id);
