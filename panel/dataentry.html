@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Pedatric Mapping Application</title>
+    <title>Pediatric Mapping Application</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -21,6 +21,13 @@
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="css/dataentry.css" rel="stylesheet">
     <!-- <link href="css/select2.min.css" rel="stylesheet" /> -->
+    
+    <script src="vendor/jquery/jquery.js"></script>
+    <script> 
+      $(function(){
+        $("#includedContent").load("includes/navbar.html"); 
+      });
+    </script> 
 
 </head>
 
@@ -30,97 +37,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="far fa-map"></i>
-                </div>
-                <div class="sidebar-brand-text mx-2">Pediatric Mapping</div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Data Management
-            </div>
-
-            <!-- Nav Item - data-->
-            <li class="nav-item">
-                <a class="nav-link" href="users.html">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Users</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-pills"></i>
-                    <span>Regimens</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="dataentry.html">
-                    <i class="far fa-fw fa-edit"></i>
-                    <span>Data Entry</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Reports</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Admin Privileges
-            </div>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-users-cog"></i>
-                    <span>User Roles</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Account
-            </div>
-
-            <!-- Nav item -->
-            <li class="nav-item">
-                <a class="nav-link" href="login.html">
-                    <i class="fas fa-fw fa-sign-out-alt"></i>
-                    <span>Sign Out</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
+        <div id="includedContent" class="sticky-top h-100"></div>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -154,7 +71,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="usernametxt">Admin</span>
                                 <img class="img-profile rounded-circle" src="img/images.png">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -217,8 +134,8 @@
                         </div>
                         <div class="card-header py-3">
 
-                            <h1 class="h3 mb-2 text-gray-800 text-center">Pedatric Mapping Application for Monitoring
-                                OVC,OTZ and PAMA Interventions </h1>
+                            <h1 class="h3 mb-2 text-gray-800 text-center">Pediatric Mapping Application for Monitoring
+                                OVC, OTZ, and PAMA Interventions </h1>
 
                             <h2 class="h5 mb-2 text-gray-800 text-center">A Technical Officer mentorship tool to Monitor
                                 and Manage Patients to Realise better Retention and suppression Outcomes</h2>
@@ -298,17 +215,11 @@
                                                                 onchange="showMflCode(this.value)">
                                                                 <option value="" hidden>Select Facility</option>
                                                             </select>
-                                                            <!-- <input type="text" name="facility" class="form-control"
-                                                                style="width: 100%;" placeholder="Enter Facility Name"
-                                                                id="facility"> -->
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">MFL code</td>
                                                         <td class="d-inline-block col-8" id="mflcode">
-                                                            <!-- <input type="text" name="mflcode" class="form-control"
-                                                                style="width: 100%;" placeholder="Enter MFL Code"
-                                                                id="mflcode"> -->
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -368,7 +279,7 @@
                                                         <td class="d-inline-block col-4">Start Regimen</td>
                                                         <td class="d-inline-block col-8">
                                                             <select id="startregimenSelect" class="form-control">
-                                                                <option value="" hidden>Select Start Regimen</option>
+                                                                <option value="" hidden selected>Select Start Regimen</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -610,123 +521,113 @@
                                             </table>
                                         </div>
 
-                                        <!-- Collapsable Card Example -->
-                                        <div class="card shadow mb-4">
-                                            <!-- Card Header - Accordion -->
-                                            <a href="#vlCollapseCard" class="d-block card-header py-3"
-                                                data-toggle="collapse" role="button" aria-expanded="true"
-                                                aria-controls="collapseCardExample">
-                                                <h6 class="m-0 font-weight-bold text-primary text-center">Latest Viral
-                                                    Load Results</h6>
-                                            </a>
-                                            <!-- Card Content - Collapse -->
-                                            <div class="collapse show" id="vlCollapseCard">
-                                                <div class="card-body">
-                                                    <div class="row justify-content-center">
-                                                        <div class="table-responsive">
-                                                            <table class="table  table-bordered table-info table-striped">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th></th>
-                                                                        <th>Last VL Date</th>
-                                                                        <th>VL Result</th>
-                                                                    </tr>
-
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td><b>CALHIV</b></td>
-                                                                        <td id="calvldate"></td>
-                                                                        <td id="calvl"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td><b>Mother</b></td>
-                                                                        <td id="mothervldate"></td>
-                                                                        <td id="mothervl"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td><b>Father</b></td>
-                                                                        <td id="fathervldate"></td>
-                                                                        <td id="fathervl"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td><b>Guardian</b></td>
-                                                                        <td id="guardianvldate"></td>
-                                                                        <td id="guardianvl"></td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="table-responsive">
-                                            <table class="table table-bordered">
+                                            <table class="table table-bordered table-primary table-striped">
                                                 <thead>
                                                     <tr class="row m-0">
-                                                        <th class="d-inline-block col-12 text-center">Comments</th>
+                                                        <th class="d-inline-block col-12 text-center">NimeCONFIRM (V-DOTs)</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-12">
-                                                            <textarea class="form-control" rows="3" id="commentArea"
-                                                                maxlength="100"></textarea>
-                                                            <span class="float-right label label-default"
-                                                                id="count_message"></span>
+                                                        <td class="d-inline-block col-4">Enrolled in NimeCONFIRM</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="vdotEnrolledSelect" class="form-control">
+                                                                <option value="" hidden>Select Option</option>
+                                                                <option value="Y">Yes</option>
+                                                                <option value="N">No</option>
+                                                                <option value="NA">N/A</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Enrolled in NimeCONFIRM
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="vdotenrollmentdate"
+                                                                class="form-control vdotClass" disabled
+                                                                placeholder="Enter Date Enrolled in NimeCONFIRM"
+                                                                id="vdotEnrollmentDate">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">NimeCONFIRM User Mode</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="userModeSelect" class="form-control vdotClass" disabled>
+                                                                <option value="" hidden>Select Option</option>
+                                                                <option value="Patient">Self Care Mode</option>
+                                                                <option value="CaseManager">Case Manager Mode</option>
+                                                                <option value="Other">Other</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Discontinued from NimeCONFIRM
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="vdotdiscontinueddate"
+                                                                class="form-control vdotClass" disabled
+                                                                placeholder="Enter Date Discontinued from NimeCONFIRM"
+                                                                id="vdotdiscontinueddate">
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-
-                                        <!-- <div class="table-responsive">
-                                            <table class="table table-bordered table-info">
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-danger table-striped">
                                                 <thead>
                                                     <tr class="row m-0">
-                                                        <th class="d-inline-block col-12 text-center">CALHIV Latest
-                                                            Viral
-                                                            Load
-                                                        </th>
+                                                        <th class="d-inline-block col-12 text-center">Audio DOTs</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date of Last VL</td>
+                                                        <td class="d-inline-block col-4">Enrolled to Audio DOTs</td>
                                                         <td class="d-inline-block col-8">
-                                                            <input type="date" name="ovcenrollmentdate"
-                                                                class="form-control" id="lastvlDate"
-                                                                disabled="disabled">
+                                                            <select id="adotEnrolledSelect" class="form-control">
+                                                                <option value="" hidden>Select Option</option>
+                                                                <option value="Y">Yes</option>
+                                                                <option value="N">No</option>
+                                                                <option value="NA">N/A</option>
+                                                            </select>
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">VL Result</td>
+                                                        <td class="d-inline-block col-4">Date Enrolled in Audiio DOTs
+                                                        </td>
                                                         <td class="d-inline-block col-8">
-                                                            <div class="float-left">
-                                                                <div class="custom-control custom-checkbox ml-2">
-                                                                    <input type="checkbox" class="custom-control-input"
-                                                                        id="isLDL3">
-                                                                    <label for="isLDL3" value="LDL"
-                                                                        class="custom-control-label">LDL</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="float-right" style="width: 80%;">
-                                                                <input type="number" name="vlcopies"
-                                                                    class="form-control"
-                                                                    placeholder="Enter Current Viral Load Copies"
-                                                                    id="vlcopies" disabled>
-                                                            </div>
+                                                            <input type="date" name="adotenrollmentdate"
+                                                                class="form-control adotClass" disabled
+                                                                placeholder="Enter Date Enrolled in Audio DOTs"
+                                                                id="adotEnrollmentDate">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Client Follow-up Personnel</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <select id="followupSelect" class="form-control adotClass" disabled>
+                                                                <option value="" hidden>Select Option</option>
+                                                                <option value="CaseManager">Case Manager</option>
+                                                                <option value="hcw">Health Care Worker</option>
+                                                                <option value="Other">Other</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date Discontinued from Audio DOTs
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="adotdiscontinueddate"
+                                                                class="form-control adotClass" disabled
+                                                                placeholder="Enter Date Discontinued from Audio DOTs"
+                                                                id="adotdiscontinueddate">
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-info">
-
-                                            </table>
-                                        </div> -->
 
                                     </div>
 
@@ -904,18 +805,6 @@
                                                                 id="otzvldate">
                                                         </td>
                                                     </tr>
-                                                    <!-- <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Missed last appointment
-                                                        </td>
-                                                        <td class="d-inline-block col-8">
-                                                            <select id="missedLastAppointmentSelect"
-                                                                class="form-control otzClass" disabled>
-                                                                <option value="" hidden>Select Option</option>
-                                                                <option value="Yes">Yes</option>
-                                                                <option value="No">No</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr> -->
                                                     <tr class="row m-0">
                                                         <td class="d-inline-block col-4">Date of last Clinical/ART Visit
                                                         </td>
@@ -957,10 +846,6 @@
                                                                 disabled>
                                                                 <option value="" hidden>Select Module</option>
                                                             </select>
-                                                            <!-- <div class="form-group otzClass" disabled
-                                                                id="otzmodulesdiv">
-
-                                                            </div> -->
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -1021,6 +906,36 @@
                                                                 class="form-control pamaClass" disabled
                                                                 placeholder="Enter Date Enrolled in PAMA"
                                                                 id="pamaEnrollmentDate">
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Baseline PAMA VL</td>
+                                                        <td class="d-inline-block col-8">
+                                                            <div class="float-left">
+                                                                <div class="custom-control custom-checkbox ml-2 ">
+                                                                    <input type="checkbox"
+                                                                        class="custom-control-input pamaClass" disabled
+                                                                        id="isLDL7">
+                                                                    <label for="isLDL7" value="LDL"
+                                                                        class="custom-control-label">LDL</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="float-right" style="width: 80%;">
+                                                                <input type="number" name="pamavl"
+                                                                    class="form-control pamaClass" disabled
+                                                                    placeholder="Enter PAMA VL (cps/ml)" id="pamavl">
+                                                            </div>
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-4">Date of Baseline PAMA VL
+                                                        </td>
+                                                        <td class="d-inline-block col-8">
+                                                            <input type="date" name="pamavldate"
+                                                                class="form-control pamaClass" disabled
+                                                                placeholder="Enter Date of Baseline PAMA VL"
+                                                                id="pamavldate">
                                                         </td>
                                                     </tr>
                                                     <tr class="row m-0">
@@ -1244,105 +1159,7 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-
-                                                <!--End Caregiver info-->
-                                                <!-- <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Type of PAMA Caregiver</td>
-                                                        <td class="d-inline-block col-8"> -->
-                                                <!-- <select id="caregivertypeSelect" class="form-control pamaClass" disabled>
-                                                                <option value="" hidden>Select Type</option>
-                                                                <option value="Mother">Mother</option>
-                                                                <option value="Father">Father</option>
-                                                                <option value="Guardian">Guardian</option>
-                                                            </select> -->
-                                                <!-- <div class="custom-control custom-checkbox ml-2">
-                                                                <input type="checkbox" class="custom-control-input pamaClass" disabled
-                                                                    id='motherchkbox'>
-                                                                <label for="motherchkbox"
-                                                                    class="custom-control-label">Mother</label>
-                                                            </div>
-                                                            <div class="custom-control custom-checkbox ml-2">
-                                                                <input type="checkbox" class="custom-control-input pamaClass" disabled
-                                                                    id='fatherchkbox'>
-                                                                <label for="fatherchkbox"
-                                                                    class="custom-control-label">Father</label>
-                                                            </div>
-                                                            <div class="custom-control custom-checkbox ml-2">
-                                                                <input type="checkbox" class="custom-control-input pamaClass" disabled
-                                                                    id='guardianchkbox'>
-                                                                <label for="guardianchkbox"
-                                                                    class="custom-control-label">Guardian</label>
-                                                            </div> -->
-
-                                                <!-- </td>
-                                                    </tr> -->
-                                                <!-- <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Mother's CCC Number</td>
-                                                        <td class="d-inline-block col-8">
-                                                            <input type="number" name="caregiver1cccno"
-                                                                class="form-control pamaClass" disabled
-                                                                placeholder="Enter Care giver 1 CCC No"
-                                                                id="caregiver1cccno">
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Father's CCC Number</td>
-                                                        <td class="d-inline-block col-8">
-                                                            <input type="number" name="caregiver2cccno"
-                                                                class="form-control pamaClass" disabled
-                                                                placeholder="Enter Care giver 2 CCC No"
-                                                                id="caregiver2cccno">
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Current Viral Load of
-                                                            Caregiver
-                                                            (cps/ml)
-                                                        </td>
-                                                        <td class="d-inline-block col-8">
-                                                            <div class="float-left">
-                                                                <div class="custom-control custom-checkbox ml-2">
-                                                                    <input type="checkbox" class="custom-control-input pamaClass" disabled
-                                                                        id="isLDL5">
-                                                                    <label for="isLDL5" value="LDL"
-                                                                        class="custom-control-label">LDL</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="float-right" style="width: 80%;">
-                                                                <input type="number" name="caregivervl"
-                                                                    class="form-control pamaClass" disabled
-                                                                    placeholder="Enter Caregiver VL" id="caregivervl">
-                                                            </div>
-
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Date of Current Viral Load of
-                                                            Caregiver
-                                                        </td>
-                                                        <td class="d-inline-block col-8">
-                                                            <input type="date" name="caregivervlddate"
-                                                                class="form-control pamaClass" disabled
-                                                                placeholder="Enter Date Discontinued from OVC care"
-                                                                id="caregivervlddate">
-                                                        </td>
-                                                    </tr> -->
-                                                <!-- <tr class="row m-0">
-                                                        <td class="d-inline-block col-4">Care giver Current viral
-                                                            laod
-                                                            status
-                                                        </td>
-                                                        <td class="d-inline-block col-8">
-                                                            <select id="caregivervlstatustSelect"
-                                                                class="form-control pamaClass" disabled>
-                                                                <option value="" hidden>Select Status</option>
-                                                                <option value="Supressed">Supressed</option>
-                                                                <option value="Not Supressed">Not Supressed</option>
-                                                                <option value="No viral load">No Viral Load</option>
-                                                                <option value="" selected></option>
-                                                            </select>
-                                                        </td>
-                                                    </tr> -->
+                                               
                                                 <thead>
                                                     <tr class="row m-0">
                                                         <th class="d-inline-block col-12 text-center">
@@ -1350,7 +1167,7 @@
                                                         </th>
                                                     </tr>
                                                 </thead>
-                                                <tr class="row m-0">
+                                                <!-- <tr class="row m-0">
                                                     <td class="d-inline-block col-4">PAMA status_at 3month after
                                                         enrollment</td>
                                                     <td class="d-inline-block col-8">
@@ -1408,28 +1225,11 @@
                                                             <option value="Dead">Dead</option>
                                                         </select>
                                                     </td>
-                                                </tr>
+                                                </tr> -->
                                                 <tr class="row m-0">
                                                     <td class="d-inline-block col-4">Current PAMA status</td>
                                                     <td class="d-inline-block col-8">
                                                         <select id="currentpamastatusSelect"
-                                                            class="form-control pamaClass" disabled>
-                                                            <option value="" hidden>Select Status</option>
-                                                            <option value="Active">Active</option>
-                                                            <option value="Transfer Out">Transfer Out</option>
-                                                            <option value="LTFU">LTFU</option>
-                                                            <option value="Dead">Dead</option>
-                                                            <option value="Transition to Adult Care">Transition to
-                                                                Adult Care (20+)
-                                                            </option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr class="row m-0">
-                                                    <td class="d-inline-block col-4">Status at PAMA Transition
-                                                    </td>
-                                                    <td class="d-inline-block col-8">
-                                                        <select id="pamastatusattransitionSelect"
                                                             class="form-control pamaClass" disabled>
                                                             <option value="" hidden>Select Status</option>
                                                             <option value="Active">Active</option>
@@ -1453,6 +1253,78 @@
                                                             id="pamadiscontinueddate">
                                                     </td>
                                                 </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                        <!-- Collapsable Card Example -->
+                                        <div class="card shadow mb-4">
+                                            <!-- Card Header - Accordion -->
+                                            <a href="#vlCollapseCard" class="d-block card-header py-3"
+                                                data-toggle="collapse" role="button" aria-expanded="true"
+                                                aria-controls="collapseCardExample">
+                                                <h6 class="m-0 font-weight-bold text-primary text-center">Latest Viral
+                                                    Load Results</h6>
+                                            </a>
+                                            <!-- Card Content - Collapse -->
+                                            <div class="collapse show" id="vlCollapseCard">
+                                                <div class="card-body">
+                                                    <div class="row justify-content-center">
+                                                        <div class="table-responsive">
+                                                            <table class="table  table-bordered table-info table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th>Last VL Date</th>
+                                                                        <th>VL Result</th>
+                                                                    </tr>
+
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td><b>CALHIV</b></td>
+                                                                        <td id="calvldate"></td>
+                                                                        <td id="calvl"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><b>Mother</b></td>
+                                                                        <td id="mothervldate"></td>
+                                                                        <td id="mothervl"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><b>Father</b></td>
+                                                                        <td id="fathervldate"></td>
+                                                                        <td id="fathervl"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><b>Guardian</b></td>
+                                                                        <td id="guardianvldate"></td>
+                                                                        <td id="guardianvl"></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr class="row m-0">
+                                                        <th class="d-inline-block col-12 text-center">Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="row m-0">
+                                                        <td class="d-inline-block col-12">
+                                                            <textarea class="form-control" rows="3" id="commentArea"
+                                                                maxlength="100"></textarea>
+                                                            <span class="float-right label label-default"
+                                                                id="count_message"></span>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -1518,29 +1390,6 @@
                     <button type="submit" name="registerbtn" id="addNewPatient" class="btn btn-primary">Add New
                         Patient</button>
                 </div>
-                <!-- <form action="code.php" method="POST" onsubmit="event.preventDefault();">
-
-                    <div class="modal-body">
-
-                        <div class="form-group">
-                            <label>Video Name</label>
-                            <input type="text" name="videolink" id="videolink" class="form-control"
-                                placeholder="Video Name" readonly>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="statuscheck">
-                                <label class="custom-control-label" for="statuscheck">Reviewed</label>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" name="registerbtn" id="savePatient" class="btn btn-primary"
-                                >Save</button>
-                        </div>
-                </form> -->
 
             </div>
         </div>
@@ -1553,7 +1402,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Patient Patient</h5>
+                    <h5 class="modal-title">Add Patient/Transfer In</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1567,7 +1416,7 @@
                             <input type="text" name="cccno" id="cccNoDialogInput" class="form-control"
                                    placeholder="Enter CCC Number">
                             <br>
-                            <button id="loadDataBtn" class="btn btn-primary">Load Data</button>
+                            <button id="loadDataBtn" class="btn btn-primary btn-block">Load Data</button>
                         </div>
                         <div class="form-group">
                             <label>Date of Birth</label>

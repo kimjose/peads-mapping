@@ -10,6 +10,8 @@ require_once "../models/Facility.php";
 require_once __DIR__ . "/../models/Patient.php";
 require_once __DIR__ . "/../models/Facility.php";
 require_once __DIR__ . "/../models/AssignedFacility.php";
+require_once __DIR__ . "/../models/Permissions.php";
+require_once __DIR__ . "/../models/UserCategory.php";
 
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -31,13 +33,14 @@ try {
         $PAMAStatus12 = $_POST['PAMAStatus12'];
         $PAMAStatus24 = $_POST['PAMAStatus24'];
         $PAMAStatusCurrent = $_POST['PAMAStatusCurrent'];
-        $PAMAStatusTransition = $_POST['PAMAStatusTransition'];
         $dateDiscontinuedFromPAMA = $_POST['dateDiscontinuedFromPAMA'];
         $comment = $_POST['comment'];
 
         $dateDiscontinuedFromOTZ = $_POST['dateDiscontinuedFromOTZ'];
         $enrolledInPAMA = $_POST['enrolledInPAMA'];
         $dateEnrolledInPAMA = $_POST['dateEnrolledInPAMA'];
+        $pamaVLCopies = $_POST['pamaVLCopies'];
+        $baselinePamaVlDate = $_POST['baselinePamaVlDate'];
         $caregiverInSameFacility = $_POST['caregiverInSameFacility'];
         $caregiverType = $_POST['caregiverType'];
         $caregiver1CCC = $_POST['caregiver1CCC'];
@@ -87,6 +90,14 @@ try {
         $schooling = $_POST['schooling'];
         $statusAtTransition = $_POST['statusAtTransition'];
         $enrolledInOVC = $_POST['enrolledInOVC'];
+        $enrolledInVDOT = $_POST['enrolledInVDOT'];
+        $vdotUserMode = $_POST['vdotUserMode'];
+        $dateEnrolledInVDOT = $_POST['dateEnrolledInVDOT'];
+        $dateDiscontinuedFromVDOT = $_POST['dateDiscontinuedFromVDOT'];
+        $enrolledInADOT = $_POST['enrolledInADOT'];
+        $followUpPersonnel = $_POST['followUpPersonnel'];
+        $dateEnrolledInADOT = $_POST['dateEnrolledInADOT'];
+        $dateDiscontinuedFromADOT = $_POST['dateDiscontinuedFromADOT'];
 
 
         Observation::create([
@@ -110,20 +121,27 @@ try {
             'lastAttendDate' => $lastAttendDate, 'nextAppointmentDate' => $nextAppointmentDate,
             'ArtAdherenceAssessment' => $ArtAdherenceAssessment, 'completedOTZModules' => $completedOTZModules, 'statusAtOTZTransition' => $statusAtOTZTransition,
             'dateDiscontinuedFromOTZ' => $dateDiscontinuedFromOTZ, 'enrolledInPAMA' => $enrolledInPAMA,
-            'dateEnrolledInPAMA' => $dateEnrolledInPAMA, 'caregiverInSameFacility' => $caregiverInSameFacility,
-            'caregiverType' => $caregiverType, 'caregiver1CCC' => $caregiver1CCC,
+            'dateEnrolledInPAMA' => $dateEnrolledInPAMA,'pamaVLCopies' =>$pamaVLCopies, 'baselinePamaVlDate'=>$baselinePamaVlDate,
+            'caregiverInSameFacility' => $caregiverInSameFacility,'caregiverType' => $caregiverType, 'caregiver1CCC' => $caregiver1CCC,
             'caregiver2CCC' => $caregiver2CCC, 'caregiver1VL' => $caregiver1VL, 'caregiver1VLDate' => $caregiver1VLDate,
             'caregiver2VL' => $caregiver2VL, 'caregiver2VLDate' => $caregiver2VLDate,
             'caregiver1VLStatus' => $caregiver1VLStatus, 'PAMAStatus3' => $PAMAStatus3,
             'PAMAStatus6' => $PAMAStatus6, 'PAMAStatus12' => $PAMAStatus12, 'PAMAStatus24' => $PAMAStatus24,
-            'PAMAStatusCurrent' => $PAMAStatusCurrent, 'PAMAStatusTransition' => $PAMAStatusTransition,
-            'dateDiscontinuedFromPAMA' => $dateDiscontinuedFromPAMA, 'comment' => $comment
+            'PAMAStatusCurrent' => $PAMAStatusCurrent,
+            'dateDiscontinuedFromPAMA' => $dateDiscontinuedFromPAMA, 
+            'enrolledInVDOT'=>$enrolledInVDOT, 'dateEnrolledInVDOT'=>$dateEnrolledInVDOT, 'vdotUserMode'=>$vdotUserMode,
+            'dateDiscontinuedFromVDOT'=>$dateDiscontinuedFromVDOT,'enrolledInADOT'=>$enrolledInADOT, 'dateEnrolledInADOT'=>$dateEnrolledInADOT, 
+            'followUpPersonnel'=>$followUpPersonnel, 'dateDiscontinuedFromADOT'=>$dateDiscontinuedFromADOT, 'comment' => $comment
         ]);
     } else if ($request == "get_users") {
         $users = User::all();
         foreach ($users as $user) {
             $facilities = AssignedFacility::where('userID', $user->id)->get();
             $user['noOfFacilities'] = sizeof($facilities);
+            $usercategory = UserCategory::findOrFail($user->usercategory);
+            $permlist = $usercategory->permissions;
+            $list = json_decode($permlist);
+            $user['permissions'] = $list;
             $cadre = Cadre::findOrFail($user->cadre);
             $user['cadreName'] = $cadre->name;
         }
@@ -188,7 +206,7 @@ try {
         $facility = $_POST['facility'];
         $county = $_POST['county'];
         $sex = $_POST['sex'];
-        $dob = $_POST['dob'];
+        $dob = $_POST['dateOfBirth'];
         $dohd = $_POST['dohd'];
         $dec = $_POST['dec'];
         $startRegimen = $_POST['startRegimen'];
@@ -197,10 +215,7 @@ try {
         $newpatient = $_POST['newpatient'];
 
         if ($cccNo != null && $cccNo != "") {
-
-            if ($newpatient == false) {
-
-                $patient = Patient::where('cccNo', $cccNo)->first();
+                $patient = Patient::where('cccNo', $cccNo)->where('transferred_out', 0)->first();
                 $patient->cccNo = $cccNo;
                 $patient->facility = $facility;
                 $patient->county = $county;
@@ -212,40 +227,28 @@ try {
                 $patient->startRegimen = $startRegimen;
                 $patient->startKaletraFormulation = $startkaletra;
                 $patient->save();
-            } else {
-               /* Patient::create([
-                    "cccNo" => $cccNo,
-                    "facility" => $facility,
-                    "county" => $county,
-                    "sex" => $sex,
-                    "dob" => $dob,
-                    "date_of_hiv_diagnosis" => $dohd,
-                    "date_enrolled" => $dec,
-                    "dateStartedART" => $dsa,
-                    "startRegimen" => $startRegimen,
-                    "startKaletraFormulation" => $startkaletra
-
-                ]);*/
-            }
         } else {
             echo "Enter Patient CCC Number";
         }
 
-        $patients = Patient::all();
+        $patient = Patient::where('cccNo', $cccNo)->first();
 
-        echo myJsonResponse(200, 'Patients Retrieved', $patients);
+        echo myJsonResponse(200, 'Patient Saved', $patient);
     } elseif ($request == "get_cadres") {
         $cadres = Cadre::all();
         echo myJsonResponse(200, "Cadres retrieved", $cadres);
     } elseif ($request == "get_facilities") {
-        require_once "../models/Facility.php";
-        session_start();
-        $user = $_SESSION['user'];
-        $assignedFacilities = AssignedFacility::where('userID', $user->id)->get();
-        $facilities = [];
-        foreach ($assignedFacilities as $assignedFacility) {
-            $facility = Facility::where('mfl_code', $assignedFacility->facility)->firstOrFail();
-            array_push($facilities, $facility);
+        require_once "../auth.php";
+        $permissionlist = $user->permissions;
+        if (in_array("3", $permissionlist)) {
+            $facilities = Facility::all();
+        } else {
+            $assignedFacilities = AssignedFacility::where('userID', $loggedUser->id)->get();
+            $facilities = [];
+            foreach ($assignedFacilities as $assignedFacility) {
+                $facility = Facility::where('mfl_code', $assignedFacility->facility)->firstOrFail();
+                array_push($facilities, $facility);
+            }
         }
         echo myJsonResponse(200, "Facilities retrieved", $facilities);
     } elseif ($request == "get_transfer_patient") {
@@ -302,19 +305,27 @@ try {
         if (password_verify($password, $user->password)) {
             $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
+            $usercategory = UserCategory::findOrFail($user->usercategory);
+            $user['userCategoryName'] = $usercategory->name;
+            $cadre = Cadre::findOrFail($user->cadre);
+            $user['cadreName'] = $cadre->name;
+            $permlist = $usercategory->permissions;
+            $list = json_decode($permlist);
+            $user['permissions'] = $list;
             session_start();
             $user['p'] = 'p';
-            $_SESSION['user'] = $user;
+            $_SESSION['user'] = serialize($user);
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
     } elseif ($request == "load_prev_obs") {
-        session_start();
-        $user = $_SESSION['user'];
+        // session_start();
+        // $user = $_SESSION['user'];
+        require_once "../auth.php";
         $cccNo = $_GET['cccNo'];
         $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
         if ($patient == null) throw new Exception("Patient not found", 404);
         $user = $_SESSION['user'];
-        $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $user->id)->where('deleted', 0)->firstOrFail();
+        $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $loggedUser->id)->where('deleted', 0)->firstOrFail();
         $facility = Facility::where('mfl_code', $patient->facility)->first();
         $patient['facilityData'] = $facility;
         $data = [];
@@ -342,10 +353,65 @@ try {
         $guardiandata = LastVL::where('cccCALHIV', $calcccno)->where('type', 'guardian')->orderBy('vlDate', 'desc')->first();
         array_push($data, $guardiandata);
         echo myJsonResponse(200, "Data retrieved", $data);
+    } else if ($request == 'get_user_categories') { 
+        
+        $categories = getUserCategories();
+        echo myJsonResponse(200, "Here are the user categories", $categories);
+        
+    } else if ($request == 'get_permissions') {
+        $permissions = Permissions::all();
+        echo myJsonResponse(200, "Permissions retrieved", $permissions);
+    } else if ($request == 'save_user_category') {
+        try {
+            $id = $cadreData['roleid'];
+            $name = $cadreData['name'];
+            $description = $cadreData['description'];
+            $permissions = $cadreData['permissions'];
+            if (isset($id) && $id != 0){
+                $usercategory = UserCategory::findOrFail($id);
+                $usercategory->name = $name;
+                $usercategory->description = $description;
+                $usercategory->permissions = $permissions;
+                $usercategory->save();
+            } else {
+                $usercategory = UserCategory::create([
+                    "name" => $name,
+                    "description" => $description,
+                    "permissions" => json_encode($permissions),
+                    "created_by" => $this->loggedUser->id
+                ]);
+            }
+            $usercategories =getUserCategories();
+            echo myJsonResponse(200, "Here are the user categories", $usercategories);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Unable to save user data.");
+        }
     } else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
     http_response_code(400);
     logError($th->getCode(), $th->getMessage());
     if ($th->getCode()) DB::rollback();
     echo myJsonResponse(400, $th->getMessage());
+}
+
+function getUserCategories() {
+    $categories = UserCategory::all();
+    foreach ($categories as $category) {
+        $permlist = $category->permissions;
+        $list = json_decode($permlist);
+        $pnames = [];
+
+        foreach ($list as $item) {
+            $pid = Permissions::findOrFail($item);
+            $pname = $pid->permission;
+            array_push($pnames, $pname);
+        }
+
+        $category['permissionname'] = $pnames;
+
+        $cadres = Cadre::where('category', $category->id)->get();
+        $category['cadres'] = $cadres;
+    }
+    return $categories;
 }
