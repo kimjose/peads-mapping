@@ -1,6 +1,5 @@
 vendor/
 bootstrap.php
 .idea
-bootstrap.php
 panel/logs
 panel/reports-excel/temp

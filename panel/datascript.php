@@ -12,6 +12,9 @@ require_once __DIR__ . "/../models/Facility.php";
 require_once __DIR__ . "/../models/AssignedFacility.php";
 require_once __DIR__ . "/../models/Permissions.php";
 require_once __DIR__ . "/../models/UserCategory.php";
+require_once __DIR__ . "/../models/ChildrenLinelist.php";
+require_once __DIR__ . "/../models/IndexClientLinelist.php";
+require_once __DIR__ . "/../models/ChildTestResults.php";
 
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -387,6 +390,163 @@ try {
             logError($e->getCode(), $e->getMessage());
             echo myJsonResponse(400, "Unable to save user data.");
         }
+    } else if ($request == 'save_index_client') {
+        try {
+            $cccNo = trim($_POST['clientccc']);
+            $names = $_POST['clientname'];
+            $datetested = $_POST['dateclienttested'];
+            $facility = $_POST['facility'];
+            $date_listed = $_POST['date_listed'];
+            $dateEnrolledToCare = $_POST['dateEnrolledToCare'];
+            $currentStatus = $_POST['currentStatus'];
+
+            $indexclient = IndexClientLinelist::create([
+                'cccNo' => $cccNo,
+                'names' => $names,
+                'facility' => $facility,
+                'date_tested' => $datetested,
+                'date_listed' => $date_listed,
+                'dateEnrolledToCare' => $dateEnrolledToCare,
+                'currentStatus' => $currentStatus
+            ]);
+
+            echo myJsonResponse(200, "Patient created", $indexclient);
+
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Unable to save patient.");
+        }
+    } else if ($request == 'get_patient') {
+        try {
+            $indexccc = $_GET["indexccc"];
+            $indexname = $_GET['indexname'];
+            $patients = [];
+            if ($indexccc != 0) {
+                $patientbyccc = IndexClientLinelist::where('cccNo', $indexccc)->first();
+                if ($patientbyccc == null) {
+                    echo myJsonResponse(201, "Patient not found.");
+                    return;
+                } else {
+                    array_push($patients, $patientbyccc);
+                }
+            } else {
+                $patients = IndexClientLinelist::where('names', 'LIKE' ,$indexname.'%')->get();
+                if (sizeof($patients) == 0) {
+                    echo myJsonResponse(201, "Patient not found.");
+                    return;
+                }
+            }
+            foreach ($patients as $patient) {
+                $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
+                $patient['children'] = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+            }
+            echo myJsonResponse(200, 'Patient found', $patients);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Patient not found.");
+        }
+
+    } else if ($request == 'link_child') {
+        try {
+            $id = $_POST['childid'];
+            $names = $_POST['childnames'];
+            $patientid = $_POST['patientid'];
+            $date_listed = $_POST['datelisted'];
+            $dob = $_POST['dob'];
+            $tested = $_POST['childtested'];
+            $date_tested = $_POST['datetested'];
+            $test_outcome = $_POST['testoutcome'];
+            $islinked = $_POST['islinked'];
+            $cccNo = $_POST['childcccno'];
+
+            $indexclient = IndexClientLinelist::findOrFail($patientid);
+            $indexCCC = $indexclient->cccNo;
+
+            if ($id == null || $id == '') {
+                ChildrenLinelist::create([
+                    'names' => $names,
+                    'indexCCC' => $indexCCC,
+                    'date_listed' => $date_listed,
+                    'dob' => $dob,
+                    'tested' => $tested,
+                    'date_tested' => $date_tested,
+                    'test_outcome' => $test_outcome,
+                    'islinked' => $islinked,
+                    'cccNo' => $cccNo
+                ]);
+            } else {
+                $child = ChildrenLinelist::findOrFail($id);
+                $child->names = $names;
+                $child->indexCCC = $indexCCC;
+                $child->date_listed = $date_listed;
+                $child->dob = $dob;
+                $child->tested = $tested;
+                $child->date_tested = $date_tested;
+                $child->test_outcome = $test_outcome;
+                $child->islinked = $islinked;
+                $child->cccNo = $cccNo;
+                $child->save();
+            }
+
+            $patient = IndexClientLinelist::where('cccNo', $indexCCC)->first();
+            $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
+            $patient['children'] = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+            echo myJsonResponse(200, 'Child Listed', $patient);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Child not listed.");
+        }
+
+    } else if ($request='add_child_test_results') {
+        try {
+            $patientid = $_POST['patientid'];
+            $id = $_POST['childid'];
+            $tested = $_POST['childtested'];
+            $date_tested = $_POST['datetested'];
+            $test_outcome = $_POST['testoutcome'];
+            $islinked = $_POST['islinked'];
+            $cccNo = $_POST['childcccno'];
+
+            ChildTestResults::create([
+                'childId' => $id,
+                'tested' => $tested,
+                'date_tested' => $date_tested,
+                'test_outcome' => $test_outcome,
+                'islinked' => $islinked,
+                'cccNo' => $cccNo
+            ]);
+
+            $indexclient = IndexClientLinelist::findOrFail($patientid);
+            $indexCCC = $indexclient->cccNo;
+
+            $patient = IndexClientLinelist::where('cccNo', $indexCCC)->first();
+            $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
+            $patient['children'] = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+            echo myJsonResponse(200, 'Child test results added', $patient);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Child test results not added.");
+        }
+    } else if ($request == 'unlink_child') {
+        try {
+            $id = $_POST['id'];
+
+            $child = ChildrenLinelist::findOrFail($id);
+            $child->deleted = 1;
+            $child->save();
+
+            $patient = IndexClientLinelist::where('cccNo', $child->indexCCC)->first();
+            $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
+            $patient['children'] = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+            echo myJsonResponse(200, 'Child Unlinked', $patient);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Child not unlinked.");
+        }
+
     } else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
     http_response_code(400);
