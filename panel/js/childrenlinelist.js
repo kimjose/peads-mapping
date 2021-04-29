@@ -102,6 +102,7 @@ btnSearchClient.addEventListener('click', () => {
                 let code = mResponse.code;
                 console.log(mResponse);
                 if (code == 200) {
+                    $('#patientsearchresult').empty();
                     let patients = mResponse.data;
                     showPatientList(patients);
                     indexclientsearch.value = '';
@@ -461,8 +462,6 @@ function showPatientList(patients) {
     for (let p = 0; p < patients.length; p++) {
         let patient = patients[p];
 
-        $('#patientsearchresult').empty();
-
         var pbutton = document.createElement('button');
         pbutton.setAttribute("type", "button");
         pbutton.setAttribute("id", patient.id);
@@ -577,17 +576,42 @@ function populateChildren(children) {
 
         tr2.appendChild(td3);
         tr2.appendChild(td4);
+ 
+        tbody.appendChild(tr1);
+        tbody.appendChild(tr2);
+
+        var initialtesttable = document.createElement('table');
+        initialtesttable.classList.add("table", "table-responsive", "table-bordered");
+        initialtesttable.setAttribute('width', "100%");
+
+        var initialtestthead = document.createElement('thead');
+
+        var tr6 = document.createElement('tr');
+        tr6.classList.add("row", "m-0");
+
+        var th1 = document.createElement("th");
+        th1.classList.add("d-inline-block", "col-12", "text-center");
+        th1.innerHTML = "Initial Test Before Enrollment";
+
+        tr6.appendChild(th1);
+        initialtestthead.appendChild(tr6);
+
+        var initialtbody = document.createElement("tbody");
 
         var tr3 = document.createElement('tr');
 
         var td5 = document.createElement('td');
         td5.setAttribute('scope', 'row');
         td5.classList.add("border-right", "border-bottom-0");
-        td5.innerHTML = "Was the child tested at enrollment?";
+        td5.innerHTML = "Had the child been tested before enrollment?";
 
         var td6 = document.createElement('td');
         td6.classList.add("border-right", "border-bottom-0", "border-right-0");
-        td6.innerHTML = child.tested;
+        let wastested = "No";
+        if (child.tested == 'Y') {
+            wastested == "Yes";
+        } else wastested == "No";
+        td6.innerHTML = wastested;
 
         tr3.appendChild(td5);
         tr3.appendChild(td6);
@@ -620,14 +644,15 @@ function populateChildren(children) {
         tr5.appendChild(td9);
         tr5.appendChild(td10);
 
-        tbody.appendChild(tr1);
-        tbody.appendChild(tr2);
-        tbody.appendChild(tr3);
-        tbody.appendChild(tr4);
-        tbody.appendChild(tr5);
+        initialtbody.appendChild(tr3);
+        initialtbody.appendChild(tr4);
+        initialtbody.appendChild(tr5);
 
-        table.appendChild(tbody);
+        initialtesttable.appendChild(initialtestthead);
+        initialtesttable.appendChild(initialtbody);
+
         divcol.appendChild(table);
+        divcol.appendChild(initialtesttable);
         rowdiv.appendChild(divcol);
 
         var buttondiv = document.createElement('div');
@@ -686,9 +711,13 @@ function funEditChild(child) {
     $('#childTestedSelect').val(child.tested);
     $('#childTestedSelect').attr('disabled', 'disabled');
     datetestedinput.value = child.date_tested;
+    datetestedinput.disabled = true;
     $('#testOutcomeSelect').val(child.test_outcome);
+    $('#testOutcomeSelect').attr('disabled', 'disabled');
     $('#linkedSelect').val(child.islinked);
+    $('#linkedSelect').attr('disabled', 'disabled');
     childcccnoinput.value = child.cccNo;
+    childcccnoinput.disabled = true;
 }
 
 function funTestChild(child) {
