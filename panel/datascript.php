@@ -416,7 +416,7 @@ try {
             logError($e->getCode(), $e->getMessage());
             echo myJsonResponse(400, "Unable to save patient.");
         }
-    } else if ($request == 'get_patient') {
+    } else if ($request == 'get_index_client') {
         try {
             $indexccc = $_GET["indexccc"];
             $indexname = $_GET['indexname'];
@@ -424,7 +424,7 @@ try {
             if ($indexccc != 0) {
                 $patientbyccc = IndexClientLinelist::where('cccNo', $indexccc)->first();
                 if ($patientbyccc == null) {
-                    echo myJsonResponse(201, "Patient not found.");
+                    echo myJsonResponse(201, "Index client not found.");
                     return;
                 } else {
                     array_push($patients, $patientbyccc);
@@ -432,18 +432,25 @@ try {
             } else {
                 $patients = IndexClientLinelist::where('names', 'LIKE' ,$indexname.'%')->get();
                 if (sizeof($patients) == 0) {
-                    echo myJsonResponse(201, "Patient not found.");
+                    echo myJsonResponse(201, "Index client not found.");
                     return;
                 }
             }
             foreach ($patients as $patient) {
                 $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
-                $patient['children'] = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+                $children = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+                foreach ($children as $child) {
+                    $followuptest = ChildTestResults::where("childId", $child->id)->first();
+                    $child['followuptest'] = $followuptest;
+                }
+                $patient['children'] = $children;
+                
             }
-            echo myJsonResponse(200, 'Patient found', $patients);
+            echo myJsonResponse(200, 'Index client found', $patients);
         } catch (\Throwable $e) {
             logError($e->getCode(), $e->getMessage());
-            echo myJsonResponse(400, "Patient not found.");
+            echo myJsonResponse(400, "Index client not found.");
         }
 
     } else if ($request == 'link_child') {
@@ -490,7 +497,13 @@ try {
 
             $patient = IndexClientLinelist::where('cccNo', $indexCCC)->first();
             $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
-            $patient['children'] = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+            $children = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+            foreach ($children as $child) {
+                $followuptest = ChildTestResults::where("childId", $child->id)->first();
+                $child['followuptest'] = $followuptest;
+            }
+            $patient['children'] = $children;
 
             echo myJsonResponse(200, 'Child Listed', $patient);
         } catch (\Throwable $e) {
@@ -522,7 +535,13 @@ try {
 
             $patient = IndexClientLinelist::where('cccNo', $indexCCC)->first();
             $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
-            $patient['children'] = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+            $children = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+            foreach ($children as $child) {
+                $followuptest = ChildTestResults::where("childId", $child->id)->first();
+                $child['followuptest'] = $followuptest;
+            }
+            $patient['children'] = $children;
 
             echo myJsonResponse(200, 'Child test results added', $patient);
         } catch (\Throwable $e) {
@@ -539,7 +558,13 @@ try {
 
             $patient = IndexClientLinelist::where('cccNo', $child->indexCCC)->first();
             $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
-            $patient['children'] = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+            $children = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+            foreach ($children as $child) {
+                $followuptest = ChildTestResults::where("childId", $child->id)->first();
+                $child['followuptest'] = $followuptest;
+            }
+            $patient['children'] = $children;
 
             echo myJsonResponse(200, 'Child Unlinked', $patient);
         } catch (\Throwable $e) {

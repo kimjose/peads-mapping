@@ -96,7 +96,7 @@ btnSearchClient.addEventListener('click', () => {
     } else {
         $.ajax({
             type: "GET",
-            url: "datascript?request=get_patient&indexccc=" + indexccc + "&indexname=" + indexname,
+            url: "datascript?request=get_index_client&indexccc=" + indexccc + "&indexname=" + indexname,
             success: function (response) {
                 var mResponse = JSON.parse(response);
                 let code = mResponse.code;
@@ -543,48 +543,56 @@ function populateChildren(children) {
         divcol.classList.add("col-auto");
 
         var table = document.createElement('table');
-        table.classList.add("table", "table-responsive");
+        table.classList.add("table", "table-responsive", "table-bordered");
         table.setAttribute('width', "100%");
 
-        var tbody = document.createElement('tbody');
+        var thead2 = document.createElement("thead");
+
+        var tr7 = document.createElement('tr');
+        tr7.classList.add("row", "m-0");
+
+        var th2 = document.createElement("th");
+        th2.classList.add("d-inline-block", "col-12", "text-center");
+        th2.innerHTML = "Child Info:";
+
+        tr7.appendChild(th2);
+        thead2.appendChild(tr7);
+
+        var tbody1 = document.createElement('tbody');
 
         var tr1 = document.createElement('tr');
+        tr1.classList.add("row", "m-0");
 
         var td1 = document.createElement('td');
-        td1.setAttribute('scope', 'row');
-        td1.classList.add("border-right", "border-top-0", "border-bottom-0");
+        td1.classList.add("d-inline-block", "col-8");
         td1.innerHTML = "Date Listed";
 
         var td2 = document.createElement('td');
-        td2.classList.add("border-right", "border-top-0", "border-bottom-0", "border-right-0");
+        td2.classList.add("d-inline-block", "col-4");
         td2.innerHTML = child.date_listed;
 
         tr1.appendChild(td1);
         tr1.appendChild(td2);
 
         var tr2 = document.createElement('tr');
+        tr2.classList.add("row", "m-0");
 
         var td3 = document.createElement('td');
-        td3.setAttribute('scope', 'row');
-        td3.classList.add("border-right", "border-bottom-0");
+        td3.classList.add("d-inline-block", "col-8");
         td3.innerHTML = "Age";
 
         let age = getAge(child.dob);
         var td4 = document.createElement('td');
-        td4.classList.add("border-right", "border-bottom-0", "border-right-0");
+        td4.classList.add("d-inline-block", "col-4");
         td4.innerHTML = age + ' years';
 
         tr2.appendChild(td3);
         tr2.appendChild(td4);
- 
-        tbody.appendChild(tr1);
-        tbody.appendChild(tr2);
 
-        var initialtesttable = document.createElement('table');
-        initialtesttable.classList.add("table", "table-responsive", "table-bordered");
-        initialtesttable.setAttribute('width', "100%");
+        tbody1.appendChild(tr1);
+        tbody1.appendChild(tr2);
 
-        var initialtestthead = document.createElement('thead');
+        var thead1 = document.createElement("thead");
 
         var tr6 = document.createElement('tr');
         tr6.classList.add("row", "m-0");
@@ -594,65 +602,175 @@ function populateChildren(children) {
         th1.innerHTML = "Initial Test Before Enrollment";
 
         tr6.appendChild(th1);
-        initialtestthead.appendChild(tr6);
+        thead1.appendChild(tr6);
 
-        var initialtbody = document.createElement("tbody");
+        var tbody2 = document.createElement("tbody");
 
         var tr3 = document.createElement('tr');
+        tr3.classList.add("row", "m-0");
 
         var td5 = document.createElement('td');
-        td5.setAttribute('scope', 'row');
-        td5.classList.add("border-right", "border-bottom-0");
+        td5.classList.add("d-inline-block", "col-8");
         td5.innerHTML = "Had the child been tested before enrollment?";
 
         var td6 = document.createElement('td');
-        td6.classList.add("border-right", "border-bottom-0", "border-right-0");
+        td6.classList.add("d-inline-block", "col-4");
         let wastested = "No";
         if (child.tested == 'Y') {
-            wastested == "Yes";
-        } else wastested == "No";
+            console.log("herebefore");
+            wastested = "Yes";
+        } else wastested = "No";
         td6.innerHTML = wastested;
 
         tr3.appendChild(td5);
         tr3.appendChild(td6);
 
-        var tr4 = document.createElement('tr');
+        var tr12 = document.createElement('tr');
+        tr12.classList.add("row", "m-0");
+        
+        var td17 = document.createElement('td');
+        td17.classList.add("d-inline-block", "col-8");
+        td17.innerHTML = "Date Tested";
 
+        var td18 = document.createElement('td');
+        td18.classList.add("d-inline-block", "col-4");
+        td18.innerHTML = child.date_tested;
+
+        tr12.appendChild(td17);
+        tr12.appendChild(td18);
+ 
+        var tr4 = document.createElement('tr');
+        tr4.classList.add("row", "m-0");
+        
         var td7 = document.createElement('td');
-        td7.setAttribute('scope', 'row');
-        td7.classList.add("border-right", "border-bottom-0");
+        td7.classList.add("d-inline-block", "col-8");
         td7.innerHTML = "Test Outcome";
 
         var td8 = document.createElement('td');
-        td8.classList.add("border-right", "border-bottom-0", "border-right-0");
+        td8.classList.add("d-inline-block", "col-4");
         td8.innerHTML = child.test_outcome;
 
         tr4.appendChild(td7);
         tr4.appendChild(td8);
-
+        
         var tr5 = document.createElement('tr');
+        tr5.classList.add("row", "m-0");
 
         var td9 = document.createElement('td');
-        td9.setAttribute('scope', 'row');
-        td9.classList.add("border-right", "border-bottom-0");
+        td9.classList.add("d-inline-block", "col-8");
         td9.innerHTML = "CCC Number";
 
         var td10 = document.createElement('td');
-        td10.classList.add("border-right", "border-bottom-0", "border-right-0");
+        td10.classList.add("d-inline-block", "col-4");
         td10.innerHTML = child.cccNo;
 
         tr5.appendChild(td9);
         tr5.appendChild(td10);
 
-        initialtbody.appendChild(tr3);
-        initialtbody.appendChild(tr4);
-        initialtbody.appendChild(tr5);
+        tbody2.appendChild(tr3);
+        if (child.tested == 'Y'){
+            tbody2.appendChild(tr12);
+            tbody2.appendChild(tr4);
+            tbody2.appendChild(tr5);
+        }
 
-        initialtesttable.appendChild(initialtestthead);
-        initialtesttable.appendChild(initialtbody);
+        var thead3 = document.createElement("thead");
+
+        var tr8 = document.createElement('tr');
+        tr8.classList.add("row", "m-0");
+
+        var th3 = document.createElement("th");
+        th3.classList.add("d-inline-block", "col-12", "text-center");
+        th3.innerHTML = "Follow up Test Details";
+
+        tr8.appendChild(th3);
+        thead3.appendChild(tr8);
+
+        var tbody3 = document.createElement("tbody");
+
+        var tr9 = document.createElement('tr');
+        tr9.classList.add("row", "m-0");
+
+        var td11 = document.createElement('td');
+        td11.classList.add("d-inline-block", "col-8");
+        td11.innerHTML = "Has the child come for a Follow up test?";
+
+        var td12 = document.createElement('td');
+        td12.classList.add("d-inline-block", "col-4");
+        let hastestedfollowup = "No";
+        if (child.followuptest != null) {
+            hastestedfollowup = "Yes";
+        } else hastestedfollowup = "No";
+        td12.innerHTML = hastestedfollowup;
+
+        tr9.appendChild(td11);
+        tr9.appendChild(td12);
+
+        var tr13 = document.createElement('tr');
+        tr13.classList.add("row", "m-0");
+        
+        var td19 = document.createElement('td');
+        td19.classList.add("d-inline-block", "col-8");
+        td19.innerHTML = "Date Tested";
+
+        var td20 = document.createElement('td');
+        td20.classList.add("d-inline-block", "col-4");
+        if (child.followuptest != null) {
+            td20.innerHTML = child.followuptest.date_tested;
+        }
+
+        tr13.appendChild(td19);
+        tr13.appendChild(td20);
+ 
+        var tr10 = document.createElement('tr');
+        tr10.classList.add("row", "m-0");
+        
+        var td13 = document.createElement('td');
+        td13.classList.add("d-inline-block", "col-8");
+        td13.innerHTML = "Test Outcome";
+
+        var td14 = document.createElement('td');
+        td14.classList.add("d-inline-block", "col-4");
+        if (child.followuptest != null) {
+            td14.innerHTML = child.followuptest.test_outcome;
+        }
+
+        tr10.appendChild(td13);
+        tr10.appendChild(td14);
+        
+        var tr11 = document.createElement('tr');
+        tr11.classList.add("row", "m-0");
+
+        var td15 = document.createElement('td');
+        td15.classList.add("d-inline-block", "col-8");
+        td15.innerHTML = "CCC Number";
+
+        var td16 = document.createElement('td');
+        td16.classList.add("d-inline-block", "col-4");
+        if (child.followuptest != null) {
+            td16.innerHTML = child.followuptest.cccNo;
+        }
+
+        tr11.appendChild(td15);
+        tr11.appendChild(td16);
+
+        tbody3.appendChild(tr9);
+        if (child.followuptest != null) {
+            tbody3.appendChild(tr13);
+            tbody3.appendChild(tr10);
+            tbody3.appendChild(tr11);
+        }
+
+        table.appendChild(thead2);
+        table.appendChild(tbody1);
+        table.appendChild(thead1);
+        table.appendChild(tbody2);
+        if (child.tested == 'N') {
+            table.appendChild(thead3);
+            table.appendChild(tbody3);
+        }
 
         divcol.appendChild(table);
-        divcol.appendChild(initialtesttable);
         rowdiv.appendChild(divcol);
 
         var buttondiv = document.createElement('div');
@@ -664,7 +782,7 @@ function populateChildren(children) {
         testbtn.setAttribute("data-target", "#ChildTestDialog");
         testbtn.setAttribute("id", "testbutton"+ itemid);
         testbtn.innerHTML = 'Test Details';
-        if (child.tested == 'Y') {
+        if ((child.tested == 'Y') || (child.tested == 'N' && child.followuptest != null)) {
             testbtn.setAttribute('disabled', 'disabled');
         }
         testbtn.addEventListener('click', () => funTestChild(child));
