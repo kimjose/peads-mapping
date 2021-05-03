@@ -13,6 +13,7 @@ const patientsearchresult = document.getElementById('patientsearchresult')
 const indexclientdetails = document.getElementById('indexclientdetails');
 const savePatientBtn = document.getElementById('savePatientBtn');
 var userObject;
+const usernametxt = document.getElementById("usernametxt");
 
 //patientdetails
 const clientcccno = document.getElementById('clientcccno');
@@ -313,6 +314,7 @@ function initialize(){
     }
     var loggedinuser = JSON.parse(userObject);
     console.log(loggedinuser);
+    usernametxt.innerHTML = loggedinuser.names;
 
     $.ajax({
         type: "GET",

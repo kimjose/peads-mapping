@@ -328,7 +328,7 @@ try {
         $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
         if ($patient == null) throw new Exception("Patient not found", 404);
         $user = $_SESSION['user'];
-        $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $loggedUser->id)->where('deleted', 0)->firstOrFail();
+        // $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $loggedUser->id)->where('deleted', 0)->firstOrFail();
         $facility = Facility::where('mfl_code', $patient->facility)->first();
         $patient['facilityData'] = $facility;
         $data = [];
