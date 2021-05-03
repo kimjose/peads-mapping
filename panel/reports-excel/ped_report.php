@@ -1,5 +1,5 @@
 <?php
-//Pesiatric report with box/spout
+//Pediatric report with box/spout
 //ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
 ini_set('max_execution_time', '0');//Unlimited execution time
 require_once __DIR__ . "/../../models/User.php";
@@ -8,8 +8,6 @@ require_once __DIR__ . "/../../models/AssignedFacility.php";
 require_once __DIR__ . "/../../models/Patient.php";
 require_once __DIR__ . "/../../models/Observation.php";
 require_once __DIR__ . "/../functions.php";
-
-
 
 require_once "../../auth.php";
 
