@@ -35,9 +35,9 @@ try {
         $children = ChildrenLinelist::all();
         foreach ($children as $child) {
             $pData = [];
-            $indexclient = IndexClientLinelist::where("cccNo", $child->indexCCC)->firstOrFail();
+            $indexclient = IndexClientLinelist::where("cccNo", $child->indexCCC)->first();
             $pData['mflcode'] = $indexclient->facility;
-            $facility = Facility::where('mfl_code', $indexclient->facility);
+            $facility = Facility::where('mfl_code', $indexclient->facility)->first();
             $pData['facilityname'] = $facility->name;
             $pData['county'] = $facility->county;
             $pData['indexCCC'] = $child->indexCCC;
@@ -52,7 +52,7 @@ try {
             $pData['initialtestoutcome'] = $child->test_outcome;
             $pData['initialchildccc'] = $child->cccNo;
 
-            $followuptest = ChildTestResults::where('childId', $child->id)->firstOrFail();
+            $followuptest = ChildTestResults::where('childId', $child->id)->first();
             $pData['followuptested'] = $followuptest->tested;
             $pData['followupdatetested'] = $followuptest->date_tested;
             $pData['followuptestoutcome'] = $followuptest->test_outcome;
@@ -107,23 +107,23 @@ try {
 
     foreach ($data as $datum) {
         $rowCells = [
-            WriterEntityFactory::createCell($datum->mflcode),
-            WriterEntityFactory::createCell($datum->facilityname),
-            WriterEntityFactory::createCell($datum->county),
-            WriterEntityFactory::createCell($datum->indexCCC),
-            WriterEntityFactory::createCell($datum->indexInitials),
-            WriterEntityFactory::createCell($datum->dateindextested),
-            WriterEntityFactory::createCell($datum->childinitials),
-            WriterEntityFactory::createCell($datum->datechildlisted),
-            WriterEntityFactory::createCell($datum->childage),
-            WriterEntityFactory::createCell($datum->initialtested),
-            WriterEntityFactory::createCell($datum->initialdatetested),
-            WriterEntityFactory::createCell($datum->initialtestoutcome),
-            WriterEntityFactory::createCell($datum->initialchildccc),
-            WriterEntityFactory::createCell($datum->followuptested),
-            WriterEntityFactory::createCell($datum->followupdatetested),
-            WriterEntityFactory::createCell($datum->followuptestoutcome),
-            WriterEntityFactory::createCell($datum->followupchildccc),
+            WriterEntityFactory::createCell($datum['mflcode']),
+            WriterEntityFactory::createCell($datum['facilityname']),
+            WriterEntityFactory::createCell($datum['county']),
+            WriterEntityFactory::createCell($datum['indexCCC']),
+            WriterEntityFactory::createCell($datum['indexInitials']),
+            WriterEntityFactory::createCell($datum['dateindextested']),
+            WriterEntityFactory::createCell($datum['childinitials']),
+            WriterEntityFactory::createCell($datum['datechildlisted']),
+            WriterEntityFactory::createCell($datum['childage']),
+            WriterEntityFactory::createCell($datum['initialtested']),
+            WriterEntityFactory::createCell($datum['initialdatetested']),
+            WriterEntityFactory::createCell($datum['initialtestoutcome']),
+            WriterEntityFactory::createCell($datum['initialchildccc']),
+            WriterEntityFactory::createCell($datum['followuptested']),
+            WriterEntityFactory::createCell($datum['followupdatetested']),
+            WriterEntityFactory::createCell($datum['followuptestoutcome']),
+            WriterEntityFactory::createCell($datum['followupchildccc']),
         ];
         try {
             $writer->addRow(WriterEntityFactory::createRow($rowCells, $normalRowStyle));
