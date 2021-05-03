@@ -60,9 +60,11 @@ const savechildtestbtn = document.getElementById('savechildtestbtn');
 initialize();
 
 childTestedSelect.addEventListener('click', () => initialchildTestOptionChanged());
-linkedSelect.addEventListener('click', () => initialTestOutcomeOptionChanged());
+testOutcomeSelect.addEventListener('click', () => initialTestOutcomeOptionChanged());
+linkedSelect.addEventListener('click', () => initialLinkedOptionChanged());
 
 childTestedSelect2.addEventListener('click', () => otherchildTestOptionChanged());
+testOutcomeSelect2.addEventListener('click', () => otherTestOutcomeOptionChanged());
 linkedSelect2.addEventListener('click', () => otherTestOutcomeOptionChanged());
 
 savePatientBtn.addEventListener('click', () => {
@@ -913,17 +915,20 @@ function initialchildTestOptionChanged() {
 
 function initialTestOutcomeOptionChanged() {
     var selectedValue =
-        linkedSelect.options[linkedSelect.selectedIndex].value;
-    var initialoutcomeFields = document.querySelectorAll(".initialoutcomeclass");
-    if (selectedValue == "Y") {
-        //if (disableOptions) ovcenrolledSelect.disabled = true;
-        initialoutcomeFields.forEach((initialoutcomeField) => {
-            initialoutcomeField.removeAttribute("disabled");
-        });
+    testOutcomeSelect.options[testOutcomeSelect.selectedIndex].value;
+    if (selectedValue == "Positive") {
+        linkedSelect.removeAttribute("disabled");
     } else {
-        initialoutcomeFields.forEach((initialoutcomeField) => {
-            initialoutcomeField.setAttribute("disabled", "");
-        });
+        linkedSelect.setAttribute("disabled", "");
+    }
+}
+function initialLinkedOptionChanged() {
+    var selectedValue =
+        linkedSelect.options[linkedSelect.selectedIndex].value;
+    if (selectedValue == "Y") {
+        childcccnoinput.disabled = false;
+    } else {
+        childcccnoinput.disabled = true;
     }
 }
 function otherchildTestOptionChanged() {
@@ -943,15 +948,19 @@ function otherchildTestOptionChanged() {
 
 function otherTestOutcomeOptionChanged() {
     var selectedValue =
-        linkedSelect2.options[linkedSelect2.selectedIndex].value;
-    var otheroutcomeFields = document.querySelectorAll(".otheroutcomeclass");
-    if (selectedValue == "Y") {
-        otheroutcomeFields.forEach((otheroutcomeField) => {
-            otheroutcomeField.removeAttribute("disabled");
-        });
+    testOutcomeSelect2.options[testOutcomeSelect2.selectedIndex].value;
+    if (selectedValue == "Positive") {
+        linkedSelect2.removeAttribute("disabled");
     } else {
-        otheroutcomeFields.forEach((otheroutcomeField) => {
-            otheroutcomeField.setAttribute("disabled", "");
-        });
+        linkedSelect2.setAttribute("disabled", "");
+    }
+}
+function otherLinkedOptionChanged() {
+    var selectedValue =
+        linkedSelect2.options[linkedSelect2.selectedIndex].value;
+    if (selectedValue == "Y") {
+        childcccnoinput2.disabled = false;
+    } else {
+        childcccnoinput2.disabled = true;
     }
 }
