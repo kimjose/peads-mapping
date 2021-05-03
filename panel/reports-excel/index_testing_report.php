@@ -35,28 +35,43 @@ try {
         $children = ChildrenLinelist::all();
         foreach ($children as $child) {
             $pData = [];
-            $indexclient = IndexClientLinelist::where("cccNo", $child->indexCCC)->firstOrFail();
+            $indexclient = IndexClientLinelist::where("cccNo", $child->indexCCC)->first();
+            if($indexclient == null) throw new Exception("No query result " . $child->indexCCC, 1);
+            
             $pData['mflcode'] = $indexclient->facility;
-            $facility = Facility::where('mfl_code', $indexclient->facility);
+            $facility = Facility::where('mfl_code', $indexclient->facility)->firstOrFail();
             $pData['facilityname'] = $facility->name;
             $pData['county'] = $facility->county;
             $pData['indexCCC'] = $child->indexCCC;
             $pData['indexInitials'] = $indexclient->names;
             $pData['dateindextested'] = $indexclient->date_tested;
+            $pData['dateindexlinelisted'] = $indexclient->date_listed;
+            $pData['dateindexenrolledtocare'] = $indexclient->dateEnrolledToCare;
+            $pData['indexcurrentstatus'] = $indexclient->currentStatus;
             $pData['childinitials'] = $child->names;
             $pData['datechildlisted'] = $child->date_listed;
             $age = getPatientAge($child->dob);
-            $pData['childage'] = $age . ' years';
+            $pData['childage'] = $age;
             $pData['initialtested'] = $child->tested;
             $pData['initialdatetested'] = $child->date_tested;
             $pData['initialtestoutcome'] = $child->test_outcome;
+            $pData['initialislinked'] = $child->islinked;
             $pData['initialchildccc'] = $child->cccNo;
 
-            $followuptest = ChildTestResults::where('childId', $child->id)->firstOrFail();
-            $pData['followuptested'] = $followuptest->tested;
-            $pData['followupdatetested'] = $followuptest->date_tested;
-            $pData['followuptestoutcome'] = $followuptest->test_outcome;
-            $pData['followupchildccc'] = $followuptest->cccNo;
+            $followuptest = ChildTestResults::where('childId', $child->id)->first();
+            if ($followuptest != null) {
+                $pData['followuptested'] = $followuptest->tested;
+                $pData['followupdatetested'] = $followuptest->date_tested;
+                $pData['followuptestoutcome'] = $followuptest->test_outcome;
+                $pData['followupislinked'] = $followuptest->islinked;
+                $pData['followupchildccc'] = $followuptest->cccNo;
+            } else {
+                $pData['followuptested'] = '';
+                $pData['followupdatetested'] = '';
+                $pData['followuptestoutcome'] = '';
+                $pData['followupislinked'] = '';
+                $pData['followupchildccc'] = '';
+            }
             
             array_push($data, $pData);
             
@@ -72,33 +87,39 @@ try {
         ->setFontBold()
         ->setFontSize(12)
         ->setFontUnderline()
+        ->setShouldWrapText()
         ->setCellAlignment(\Box\Spout\Common\Entity\Style\CellAlignment::CENTER)
         ->build();
 
     $normalRowStyle = (new \Box\Spout\Writer\Common\Creator\Style\StyleBuilder())
         ->setFontSize(10)
         ->setCellAlignment(\Box\Spout\Common\Entity\Style\CellAlignment::CENTER)
+        ->setShouldWrapText()
         ->build();
 
     $headerCells = [
 
         WriterEntityFactory::createCell("MFL Code"),
         WriterEntityFactory::createCell("Facility Name"),
-        WriterEntityFactory::createCell("Facility Name"),
         WriterEntityFactory::createCell("County"),
         WriterEntityFactory::createCell("Index Client CCCNO"),
         WriterEntityFactory::createCell("Index Client Initials"),
-        WriterEntityFactory::createCell("Date index tested"),
+        WriterEntityFactory::createCell("Date index confirmed HIV Positive"),
+        WriterEntityFactory::createCell("Date index Linelisted"),
+        WriterEntityFactory::createCell("Date index Enrolled into HIV care"),
+        WriterEntityFactory::createCell("Index Client Current Status"),
         WriterEntityFactory::createCell("Listed Child Initials"),
         WriterEntityFactory::createCell("Date child listed"),
         WriterEntityFactory::createCell("Age of Child"),
         WriterEntityFactory::createCell("Child tested before enrollment"),
         WriterEntityFactory::createCell("Date child tested before enrollment"),
         WriterEntityFactory::createCell("Testing Outcome before enrollment"),
+        WriterEntityFactory::createCell("Was Linked before enrollment"),
         WriterEntityFactory::createCell("CCC Number"),
         WriterEntityFactory::createCell("Child had a follow-up test"),
         WriterEntityFactory::createCell("Date child had a follow-up test"),
-        WriterEntityFactory::createCell("Follow-up Test Outcome"),
+        WriterEntityFactory::createCell("Testing Outcome before enrollment"),
+        WriterEntityFactory::createCell("Follow-up was linked"),
         WriterEntityFactory::createCell("CCC Number")
     ];
     $headerRow = WriterEntityFactory::createRow($headerCells, $boldRowStyle);
@@ -107,23 +128,28 @@ try {
 
     foreach ($data as $datum) {
         $rowCells = [
-            WriterEntityFactory::createCell($datum->mflcode),
-            WriterEntityFactory::createCell($datum->facilityname),
-            WriterEntityFactory::createCell($datum->county),
-            WriterEntityFactory::createCell($datum->indexCCC),
-            WriterEntityFactory::createCell($datum->indexInitials),
-            WriterEntityFactory::createCell($datum->dateindextested),
-            WriterEntityFactory::createCell($datum->childinitials),
-            WriterEntityFactory::createCell($datum->datechildlisted),
-            WriterEntityFactory::createCell($datum->childage),
-            WriterEntityFactory::createCell($datum->initialtested),
-            WriterEntityFactory::createCell($datum->initialdatetested),
-            WriterEntityFactory::createCell($datum->initialtestoutcome),
-            WriterEntityFactory::createCell($datum->initialchildccc),
-            WriterEntityFactory::createCell($datum->followuptested),
-            WriterEntityFactory::createCell($datum->followupdatetested),
-            WriterEntityFactory::createCell($datum->followuptestoutcome),
-            WriterEntityFactory::createCell($datum->followupchildccc),
+            WriterEntityFactory::createCell($datum['mflcode']),
+            WriterEntityFactory::createCell($datum['facilityname']),
+            WriterEntityFactory::createCell($datum['county']),
+            WriterEntityFactory::createCell($datum['indexCCC']),
+            WriterEntityFactory::createCell($datum['indexInitials']),
+            WriterEntityFactory::createCell($datum['dateindextested']),
+            WriterEntityFactory::createCell($datum['dateindexlinelisted']),
+            WriterEntityFactory::createCell($datum['dateindexenrolledtocare']),
+            WriterEntityFactory::createCell($datum['indexcurrentstatus']),
+            WriterEntityFactory::createCell($datum['childinitials']),
+            WriterEntityFactory::createCell($datum['datechildlisted']),
+            WriterEntityFactory::createCell($datum['childage']),
+            WriterEntityFactory::createCell($datum['initialtested']),
+            WriterEntityFactory::createCell($datum['initialdatetested']),
+            WriterEntityFactory::createCell($datum['initialtestoutcome']),
+            WriterEntityFactory::createCell($datum['initialislinked']),
+            WriterEntityFactory::createCell($datum['initialchildccc']),
+            WriterEntityFactory::createCell($datum['followuptested']),
+            WriterEntityFactory::createCell($datum['followupdatetested']),
+            WriterEntityFactory::createCell($datum['followuptestoutcome']),
+            WriterEntityFactory::createCell($datum['followupislinked']),
+            WriterEntityFactory::createCell($datum['followupchildccc']),
         ];
         try {
             $writer->addRow(WriterEntityFactory::createRow($rowCells, $normalRowStyle));
