@@ -31,7 +31,7 @@ var patientid = 0;
 const linkchildform = document.getElementById('linkchildform');
 const indexclientsearch = document.getElementById('indexclientsearch');
 const btnSearchClient = document.getElementById('btnSearchClient');
-
+const editPatientBtn = document.getElementById('editPatientBtn');
 
 //link child modal
 const labelChildID = document.getElementById('labelChildID');
@@ -71,6 +71,10 @@ linkedSelect2.addEventListener('click', () => otherTestOutcomeOptionChanged());
 savePatientBtn.addEventListener('click', () => {
     savePatient();
 });
+
+// editPatientBtn.addEventListener('click', () => {
+//     console.log(patientid);
+// })
 
 btnSearchClient.addEventListener('click', () => {
 
@@ -501,11 +505,29 @@ function populatepatientdate(patient) {
     dateclientenrolleddisplay.innerHTML = patient.dateEnrolledToCare;
     indexclientstatusdisplay.innerHTML = patient.currentStatus;
 
+    let editindexdetails = document.createElement('button');
+    editindexdetails.classList.add('btn', 'btn-primary', 'ml-4');
+    editindexdetails.setAttribute("data-toggle", "modal");
+    editindexdetails.setAttribute('data-target', "#addPatientDialog");
+    editindexdetails.innerHTML = 'Edit Index Client Details';
+    editindexdetails.addEventListener('click', () => editIndexClient(patient));
+
     indexclientdetails.classList.remove('d-none');
+    indexclientdetails.appendChild(editindexdetails);
     $('#addChildBtn').removeAttr('disabled');
     $('#childrenlistedcard').empty();
 
     populateChildren(children);
+}
+
+function editIndexClient(patient) {
+    cccNoDialogInput.value = patient.cccNo;
+    clientnames.value = patient.names;
+    dateclienttestedinput.value = patient.date_tested;
+    $('#facilityDialogSelect').val(patient.facility.mfl_code);
+    dateclientlistedinput.value = patient.date_listed;
+    dateclientenrolledinput.value = patient.dateEnrolledToCare;
+    $('#clientstatusSelect').val(patient.currentStatus);
 }
 
 function populateChildren(children) {
