@@ -511,7 +511,7 @@ try {
             echo myJsonResponse(400, "Child not listed.");
         }
 
-    } else if ($request='add_child_test_results') {
+    } else if ($request =='add_child_test_results') {
         try {
             $patientid = $_POST['patientid'];
             $id = $_POST['childid'];
