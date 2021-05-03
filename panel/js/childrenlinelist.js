@@ -858,8 +858,8 @@ function funTestChild(child) {
 }
 
 function funUnlinkChild(id) {
-    var r = confirm("Are you sure you want to Unlink this child?");
-    if (r == true) {
+    let del = confirm("Are you sure you want to Unlink this child?");
+    if (del == true) {
         $.ajax({
             type: "POST",
             url: "datascript?request=unlink_child",
