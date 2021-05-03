@@ -151,8 +151,8 @@
                                     <p class="text-center">Generate a report of all the index client and their linelisted children</p>
                                     <br/>
                                     
-                                    <a href="reports-excel/ped_report" id="generatelinelistreport"
-                                        class="btn btn-primary btn-block" onclick="" disabled>Download in Excel format</a>
+                                    <a href="reports-excel/index_testing_report.php" id="generatelinelistreport"
+                                        class="btn btn-primary btn-block" onclick="">Download in Excel format</a>
                                 </div>
                             </div>
                         </div>
@@ -196,6 +196,16 @@
 
     <!-- Page level custom scripts -->
     <!-- <script src="js/reports.js"></script> -->
+    <script>
+        const usernametxt = document.getElementById("usernametxt");
+        let userObject = sessionStorage.getItem("user");
+        if (userObject == null) {
+            window.location.replace("login.html");
+        }
+
+        var loggedinuser = JSON.parse(userObject);
+        usernametxt.innerHTML = loggedinuser.names;
+    </script>
 
 </body>
 
