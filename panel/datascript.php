@@ -10,6 +10,11 @@ require_once "../models/Facility.php";
 require_once __DIR__ . "/../models/Patient.php";
 require_once __DIR__ . "/../models/Facility.php";
 require_once __DIR__ . "/../models/AssignedFacility.php";
+require_once __DIR__ . "/../models/Permissions.php";
+require_once __DIR__ . "/../models/UserCategory.php";
+require_once __DIR__ . "/../models/ChildrenLinelist.php";
+require_once __DIR__ . "/../models/IndexClientLinelist.php";
+require_once __DIR__ . "/../models/ChildTestResults.php";
 
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -18,25 +23,27 @@ $response = [];
 
 try {
     if ($request == "get_otz_modules") {
+        require_once __DIR__ . "/../auth.php";
         require_once "../models/OTZModules.php";
         $modules = OTZModules::all();
         echo myJsonResponse(200, "Modules retrieved", $modules);
     } elseif ($request == "submit_form") {
-        $userId = $_POST['userId'];
+        require_once __DIR__ . "/../auth.php";
+        $userId = $loggedUser->id;
         $mflCode = $_POST['mflCode'];
         $weight = $_POST['weight'];
         $PAMAStatus6 = $_POST['PAMAStatus6'];
         $PAMAStatus12 = $_POST['PAMAStatus12'];
         $PAMAStatus24 = $_POST['PAMAStatus24'];
         $PAMAStatusCurrent = $_POST['PAMAStatusCurrent'];
-        $PAMAStatusTransition = $_POST['PAMAStatusTransition'];
         $dateDiscontinuedFromPAMA = $_POST['dateDiscontinuedFromPAMA'];
         $comment = $_POST['comment'];
-
 
         $dateDiscontinuedFromOTZ = $_POST['dateDiscontinuedFromOTZ'];
         $enrolledInPAMA = $_POST['enrolledInPAMA'];
         $dateEnrolledInPAMA = $_POST['dateEnrolledInPAMA'];
+        $pamaVLCopies = $_POST['pamaVLCopies'];
+        $baselinePamaVlDate = $_POST['baselinePamaVlDate'];
         $caregiverInSameFacility = $_POST['caregiverInSameFacility'];
         $caregiverType = $_POST['caregiverType'];
         $caregiver1CCC = $_POST['caregiver1CCC'];
@@ -86,6 +93,14 @@ try {
         $schooling = $_POST['schooling'];
         $statusAtTransition = $_POST['statusAtTransition'];
         $enrolledInOVC = $_POST['enrolledInOVC'];
+        $enrolledInVDOT = $_POST['enrolledInVDOT'];
+        $vdotUserMode = $_POST['vdotUserMode'];
+        $dateEnrolledInVDOT = $_POST['dateEnrolledInVDOT'];
+        $dateDiscontinuedFromVDOT = $_POST['dateDiscontinuedFromVDOT'];
+        $enrolledInADOT = $_POST['enrolledInADOT'];
+        $followUpPersonnel = $_POST['followUpPersonnel'];
+        $dateEnrolledInADOT = $_POST['dateEnrolledInADOT'];
+        $dateDiscontinuedFromADOT = $_POST['dateDiscontinuedFromADOT'];
 
 
         Observation::create([
@@ -109,18 +124,27 @@ try {
             'lastAttendDate' => $lastAttendDate, 'nextAppointmentDate' => $nextAppointmentDate,
             'ArtAdherenceAssessment' => $ArtAdherenceAssessment, 'completedOTZModules' => $completedOTZModules, 'statusAtOTZTransition' => $statusAtOTZTransition,
             'dateDiscontinuedFromOTZ' => $dateDiscontinuedFromOTZ, 'enrolledInPAMA' => $enrolledInPAMA,
-            'dateEnrolledInPAMA' => $dateEnrolledInPAMA, 'caregiverInSameFacility' => $caregiverInSameFacility,
-            'caregiverType' => $caregiverType, 'caregiver1CCC' => $caregiver1CCC,
+            'dateEnrolledInPAMA' => $dateEnrolledInPAMA,'pamaVLCopies' =>$pamaVLCopies, 'baselinePamaVlDate'=>$baselinePamaVlDate,
+            'caregiverInSameFacility' => $caregiverInSameFacility,'caregiverType' => $caregiverType, 'caregiver1CCC' => $caregiver1CCC,
             'caregiver2CCC' => $caregiver2CCC, 'caregiver1VL' => $caregiver1VL, 'caregiver1VLDate' => $caregiver1VLDate,
             'caregiver2VL' => $caregiver2VL, 'caregiver2VLDate' => $caregiver2VLDate,
             'caregiver1VLStatus' => $caregiver1VLStatus, 'PAMAStatus3' => $PAMAStatus3,
             'PAMAStatus6' => $PAMAStatus6, 'PAMAStatus12' => $PAMAStatus12, 'PAMAStatus24' => $PAMAStatus24,
-            'PAMAStatusCurrent' => $PAMAStatusCurrent, 'PAMAStatusTransition' => $PAMAStatusTransition,
-            'dateDiscontinuedFromPAMA' => $dateDiscontinuedFromPAMA, 'comment' => $comment
+            'PAMAStatusCurrent' => $PAMAStatusCurrent,
+            'dateDiscontinuedFromPAMA' => $dateDiscontinuedFromPAMA, 
+            'enrolledInVDOT'=>$enrolledInVDOT, 'dateEnrolledInVDOT'=>$dateEnrolledInVDOT, 'vdotUserMode'=>$vdotUserMode,
+            'dateDiscontinuedFromVDOT'=>$dateDiscontinuedFromVDOT,'enrolledInADOT'=>$enrolledInADOT, 'dateEnrolledInADOT'=>$dateEnrolledInADOT, 
+            'followUpPersonnel'=>$followUpPersonnel, 'dateDiscontinuedFromADOT'=>$dateDiscontinuedFromADOT, 'comment' => $comment
         ]);
     } else if ($request == "get_users") {
         $users = User::all();
         foreach ($users as $user) {
+            $facilities = AssignedFacility::where('userID', $user->id)->get();
+            $user['noOfFacilities'] = sizeof($facilities);
+            $usercategory = UserCategory::findOrFail($user->usercategory);
+            $permlist = $usercategory->permissions;
+            $list = json_decode($permlist);
+            $user['permissions'] = $list;
             $cadre = Cadre::findOrFail($user->cadre);
             $user['cadreName'] = $cadre->name;
         }
@@ -185,7 +209,7 @@ try {
         $facility = $_POST['facility'];
         $county = $_POST['county'];
         $sex = $_POST['sex'];
-        $dob = $_POST['dob'];
+        $dob = $_POST['dateOfBirth'];
         $dohd = $_POST['dohd'];
         $dec = $_POST['dec'];
         $startRegimen = $_POST['startRegimen'];
@@ -194,10 +218,7 @@ try {
         $newpatient = $_POST['newpatient'];
 
         if ($cccNo != null && $cccNo != "") {
-
-            if ($newpatient == false) {
-
-                $patient = Patient::where('cccNo', $cccNo)->first();
+                $patient = Patient::where('cccNo', $cccNo)->where('transferred_out', 0)->first();
                 $patient->cccNo = $cccNo;
                 $patient->facility = $facility;
                 $patient->county = $county;
@@ -209,41 +230,28 @@ try {
                 $patient->startRegimen = $startRegimen;
                 $patient->startKaletraFormulation = $startkaletra;
                 $patient->save();
-            } else {
-                Patient::create([
-                    "cccNo" => $cccNo,
-                    "facility" => $facility,
-                    "county" => $county,
-                    "sex" => $sex,
-                    "dob" => $dob,
-                    "date_of_hiv_diagnosis" => $dohd,
-                    "date_enrolled" => $dec,
-                    "dateStartedART" => $dsa,
-                    "startRegimen" => $startRegimen,
-                    "startKaletraFormulation" => $startkaletra
-
-                ]);
-            }
         } else {
             echo "Enter Patient CCC Number";
         }
 
-        $patients = Patient::all();
+        $patient = Patient::where('cccNo', $cccNo)->first();
 
-        echo myJsonResponse(200, 'Patients Retrieved', $patients);
-
+        echo myJsonResponse(200, 'Patient Saved', $patient);
     } elseif ($request == "get_cadres") {
         $cadres = Cadre::all();
         echo myJsonResponse(200, "Cadres retrieved", $cadres);
     } elseif ($request == "get_facilities") {
-        require_once "../models/Facility.php";
-        session_start();
-        $user = $_SESSION['user'];
-        $assignedFacilities = AssignedFacility::where('userID', $user['id'])->get();
-        $facilities = [];
-        foreach ($assignedFacilities as $assignedFacility) {
-            $facility = Facility::where('mfl_code', $assignedFacility->facility)->firstOrFail();
-            array_push($facilities, $facility);
+        require_once "../auth.php";
+        $permissionlist = $user->permissions;
+        if (in_array("3", $permissionlist)) {
+            $facilities = Facility::all();
+        } else {
+            $assignedFacilities = AssignedFacility::where('userID', $loggedUser->id)->get();
+            $facilities = [];
+            foreach ($assignedFacilities as $assignedFacility) {
+                $facility = Facility::where('mfl_code', $assignedFacility->facility)->firstOrFail();
+                array_push($facilities, $facility);
+            }
         }
         echo myJsonResponse(200, "Facilities retrieved", $facilities);
     } elseif ($request == "get_transfer_patient") {
@@ -280,7 +288,7 @@ try {
                 echo myJsonResponse(200, "Patient added successfully");
             }
         } else {
-            print_r($patientData);
+            // print_r($patientData);
             $patient = Patient::create($patientData);
             echo myJsonResponse(200, "Patient added successfully +" . $patient);
         }
@@ -300,8 +308,16 @@ try {
         if (password_verify($password, $user->password)) {
             $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
+            $usercategory = UserCategory::findOrFail($user->usercategory);
+            $user['userCategoryName'] = $usercategory->name;
+            $cadre = Cadre::findOrFail($user->cadre);
+            $user['cadreName'] = $cadre->name;
+            $permlist = $usercategory->permissions;
+            $list = json_decode($permlist);
+            $user['permissions'] = $list;
             session_start();
-            $_SESSION['user'] = $user;
+            $user['p'] = 'p';
+            $_SESSION['user'] = serialize($user);
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
     } elseif ($request == "get_facility_patients") {
@@ -313,18 +329,19 @@ try {
         }
         echo myJsonResponse(200, 'Patients', $patients);
     } elseif ($request == "load_prev_obs") {
-        session_start();
-        $user = $_SESSION['user'];
+        // session_start();
+        // $user = $_SESSION['user'];
+        require_once "../auth.php";
         $cccNo = $_GET['cccNo'];
         $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
         if ($patient == null) throw new Exception("Patient not found", 404);
         $user = $_SESSION['user'];
-        $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $user['id'])->where('deleted', 0)->firstOrFail();
+        $assignedFacility = AssignedFacility::where('facility', $patient->facility)->where('userID', $loggedUser->id)->where('deleted', 0)->firstOrFail();
         $facility = Facility::where('mfl_code', $patient->facility)->first();
         $patient['facilityData'] = $facility;
         $data = [];
         $data['patient'] = $patient;
-        $observation = Observation::where('patientCCC', $patient->cccNo)->orderBy('id', 'desc')->first();
+        $observation = Observation::where('patientCCC', $patient->cccNo)->where('mflCode', $patient->facility)->orderBy('id', 'desc')->first();
         if ($observation == null) {
             echo myJsonResponse(201, "No Observation", $data);
         } else {
@@ -337,12 +354,257 @@ try {
     } else if ($request == "get_last_vls") {
         require_once "../models/LastVL.php";
         $calcccno = $_GET["cccNo"];
-        $data = LastVL::where('cccCALHIV', $calcccno)->get();
+        $data = [];
+        $caldata = LastVL::where('cccCALHIV', $calcccno)->where('type', 'cal')->orderBy('vlDate', 'desc')->first();
+        array_push($data, $caldata);
+        $motherdata = LastVL::where('cccCALHIV', $calcccno)->where('type', 'mother')->orderBy('vlDate', 'desc')->first();
+        array_push($data, $motherdata);
+        $fatherdata = LastVL::where('cccCALHIV', $calcccno)->where('type', 'father')->orderBy('vlDate', 'desc')->first();
+        array_push($data, $fatherdata);
+        $guardiandata = LastVL::where('cccCALHIV', $calcccno)->where('type', 'guardian')->orderBy('vlDate', 'desc')->first();
+        array_push($data, $guardiandata);
         echo myJsonResponse(200, "Data retrieved", $data);
+    } else if ($request == 'get_user_categories') { 
+        
+        $categories = getUserCategories();
+        echo myJsonResponse(200, "Here are the user categories", $categories);
+        
+    } else if ($request == 'get_permissions') {
+        $permissions = Permissions::all();
+        echo myJsonResponse(200, "Permissions retrieved", $permissions);
+    } else if ($request == 'save_user_category') {
+        try {
+            $id = $cadreData['roleid'];
+            $name = $cadreData['name'];
+            $description = $cadreData['description'];
+            $permissions = $cadreData['permissions'];
+            if (isset($id) && $id != 0){
+                $usercategory = UserCategory::findOrFail($id);
+                $usercategory->name = $name;
+                $usercategory->description = $description;
+                $usercategory->permissions = $permissions;
+                $usercategory->save();
+            } else {
+                $usercategory = UserCategory::create([
+                    "name" => $name,
+                    "description" => $description,
+                    "permissions" => json_encode($permissions),
+                    "created_by" => $this->loggedUser->id
+                ]);
+            }
+            $usercategories =getUserCategories();
+            echo myJsonResponse(200, "Here are the user categories", $usercategories);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Unable to save user data.");
+        }
+    } else if ($request == 'save_index_client') {
+        try {
+            $cccNo = trim($_POST['clientccc']);
+            $names = $_POST['clientname'];
+            $datetested = $_POST['dateclienttested'];
+            $facility = $_POST['facility'];
+            $date_listed = $_POST['date_listed'];
+            $dateEnrolledToCare = $_POST['dateEnrolledToCare'];
+            $currentStatus = $_POST['currentStatus'];
+
+            $indexclient = IndexClientLinelist::create([
+                'cccNo' => $cccNo,
+                'names' => $names,
+                'facility' => $facility,
+                'date_tested' => $datetested,
+                'date_listed' => $date_listed,
+                'dateEnrolledToCare' => $dateEnrolledToCare,
+                'currentStatus' => $currentStatus
+            ]);
+
+            echo myJsonResponse(200, "Patient created", $indexclient);
+
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Unable to save patient.");
+        }
+    } else if ($request == 'get_index_client') {
+        try {
+            $indexccc = $_GET["indexccc"];
+            $indexname = $_GET['indexname'];
+            $patients = [];
+            if ($indexccc != 0) {
+                $patientbyccc = IndexClientLinelist::where('cccNo', $indexccc)->first();
+                if ($patientbyccc == null) {
+                    echo myJsonResponse(201, "Index client not found.");
+                    return;
+                } else {
+                    array_push($patients, $patientbyccc);
+                }
+            } else {
+                $patients = IndexClientLinelist::where('names', 'LIKE' ,$indexname.'%')->get();
+                if (sizeof($patients) == 0) {
+                    echo myJsonResponse(201, "Index client not found.");
+                    return;
+                }
+            }
+            foreach ($patients as $patient) {
+                $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
+                $children = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+                foreach ($children as $child) {
+                    $followuptest = ChildTestResults::where("childId", $child->id)->first();
+                    $child['followuptest'] = $followuptest;
+                }
+                $patient['children'] = $children;
+                
+            }
+            echo myJsonResponse(200, 'Index client found', $patients);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Index client not found.");
+        }
+
+    } else if ($request == 'link_child') {
+        try {
+            $id = $_POST['childid'];
+            $names = $_POST['childnames'];
+            $patientid = $_POST['patientid'];
+            $date_listed = $_POST['datelisted'];
+            $dob = $_POST['dob'];
+            $tested = $_POST['childtested'];
+            $date_tested = $_POST['datetested'];
+            $test_outcome = $_POST['testoutcome'];
+            $islinked = $_POST['islinked'];
+            $cccNo = $_POST['childcccno'];
+
+            $indexclient = IndexClientLinelist::findOrFail($patientid);
+            $indexCCC = $indexclient->cccNo;
+
+            if ($id == null || $id == '') {
+                ChildrenLinelist::create([
+                    'names' => $names,
+                    'indexCCC' => $indexCCC,
+                    'date_listed' => $date_listed,
+                    'dob' => $dob,
+                    'tested' => $tested,
+                    'date_tested' => $date_tested,
+                    'test_outcome' => $test_outcome,
+                    'islinked' => $islinked,
+                    'cccNo' => $cccNo
+                ]);
+            } else {
+                $child = ChildrenLinelist::findOrFail($id);
+                $child->names = $names;
+                $child->indexCCC = $indexCCC;
+                $child->date_listed = $date_listed;
+                $child->dob = $dob;
+                $child->tested = $tested;
+                $child->date_tested = $date_tested;
+                $child->test_outcome = $test_outcome;
+                $child->islinked = $islinked;
+                $child->cccNo = $cccNo;
+                $child->save();
+            }
+
+            $patient = IndexClientLinelist::where('cccNo', $indexCCC)->first();
+            $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
+            $children = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+            foreach ($children as $child) {
+                $followuptest = ChildTestResults::where("childId", $child->id)->first();
+                $child['followuptest'] = $followuptest;
+            }
+            $patient['children'] = $children;
+
+            echo myJsonResponse(200, 'Child Listed', $patient);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Child not listed.");
+        }
+
+    } else if ($request == 'add_child_test_results') {
+        try {
+            $patientid = $_POST['patientid'];
+            $id = $_POST['childid'];
+            $tested = $_POST['childtested'];
+            $date_tested = $_POST['datetested'];
+            $test_outcome = $_POST['testoutcome'];
+            $islinked = $_POST['islinked'];
+            $cccNo = $_POST['childcccno'];
+
+            ChildTestResults::create([
+                'childId' => $id,
+                'tested' => $tested,
+                'date_tested' => $date_tested,
+                'test_outcome' => $test_outcome,
+                'islinked' => $islinked,
+                'cccNo' => $cccNo
+            ]);
+
+            $indexclient = IndexClientLinelist::findOrFail($patientid);
+            $indexCCC = $indexclient->cccNo;
+
+            $patient = IndexClientLinelist::where('cccNo', $indexCCC)->first();
+            $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
+            $children = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+            foreach ($children as $child) {
+                $followuptest = ChildTestResults::where("childId", $child->id)->first();
+                $child['followuptest'] = $followuptest;
+            }
+            $patient['children'] = $children;
+
+            echo myJsonResponse(200, 'Child test results added', $patient);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Child test results not added.");
+        }
+    } else if ($request == 'unlink_child') {
+        try {
+            $id = $_POST['id'];
+
+            $child = ChildrenLinelist::findOrFail($id);
+            $child->deleted = 1;
+            $child->save();
+
+            $patient = IndexClientLinelist::where('cccNo', $child->indexCCC)->first();
+            $patient['facility'] = Facility::where('mfl_code', $patient->facility)->first();
+            $children = ChildrenLinelist::where('indexCCC', $patient->cccNo)->where('deleted', 0)->get();
+
+            foreach ($children as $child) {
+                $followuptest = ChildTestResults::where("childId", $child->id)->first();
+                $child['followuptest'] = $followuptest;
+            }
+            $patient['children'] = $children;
+
+            echo myJsonResponse(200, 'Child Unlinked', $patient);
+        } catch (\Throwable $e) {
+            logError($e->getCode(), $e->getMessage());
+            echo myJsonResponse(400, "Child not unlinked.");
+        }
+
     } else throw new Exception("Invalid request.", -1);
 } catch (\Throwable $th) {
     http_response_code(400);
     logError($th->getCode(), $th->getMessage());
     if ($th->getCode()) DB::rollback();
     echo myJsonResponse(400, $th->getMessage());
+}
+
+function getUserCategories() {
+    $categories = UserCategory::all();
+    foreach ($categories as $category) {
+        $permlist = $category->permissions;
+        $list = json_decode($permlist);
+        $pnames = [];
+
+        foreach ($list as $item) {
+            $pid = Permissions::findOrFail($item);
+            $pname = $pid->permission;
+            array_push($pnames, $pname);
+        }
+
+        $category['permissionname'] = $pnames;
+
+        $cadres = Cadre::where('category', $category->id)->get();
+        $category['cadres'] = $cadres;
+    }
+    return $categories;
 }

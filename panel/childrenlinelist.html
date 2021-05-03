@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Pedatric Mapping Application</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+    <script src="vendor/jquery/jquery.js"></script>
+    <script>
+        $(function () {
+            $("#includedContent").load("includes/navbar.html");
+        });
+    </script>
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div id="includedContent" class="sticky-top h-100"></div>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="usernametxt">Admin</span>
+                            <img class="img-profile rounded-circle" src="img/images.png">
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Settings
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Activity Log
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </nav>
+            <!-- End of Topbar -->
+
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <h1 class="h3 mb-4 text-gray-800">Index Testing for Children</h1>
+
+                <div class="error-class alert-danger alert-dismissable'" id="error-modal" style="display: none">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error encountered.</h5>
+                        <button type="button" id="errorModalDismiss" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <p class="ml-4">Err</p>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h1 class="h4 mb-2 text-gray-800 float-left">Index Client Info:</h1>
+                                <button class="btn btn-primary btn-icon-split ml-auto float-right" data-toggle="modal"
+                                        data-target="#addPatientDialog" id="addPatientBtn" onclick="clearPatientDialog();">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-user-plus"></i>
+                                </span>
+                                    <span class="text">Add Index Client/Transfer In</span>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label>Search by Index Client CCC Number/Initials</label>
+                                            <label id="search-error" class="errors">Enter at least 3 characters</label>
+                                            <input type="text" name="names" class="form-control"
+                                                   placeholder="Enter CCC Number/Initials" id="indexclientsearch" autocomplete="off" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 my-auto">
+                                        <button type="button" id="btnSearchClient"
+                                                class="btn btn-outline-primary waves-effect my-auto mb-2"
+                                                style="width: 100%;">Search
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="list-group mt-4 d-none" id="patientsearchresult">
+                                </div>
+
+                                <div class="border border-dark mt-4 p-2 d-none" id="indexclientdetails">
+                                    <div class="row justify-content-center">
+                                        <div class="col-auto">
+                                            <table class="table table-responsive" width="100%">
+                                                <tbody>
+                                                <tr>
+                                                    <td scope="row"
+                                                        class="border-right border-top-0 border-bottom-0">Index Client CCC Number
+                                                    </td>
+                                                    <td class="border-right border-top-0 border-bottom-0 border-right-0"
+                                                        id="clientcccno">_
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row" class="border-right border-bottom-0">Index Client Name
+                                                    </td>
+                                                    <td class="border-right border-bottom-0 border-right-0"
+                                                        id="clientname">_
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row" class="border-right border-bottom-0">Date Confirmed HIV Positive
+                                                    </td>
+                                                    <td class="border-right border-bottom-0 border-right-0"
+                                                        id="dateclienttested">_
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row" class="border-right border-bottom-0">Date Index Client Linelisted
+                                                    </td>
+                                                    <td class="border-right border-bottom-0 border-right-0"
+                                                        id="dateclientlisted">_
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row" class="border-right border-bottom-0">Facility MFL Code
+                                                    </td>
+                                                    <td class="border-right border-bottom-0 border-right-0"
+                                                        id="mflcode">_
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row" class="border-right border-bottom-0">Facility Name
+                                                    </td>
+                                                    <td class="border-right border-bottom-0 border-right-0"
+                                                        id="facilityname">_
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row" class="border-right border-bottom-0">Date Enrolled to HIV Care
+                                                    </td>
+                                                    <td class="border-right border-bottom-0 border-right-0"
+                                                        id="dateclientenrolled">_
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row" class="border-right border-bottom-0">County
+                                                    </td>
+                                                    <td class="border-right border-bottom-0 border-right-0"
+                                                        id="county">_
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row" class="border-right border-bottom-0">Current Status
+                                                    </td>
+                                                    <td class="border-right border-bottom-0 border-right-0"
+                                                        id="indexclientstatus">_
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td scope="row" class="border-right border-bottom-0">Number of Children Linelisted</td>
+                                                    <td class="border-right border-bottom-0 border-right-0"
+                                                        id="childrennumber">_
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h1 class="h4 mb-2 text-gray-800 float-left">Children Linelisted</h1>
+                                <button class="btn btn-primary btn-icon-split ml-auto float-right" data-toggle="modal"
+                                        data-target="#linkChildDialog" id="addChildBtn" onclick="clearChildDialog();" disabled>
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-user-plus"></i>
+                                    </span>
+                                    <span class="text">Add New Child</span>
+                                </button>
+                            </div>
+                            <div class="card-body" id="childrenlistedcard">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; CHS 2021</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- add child dialog -->
+<div class="modal fade" id="linkChildDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Link Child</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="code.php" method="POST" onsubmit="event.preventDefault();" id="linkchildform">
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>ID: </label>
+                        <label id='labelChildID'></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Child's Names</label>
+                        <label id="name-error" class="errors">Name must be provided</label>
+                        <input type="text" name="name" id='childnames' class="form-control"
+                               placeholder="Enter Names of the Child" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <label id="dob-error" class="errors">Date of Birth must be provided</label>
+                        <input type="date" name="dob" id="dob" class="form-control"
+                               placeholder="Enter Date of Birth">
+                    </div>
+                    <div class="form-group">
+                        <label>Date Child Listed</label>
+                        <label id="dcl-error" class="errors">Date Child Listed must be provided</label>
+                        <input type="date" name="dob" id="datelisted" class="form-control"
+                               placeholder="Enter Date Child Listed">
+                    </div>
+                    <div class="form-group">
+                        <label>Has the Child been tested?</label>
+                        <label id="tested-error" class="errors">You must indicate whether child has been tested</label>
+                        <select id="childTestedSelect" class="form-control">
+                            <option value="" hidden>Select Option</option>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date Child Tested</label>
+                        <label id="dct-error" class="errors">Date Child Tested must be provided</label>
+                        <input type="date" name="dob" id="datetested" class="form-control initialtestclass"
+                               placeholder="Enter Date Child Tested" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Test Outcome</label>
+                        <label id="outcome-error" class="errors">Test outcome must be provided</label>
+                        <select id="testOutcomeSelect" class="form-control initialtestclass" disabled>
+                            <option value="" hidden>Select Option</option>
+                            <option value="Positive">Positive</option>
+                            <option value="Negative">Negative</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Has Child been Linked?</label>
+                        <label id="linked-error" class="errors">You must indicate whether child has been linked</label>
+                        <select id="linkedSelect" class="form-control initialoutcomeclass" disabled>
+                            <option value="" hidden>Select Option</option>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>CCC Number</label>
+                        <label id="ccc-error" class="errors">Enter a valid CCC Number</label>
+                        <input type="text" name="cccno" id="childcccno" class="form-control initialoutcomeclass"
+                               placeholder="Enter CCC Number" autocomplete="off" disabled>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" name="savechildbtn" id="savechildbtn" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!--child testing dialog-->
+<div class="modal fade" id="ChildTestDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Child Test Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="code.php" method="POST" onsubmit="event.preventDefault();" id="childtestform">
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>ID: </label>
+                        <label id='ChildID'></label>
+                    </div>
+                    <div class="form-group">
+                        <label>Has the Child been tested?</label>
+                        <label id="tested-error2" class="errors">You must indicate whether child has been tested</label>
+                        <select id="childTestedSelect2" class="form-control">
+                            <option value="" hidden>Select Option</option>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date Child Tested</label>
+                        <label id="dct-error2" class="errors">Date Child Tested must be provided</label>
+                        <input type="date" name="dob" id="datetested2" class="form-control othertestclass"
+                               placeholder="Enter Date Child Tested" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Test Outcome</label>
+                        <label id="outcome-error2" class="errors">Test outcome must be provided</label>
+                        <select id="testOutcomeSelect2" class="form-control othertestclass" disabled>
+                            <option value="" hidden>Select Option</option>
+                            <option value="Positive">Positive</option>
+                            <option value="Negative">Negative</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Has Child been Linked?</label>
+                        <label id="linked-error2" class="errors">You must indicate whether child has been linked</label>
+                        <select id="linkedSelect2" class="form-control othertestclass" disabled>
+                            <option value="" hidden>Select Option</option>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>CCC Number</label>
+                        <label id="ccc-error2" class="errors">Enter a valid CCC Number</label>
+                        <input type="text" name="cccno" id="childcccno2" class="form-control otheroutcomeclass"
+                               placeholder="Enter CCC Number" autocomplete="off" disabled>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" name="savechildbtn" id="savechildtestbtn" class="btn btn-primary othertestclass" disabled>Save</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- add patient dialog -->
+<div class="modal fade" id="addPatientDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Index Client/Transfer In</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="code.php" method="POST" onsubmit="event.preventDefault();" id="addPatientForm">
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>CCC Number</label>
+                        <label id="client-ccc-error" class="errors">Enter a valid CCC Number</label>
+                        <input type="text" name="cccno" id="cccNoDialogInput" class="form-control"
+                               placeholder="Enter CCC Number" autocomplete="off">
+<!--                        <br>-->
+<!--                        <button id="loadDataBtn" class="btn btn-primary btn-block">Load Data</button>-->
+                    </div>
+                    <div class="form-group">
+                        <label>Client Names</label>
+                        <label id="client-name-error" class="errors">Name must be provided</label>
+                        <input type="text" name="name" id='clientnames' class="form-control"
+                               placeholder="Enter Names of the client" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Date Confirmed HIV Positive</label>
+                        <label id="dclienttested-error" class="errors">Date client Tested positive must be provided</label>
+                        <input type="date" name="dct" id="dateclienttestedinput" class="form-control p-data"
+                               placeholder="Enter Date Client Tested">
+                    </div>
+                    <div class="form-group">
+                        <label>Date Enrolled to HIV Care</label>
+                        <label id="dclientenrolled-error" class="errors">Date enrolled to care must be provided</label>
+                        <input type="date" name="dct" id="dateclientenrolledinput" class="form-control p-data"
+                               placeholder="Enter Date Client Enrolled to Care">
+                    </div>
+                    <div class="form-group">
+                        <label>Date Linelisted</label>
+                        <label id="dclientlisted-error" class="errors">Date client listed must be provided</label>
+                        <input type="date" name="dct" id="dateclientlistedinput" class="form-control p-data"
+                               placeholder="Enter Date Client Linelisted">
+                    </div>
+                    <div class="form-group">
+                        <label for="facilityDialogSelect">Facility</label>
+                        <label id="facility-error" class="errors">Facility must be provided</label>
+                        <select name="facility" id="facilityDialogSelect" class="form-control">
+                            <option selected hidden value="">Select facility</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Status</label>
+                        <label id="clientstatus-error" class="errors">Client Status must be provided</label>
+                        <select id="clientstatusSelect" class="form-control">
+                            <option value="" hidden>Select Option</option>
+                            <option value="Active">Active</option>
+                            <option value="Dead">Dead</option>
+                            <option value="LTFU">LTFU</option>
+                            <option value="TO">TO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" name="savebtn" id="savePatientBtn" class="btn btn-primary"
+                    >Save</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>
+<script src="js/childrenlinelist.js"></script>
+
+</body>
+
+</html>

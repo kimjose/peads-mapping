@@ -76,6 +76,9 @@ const otzTransitionStatusSelect = document.getElementById(
 const otzDiscontinuedDateInput = document.getElementById("otzDiscontinuedDate");
 const pamaEnrolledSelect = document.getElementById("pamaEnrolledSelect");
 const pamaEnrollmentDateInput = document.getElementById("pamaEnrollmentDate");
+const isLDL7 = document.getElementById("isLDL7");
+const pamaVlInput = document.getElementById("pamavl");
+const pamaVlDateInput = document.getElementById("pamavldate");
 const caregiverenrolledSelect = document.getElementById(
     "caregiverenrolledSelect"
 );
@@ -84,12 +87,6 @@ const caregiver1cccnoInput = document.getElementById("caregiver1cccno");
 const caregiver2cccnoInput = document.getElementById("caregiver2cccno");
 const isLDL5 = document.getElementById("isLDL5");
 const caregiver3cccnoInput = document.getElementById("caregiver3cccno");
-// const mothervlcopiesInput = document.getElementById("mothervlcopies");
-// const motherlastvlDateInput = document.getElementById("motherlastvlDate");
-// const fathervlcopiesInput = document.getElementById("fathervlcopies");
-// const fatherlastvlDateInput = document.getElementById("fatherlastvlDate");
-// const guardianvlcopiesInput = document.getElementById("guardianvlcopies");
-// const guardianlastvlDateInput = document.getElementById("guardianlastvlDate");
 const caregivervlInput = document.getElementById("caregivervl");
 const caregivervlddateInput = document.getElementById("caregivervlddate");
 
@@ -97,6 +94,7 @@ const tbodyMother = document.getElementById("tbodyMother");
 const isLDLmother = document.getElementById("isLDLmother");
 const motherVlCopiesInput = document.getElementById("mothervlcopies");
 const motherlastvlDateInput = document.getElementById("motherlastvlDate");
+const mothervlstatustSelect = document.getElementById("mothervlstatustSelect");
 
 const tbodyFather = document.getElementById("tbodyFather");
 const isLDLfather = document.getElementById("isLDLfather");
@@ -111,15 +109,12 @@ const guardianlastvlDate = document.getElementById("guardianlastvlDate");
 const caregivervlstatustSelect = document.getElementById(
     "caregivervlstatustSelect"
 );
-const pamastatusat3Select = document.getElementById("pamastatusat3Select");
-const pamastatusat6Select = document.getElementById("pamastatusat6Select");
-const pamastatusat12Select = document.getElementById("pamastatusat12Select");
-const pamastatusat24Select = document.getElementById("pamastatusat24Select");
+// const pamastatusat3Select = document.getElementById("pamastatusat3Select");
+// const pamastatusat6Select = document.getElementById("pamastatusat6Select");
+// const pamastatusat12Select = document.getElementById("pamastatusat12Select");
+// const pamastatusat24Select = document.getElementById("pamastatusat24Select");
 const currentPamaStatusSelect = document.getElementById(
     "currentpamastatusSelect"
-);
-const pamaStatusAtTransitionSelect = document.getElementById(
-    "pamastatusattransitionSelect"
 );
 const pamaDiscontinuedDateInput = document.getElementById(
     "pamadiscontinueddate"
@@ -132,17 +127,44 @@ const guardianchkbox = document.getElementById("guardianchkbox");
 const fatherchkbox = document.getElementById("fatherchkbox");
 const motherchkbox = document.getElementById("motherchkbox");
 
+const calvldate = document.getElementById("calvldate");
+const calvl = document.getElementById("calvl");
+const mothervldate = document.getElementById("mothervldate");
+const mothervl = document.getElementById("mothervl");
+const fathervldate = document.getElementById("fathervldate");
+const fathervl = document.getElementById("fathervl");
+const guardianvldate = document.getElementById("guardianvldate");
+const guardianvl = document.getElementById("guardianvl");
 const errorDiv = document.querySelector("#error-modal");
+const usernametxt = document.getElementById("usernametxt");
+const vdotEnrolledSelect = document.getElementById("vdotEnrolledSelect");
+const vdotenrollmentdate = document.getElementById("vdotEnrollmentDate");
+const userModeSelect = document.getElementById("userModeSelect");
+const vdotdiscontinueddate = document.getElementById("vdotdiscontinueddate");
+const adotEnrolledSelect = document.getElementById("adotEnrolledSelect");
+const adotenrollmentdate = document.getElementById("adotEnrollmentDate");
+const followupSelect = document.getElementById("followupSelect");
+const adotdiscontinueddate = document.getElementById("adotdiscontinueddate");
+
+var userObject;
 
 motherchkbox.addEventListener('change', () => {
     guardianchkbox.checked = false;
     caregiverChanged();
 });
 isLDLmother.addEventListener('change', () => {
+    
     if (isLDLmother.checked) {
-        motherVlCopiesInput.value = '';
-        motherVlCopiesInput.readOnly = true;
-    } else motherVlCopiesInput.readOnly = true;
+    copiesValuesChanged(0, 'mothervlstatustSelect', motherVlCopiesInput)
+    } else motherVlCopiesInput.readOnly = false;
+});
+motherVlCopiesInput.addEventListener('input', ()=>{
+    let copiesValue = motherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'mothervlstatustSelect')
+});
+motherVlCopiesInput.addEventListener('propertychange', ()=>{
+    let copiesValue = motherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'mothervlstatustSelect')
 });
 fatherchkbox.addEventListener('change', () => {
     guardianchkbox.checked = false;
@@ -150,9 +172,16 @@ fatherchkbox.addEventListener('change', () => {
 });
 isLDLfather.addEventListener('change', () => {
     if (isLDLfather.checked) {
-        fatherVlCopiesInput.value = '';
-        fatherVlCopiesInput.readOnly = true;
+        copiesValuesChanged(0, 'fathervlstatustSelect', fatherVlCopiesInput)
     } else fatherVlCopiesInput.readOnly = false;
+});
+fatherVlCopiesInput.addEventListener('input', ()=>{
+    let copiesValue = fatherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'fathervlstatustSelect')
+});
+fatherVlCopiesInput.addEventListener('propertychange', ()=>{
+    let copiesValue = fatherVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'fathervlstatustSelect')
 });
 guardianchkbox.addEventListener('change', () => {
     motherchkbox.checked = false;
@@ -161,10 +190,38 @@ guardianchkbox.addEventListener('change', () => {
 });
 isLDLguardian.addEventListener('change', () => {
     if (isLDLguardian.checked) {
-        guardianVlCopiesInput.value = '';
-        guardianVlCopiesInput.readOnly = true;
-    } else guardianVlCopiesInput.readOnly = false;
+        copiesValuesChanged(0, 'guardianvlstatustSelect', guardianVlCopiesInput);
+    } else {
+        guardianVlCopiesInput.readOnly = false;
+    }
 });
+guardianVlCopiesInput.addEventListener('input', ()=>{
+    let copiesValue = guardianVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'guardianvlstatustSelect');
+});
+guardianVlCopiesInput.addEventListener('propertychange', ()=>{
+    let copiesValue = guardianVlCopiesInput.value;
+    copiesValuesChanged(copiesValue, 'guardianvlstatustSelect');
+});
+/****
+ * value, selector(id) , what to disable
+ */
+function copiesValuesChanged(copiesValue, selector, copiesInput = null){
+    if(copiesValue !== "" && copiesValue < 1000) {
+        $('#'+selector).val("Supressed");
+        if(copiesInput != null){
+            copiesInput.value = '';
+            copiesInput.readOnly = true;
+        }
+    } else if(copiesValue > 1000) {
+        $('#'+selector).val("Not Supressed");
+        if(copiesInput != null){
+            copiesInput.readOnly = false;
+        }
+    } else {
+        $('#'+selector).val("");
+    }
+}
 
 function caregiverChanged() {
     if (guardianchkbox.checked) {
@@ -242,13 +299,13 @@ btnSearch.addEventListener("click", () => {
 btnSubmit.addEventListener("click", () => submitPatientData());
 
 function initialize() {
-    let userObject = sessionStorage.getItem("user");
+    userObject = sessionStorage.getItem("user");
     if (userObject == null) {
         window.location.replace("login.html");
         return;
     }
     var loggedinuser = JSON.parse(userObject);
-    console.log(loggedinuser);
+    usernametxt.innerHTML = loggedinuser.names;
 
     userName.innerText = loggedinuser.names;
     lastLoginDate.innerHTML = loggedinuser.last_login;
@@ -297,6 +354,15 @@ function initialize() {
             otzVlInput.readOnly = false;
         }
     });
+
+    isLDL7.addEventListener('click', () => {
+        if (isLDL7.checked) {
+            pamaVlInput.value = '';
+            pamaVlInput.readOnly = true;
+        } else {
+            pamaVlInput.readOnly = false;
+        }
+    });
     /*
       isLDL5.addEventListener('click', () => {
         if (isLDL5.checked) {
@@ -331,7 +397,9 @@ function initialize() {
 
     ovcenrolledSelect.addEventListener('click', () => ovcOptionChanged());
     otzenrolledSelect.addEventListener('click', () => otzOptionChanged());
-    pamaEnrolledSelect.addEventListener('click', () => pamaOptionChanged())
+    pamaEnrolledSelect.addEventListener('click', () => pamaOptionChanged());
+    vdotEnrolledSelect.addEventListener('click', () => vdotOptionChanged());
+    adotEnrolledSelect.addEventListener('click', () => adotOptionChanged());
 
     let load = false;
     var modulesLoaded = false
@@ -438,9 +506,41 @@ function loadPreviousObservation(cccNo) {
             var mResponse = JSON.parse(response);
             console.log(mResponse.data);
             data = mResponse.data;
+
+            calvldate.innerHTML = null;
+            calvl.innerHTML = null;
+            mothervldate.innerHTML = null;
+            mothervl.innerHTML = null;
+            fathervldate.innerHTML = null;
+            fathervl.innerHTML = null;
+            guardianvldate.innerHTML = null;
+            guardianvl.innerHTML = null;
+            
             for (var i = 0; i < data.length; i++) {
                 let dataobj = data[i];
-
+                console.log(dataobj);
+                if (dataobj !== null) {
+                    if (dataobj.type == 'cal') {
+                        calvldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // calvldate.innerHTML = dataobj.vlDate;
+                        calvl.innerHTML = dataobj.vlCopies;
+                    }
+                    if (dataobj.type == 'mother') {
+                        mothervldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // mothervldate.innerHTML = dataobj.vlDate;
+                        mothervl.innerHTML = dataobj.vlCopies;
+                    }
+                    if (dataobj.type == 'father') {
+                        fathervldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // fathervldate.innerHTML = dataobj.vlDate;
+                        fathervl.innerHTML = dataobj.vlCopies;
+                    }
+                    if (dataobj.type == 'guardian') {
+                        guardianvldate.innerHTML = moment(dataobj.vlDate).format('DD-MMM-YYYY');
+                        // guardianvldate.innerHTML = dataobj.vlDate;
+                        guardianvl.innerHTML = dataobj.vlCopies;
+                    }
+                }
             }
         },
         error: error => handleError(error.status, error.message)
@@ -479,8 +579,8 @@ function loadPreviousObservation(cccNo) {
                 } else {
                     if (ovcenrolledSelect.hasAttribute("disabled")) ovcenrolledSelect.removeAttribute("disabled");
                 }
-                if (currentAge < 10 || currentAge > 19) {//disable OTZ
-                    otzenrolledSelect.setAttribute("disabled", "")
+                if (currentAge < 10 || currentAge > 19) {//disable OTZ todo
+                    // otzenrolledSelect.setAttribute("disabled", "")
                 } else {
                     if (otzenrolledSelect.hasAttribute("disabled")) otzenrolledSelect.removeAttribute("disabled");
                 }
@@ -501,18 +601,10 @@ function loadPreviousObservation(cccNo) {
                 let patient = mResponse.data.patient;
                 var facil = patient.facility;
                 $("#facilitySelect").val(facil);
-                // facilitySelector.disabled=true;
-                // facilityInput.value = patient.facilityData.name;
                 mflcodeInput.innerHTML = patient.facilityData.mfl_code;
                 countyInput.innerHTML = patient.county;
                 var genders = genderSelect.options;
                 $("#genderSelect").val(patient.sex);
-                /*for (let i = 0; i < genders.length; i++) {
-                  const gender = genders[i];
-                  if (patient.sex == gender.value) {
-                    genderSelect.selectedIndex = i;
-                  }
-                }*/
                 dobInput.value = patient.dob;
                 dob = new Date(patient.dob);
                 dateenrolled = new Date(patient.date_enrolled);
@@ -588,9 +680,19 @@ function loadObsData(observation) {
     if (observation.vlCopies == "LDL") {
         isLDL1.checked = true;
         vlcopiesInput.value = '';
-    } else vlcopiesInput.value = observation.vlCopies;
+        $("#currentvlstatustSelect").val("Supressed");
+    } else {
+        vlcopiesInput.value = observation.vlCopies;
+        if(observation.vlCopies < 1000){
+            console.log("In and deamd" + observation.vlCopies)
+            $("#currentvlstatustSelect").val("Supressed");
+        } else if(observation.vlCopies >= 1000){
+            $("#currentvlstatustSelect").val("NotSupressed");
+            console.log("Status check 2");
+        }
+    }
     // vloutcomestatusInput.value = observation.vlOutcome;
-    $("#currentvlstatustSelect").val(observation.vlOutcome);
+    // $("#currentvlstatustSelect").val(observation.vlOutcome);
     weightInput.value = observation.weight;
     isZScoreCheck.checked = false;
     isMUACCheck.checked = false;
@@ -630,7 +732,7 @@ function loadObsData(observation) {
 
     var iptstatus = $("#iptstatusSelect").val();
     if (iptstatus == "Completed") {
-        iptstatusSelect.disabled = true;
+        // iptstatusSelect.disabled = true;
     }
 
     var schoolingStatuses = schoolingstatusSelect.options;
@@ -672,14 +774,15 @@ function loadObsData(observation) {
         ovcEnrollmentDateInput.readOnly = true;
     }
     cpmisNumberInput.value = observation.CPMISNumber;
-    if (observation.CPMISNumber !== 0) {
+    /*if (observation.CPMISNumber !== 0) { //TODO comment out
         cpmisNumberInput.readOnly = true;
-    }
+    }*/
     if (observation.ovcVLCopies == "LDL") {
         isLDL2.checked = true;
         ovcVLcopiesInput.value = '';
         ovcVLcopiesInput.readOnly = true;
     } else ovcVLcopiesInput.value = observation.ovcVLCopies
+    ovcVLDateInput.value = observation.baselineOvcVlDate;
     ovcDiscontinuedDateInput.value = observation.dateDiscontinuedFromOVC;
     var ovcDisStatuses = ovcDiscontinuationStatusSelect.options;
     for (var i = 0; i < ovcDisStatuses.length; i++) {
@@ -712,13 +815,6 @@ function loadObsData(observation) {
     } else otzVlInput.value = observation.ovcVLCopies
     otzVlInput.value = observation.OTZVL;
     otzVlDateInput.value = observation.OTZVLDate;
-    /*var missedOptions = missedLastAppointmentSelect.options;
-    for (var i = 0; i < missedOptions.length; i++) {
-      const missedOption = missedOptions[i];
-      if (missedOption.value == observation.missedLastAppointment) {
-        missedLastAppointmentSelect.selectedIndex = i;
-      }
-    }*/
     var artAssessmentOptions = artAssessmentSelect.options;
     for (var i = 0; i < artAssessmentOptions.length; i++) {
         const artAssessmentOption = artAssessmentOptions[i];
@@ -757,6 +853,12 @@ function loadObsData(observation) {
     }
     pamaOptionChanged(true);
     pamaEnrollmentDate.value = observation.dateEnrolledInPAMA;
+    if (observation.pamaVLCopies == "LDL") {
+        isLDL7.checked = true;
+        pamaVlInput.value = '';
+        pamaVlInput.readOnly = true;
+    } else pamaVlInput.value = observation.pamaVLCopies;
+    pamaVlDateInput.value = observation.baselinePamaVlDate;
     var cgInPamaOptions = caregiverenrolledSelect.options;
     for (var i = 0; i < cgInPamaOptions.length; i++) {
         const cgInPamaOption = cgInPamaOptions[i];
@@ -837,47 +939,46 @@ function loadObsData(observation) {
          caregivervlstatustSelect.selectedIndex = i;
        }
      }*/
-    var pamaStatusOptions = pamastatusat3Select.options;
-    for (var i = 0; i < pamaStatusOptions.length; i++) {
-        const pamaStatusOption = pamaStatusOptions[i];
-        if (pamaStatusOption.value == observation.PAMAStatus3) {
-            pamastatusat3Select.selectedIndex = i;
-        }
-        if (pamaStatusOption.value == observation.PAMAStatus6) {
-            pamastatusat6Select.selectedIndex = i;
-        }
-        if (pamaStatusOption.value == observation.PAMAStatus12) {
-            pamastatusat12Select.selectedIndex = i;
-        }
-        if (pamaStatusOption.value == observation.PAMAStatus24) {
-            pamastatusat24Select.selectedIndex = i;
-        }
-    }
+    // var pamaStatusOptions = pamastatusat3Select.options;
+    // for (var i = 0; i < pamaStatusOptions.length; i++) {
+    //     const pamaStatusOption = pamaStatusOptions[i];
+    //     if (pamaStatusOption.value == observation.PAMAStatus3) {
+    //         pamastatusat3Select.selectedIndex = i;
+    //     }
+    //     if (pamaStatusOption.value == observation.PAMAStatus6) {
+    //         pamastatusat6Select.selectedIndex = i;
+    //     }
+    //     if (pamaStatusOption.value == observation.PAMAStatus12) {
+    //         pamastatusat12Select.selectedIndex = i;
+    //     }
+    //     if (pamaStatusOption.value == observation.PAMAStatus24) {
+    //         pamastatusat24Select.selectedIndex = i;
+    //     }
+    // }
     var pamaStatusOptions2 = currentPamaStatusSelect.options;
     for (var i = 0; i < pamaStatusOptions2.length; i++) {
         const pamaStatusOption = pamaStatusOptions2[i];
         if (pamaStatusOption.value == observation.PAMAStatusCurrent) {
             currentPamaStatusSelect.selectedIndex = i;
         }
-        if (pamaStatusOption.value == observation.PAMAStatusTransition) {
-            pamaStatusAtTransitionSelect.selectedIndex = i;
-        }
     }
 
     pamaDiscontinuedDateInput.value = observation.dateDiscontinuedFromPAMA;
+
+    $('#vdotEnrolledSelect').val(observation.enrolledInVDOT);
+    vdotOptionChanged(true);
+    vdotenrollmentdate.value = observation.dateEnrolledInVDOT;
+    $('#userModeSelect').val(observation.vdotUserMode);
+    vdotdiscontinueddate.value = observation.dateDiscontinuedFromVDOT;
+
+    $('#adotEnrolledSelect').val(observation.enrolledInADOT);
+    adotOptionChanged(true);
+    adotenrollmentdate.value = observation.dateEnrolledInADOT;
+    $('#followupSelect').val(observation.followUpPersonnel);
+    adotdiscontinueddate.value = observation.dateDiscontinuedFromADOT;
+
     commentArea.value = observation.comment;
 
-    /********************************
-     * 'currentRegimen', 'regimenLine', 'regimenStartDate',  'kaletraFormulation', 'vlDate', 'vlOutcome',
-     'latestZScore', 'opportunisticInfection', 'disclosureStatus', 'iptStatus', 'schooling', 'statusAtTransition', 'enrolledInOVC',
-     'dateEnrolledInOVC', 'CPMISNumber', 'dateDiscontinuedFromOVC', 'statusAtOVCDiscontinuation', 'enrolledInOTZ', 'dateEnrolledInOTZ',
-     'OTZArtRegimen', 'OTZVL', 'OTZVLDate', 'missedLastAppointment', 'ArtAdherenceAssessment', 'completedOTZModules', 'statusAtOTZTransition',
-     'dateDiscontinuedFromOTZ', 'enrolledInPAMA', 'dateEnrolledInPAMA', 'caregiverInSameFacility', 'caregiverType', 'caregiver1CCC',
-     'caregiver2CCC', 'caregiverVL', 'caregiverVLDate', 'caregiverVLStatus', 'PAMAStatus3',
-     'PAMAStatus6', 'PAMAStatus12', 'PAMAStatus24', 'PAMAStatusCurrent', 'PAMAStatusTransition', 'dateDiscontinuedFromPAMA', 'comment'
-     *
-     *
-     */
 }
 
 /**
@@ -946,7 +1047,7 @@ function verify() {
         }
         if (ovcWithCpmisNo === 'Y' && CPMISNumber === '') {
             error = true;
-            errorMessage += "Enter date enrolled in OVC.\n"
+            errorMessage += "Enter CPMIS Number.\n"
         }
         if (ovcVLCopies !== '' && baselineOvcVlDate === '') {
             error = true;
@@ -970,10 +1071,6 @@ function verify() {
     if (isLDL4.checked) OTZVL = "LDL";
     else OTZVL = otzVlInput.value;
     let OTZVLDate = otzVlDateInput.value;
-    /*let missedLastAppointment =
-      missedLastAppointmentSelect.options[
-        missedLastAppointmentSelect.selectedIndex
-      ].value;*/
     let lastAttendDate = otzLastAttendDateInput.value;
     let nextAppointmentDate = otzNextAppointmentDateInput.value;
     let ArtAdherenceAssessment = artAssessmentSelect.options[artAssessmentSelect.selectedIndex].value;
@@ -995,7 +1092,6 @@ function verify() {
     formData.append("OTZArtRegimen", OTZArtRegimen);
     formData.append("OTZVL", OTZVL);
     formData.append("OTZVLDate", OTZVLDate);
-    // formData.append("missedLastAppointment", missedLastAppointment);
     formData.append("lastAttendDate", lastAttendDate);
     formData.append("nextAppointmentDate", nextAppointmentDate);
     formData.append("ArtAdherenceAssessment", ArtAdherenceAssessment);
@@ -1006,6 +1102,10 @@ function verify() {
     //pama--->const caregiverenrolledSelect = document.getElementById("caregiverenrolledSelect");
     let enrolledInPAMA = pamaEnrolledSelect.options[pamaEnrolledSelect.selectedIndex].value;
     let dateEnrolledInPAMA = pamaEnrollmentDateInput.value;
+    let pamaVLCopies = '';
+    let baselinePamaVlDate = pamaVlDateInput.value;
+    if (isLDL7.checked) pamaVLCopies = "LDL";
+    else pamaVLCopies = pamaVlInput.value;
     let caregiverInSameFacility = caregiverenrolledSelect.options[caregiverenrolledSelect.selectedIndex].value;
     let caregiverType = ''
     if (guardianchkbox.checked) caregiverType = "Guardian";
@@ -1053,12 +1153,11 @@ function verify() {
         }
     }
 
-    let PAMAStatus3 = pamastatusat3Select.options[pamastatusat3Select.selectedIndex].value;
-    let PAMAStatus6 = pamastatusat6Select.options[pamastatusat6Select.selectedIndex].value;
-    let PAMAStatus12 = pamastatusat12Select.options[pamastatusat12Select.selectedIndex].value;
-    let PAMAStatus24 = pamastatusat24Select.options[pamastatusat24Select.selectedIndex].value;
+    let PAMAStatus3 = '';
+    let PAMAStatus6 = '';
+    let PAMAStatus12 = '';
+    let PAMAStatus24 = '';
     let PAMAStatusCurrent = currentPamaStatusSelect.options[currentPamaStatusSelect.selectedIndex].value;
-    let PAMAStatusTransition = pamaStatusAtTransitionSelect.options[pamaStatusAtTransitionSelect.selectedIndex].value;
     let dateDiscontinuedFromPAMA = pamaDiscontinuedDateInput.value;
     let comment = commentArea.value;
     if (enrolledInPAMA === 'Y') {
@@ -1066,6 +1165,8 @@ function verify() {
     }
     formData.append("enrolledInPAMA", enrolledInPAMA);
     formData.append("dateEnrolledInPAMA", dateEnrolledInPAMA);
+    formData.append("pamaVLCopies", pamaVLCopies);
+    formData.append("baselinePamaVlDate", baselinePamaVlDate);
     formData.append("caregiverInSameFacility", caregiverInSameFacility);
     formData.append("caregiverType", caregiverType);
     formData.append("caregiver1CCC", caregiver1CCC);
@@ -1080,8 +1181,48 @@ function verify() {
     formData.append("PAMAStatus12", PAMAStatus12);
     formData.append("PAMAStatus24", PAMAStatus24);
     formData.append("PAMAStatusCurrent", PAMAStatusCurrent);
-    formData.append("PAMAStatusTransition", PAMAStatusTransition);
     formData.append("dateDiscontinuedFromPAMA", dateDiscontinuedFromPAMA);
+
+    let enrolledInVDOT = vdotEnrolledSelect.options[vdotEnrolledSelect.selectedIndex].value;
+    let dateEnrolledInVDOT = vdotenrollmentdate.value;
+    let vdotUserMode = userModeSelect.options[userModeSelect.selectedIndex].value;
+    if (enrolledInVDOT === 'Y') {//Tests for enrolled in VDOT
+        if (dateEnrolledInVDOT == null || dateEnrolledInVDOT === "") {
+            error = true;
+            errorMessage += "Enter date enrolled to NimeCONFIRM.\n"
+        }
+        if (vdotUserMode === '') {
+            error = true;
+            errorMessage += "Select NimeCONFIRM User Mode.\n"
+        }
+    }
+    let dateDiscontinuedFromVDOT = vdotdiscontinueddate.value;
+
+    formData.append("enrolledInVDOT", enrolledInVDOT);
+    formData.append("dateEnrolledInVDOT", dateEnrolledInVDOT);
+    formData.append('vdotUserMode', vdotUserMode);
+    formData.append("dateDiscontinuedFromVDOT", dateDiscontinuedFromVDOT);
+    
+    let enrolledInADOT = adotEnrolledSelect.options[adotEnrolledSelect.selectedIndex].value;
+    let dateEnrolledInADOT = adotenrollmentdate.value;
+    let followUpPersonnel = followupSelect.options[followupSelect.selectedIndex].value;
+    if (enrolledInADOT === 'Y') {//Tests for enrolled in VDOT
+        if (dateEnrolledInADOT == null || dateEnrolledInADOT === "") {
+            error = true;
+            errorMessage += "Enter date enrolled to Audio DOTS.\n"
+        }
+        if (followUpPersonnel == '') {
+            error = true;
+            errorMessage += 'Select Audio DOT Followup Personnel.\n';
+        }
+    }
+    let dateDiscontinuedFromADOT = adotdiscontinueddate.value;
+
+    formData.append("enrolledInADOT", enrolledInADOT);
+    formData.append("dateEnrolledInADOT", dateEnrolledInADOT);
+    formData.append("followUpPersonnel", followUpPersonnel);
+    formData.append("dateDiscontinuedFromADOT", dateDiscontinuedFromADOT);
+    
     formData.append("comment", comment);
 
     //Other data------>
@@ -1091,7 +1232,7 @@ function verify() {
     formData.append("patientCCC", patientCCC);
     formData.append("userId", userId);
     formData.append("mflCode", mflCode);
-
+    console.log(userObject.id)
     if (error) {
         handleError(-1, errorMessage);
     } else {
@@ -1191,14 +1332,6 @@ function submitData(formData = null) {
         let ArtAdherenceAssessment =
             artAssessmentSelect.options[artAssessmentSelect.selectedIndex].value;
         let completedOTZModules = otzModulesSelect.options[otzModulesSelect.selectedIndex].value;
-        // let completedOTZModules = [];
-        // var checkBoxes = otzmodulesdiv.querySelectorAll('input[type="checkbox"]');
-        // checkBoxes.forEach((checkBox) => {
-        //   if (checkBox.checked == true) {
-        //     completedOTZModules.push(checkBox.getAttribute("id"));
-        //   }
-        // });
-        // console.log(completedOTZModules);
         let statusAtOTZTransition =
             otzTransitionStatusSelect.options[otzTransitionStatusSelect.selectedIndex]
                 .value;
@@ -1255,25 +1388,19 @@ function submitData(formData = null) {
                 caregiver2VLDate = fatherlastvlDateInput.value;
             }
         }
-        let PAMAStatus3 =
-            pamastatusat3Select.options[pamastatusat3Select.selectedIndex].value;
-        let PAMAStatus6 =
-            pamastatusat6Select.options[pamastatusat6Select.selectedIndex].value;
-        let PAMAStatus12 =
-            pamastatusat12Select.options[pamastatusat12Select.selectedIndex].value;
-        let PAMAStatus24 =
-            pamastatusat24Select.options[pamastatusat24Select.selectedIndex].value;
+        let PAMAStatus3 = '';
+        let PAMAStatus6 = '';
+        let PAMAStatus12 = '';
+        let PAMAStatus24 = '';
         let PAMAStatusCurrent =
             currentPamaStatusSelect.options[currentPamaStatusSelect.selectedIndex]
                 .value;
-        let PAMAStatusTransition =
-            pamaStatusAtTransitionSelect.options[
-                pamaStatusAtTransitionSelect.selectedIndex
-                ].value;
         let dateDiscontinuedFromPAMA = pamaDiscontinuedDateInput.value;
         let comment = commentArea.value;
         formData.append("enrolledInPAMA", enrolledInPAMA);
         formData.append("dateEnrolledInPAMA", dateEnrolledInPAMA);
+        formData.append("pamaVLCopies", pamaVLCopies);
+        formData.append("baselinePamaVlDate", baselinePamaVlDate);
         formData.append("caregiverInSameFacility", caregiverInSameFacility);
         formData.append("caregiverType", caregiverType);
         formData.append("caregiver1CCC", caregiver1CCC);
@@ -1288,13 +1415,32 @@ function submitData(formData = null) {
         formData.append("PAMAStatus12", PAMAStatus12);
         formData.append("PAMAStatus24", PAMAStatus24);
         formData.append("PAMAStatusCurrent", PAMAStatusCurrent);
-        formData.append("PAMAStatusTransition", PAMAStatusTransition);
         formData.append("dateDiscontinuedFromPAMA", dateDiscontinuedFromPAMA);
+
+        let enrolledInVDOT = vdotEnrolledSelect.options[vdotEnrolledSelect.selectedIndex].value;
+        let dateEnrolledInVDOT = vdotenrollmentdate.value;
+        let dateDiscontinuedFromVDOT = vdotdiscontinueddate.value;
+
+        formData.append("enrolledInVDOT", enrolledInVDOT);
+        formData.append("dateEnrolledInVDOT", dateEnrolledInVDOT);
+        formData.append('vdotUserMode', vdotUserMode);
+        formData.append("dateDiscontinuedFromVDOT", dateDiscontinuedFromVDOT);
+
+        let enrolledInADOT = adotEnrolledSelect.options[adotEnrolledSelect.selectedIndex].value;
+        let dateEnrolledInADOT = adotenrollmentdate.value;
+        let followUpPersonnel = followupSelect.options[followupSelect.selectedIndex].value;
+        let dateDiscontinuedFromADOT = adotdiscontinueddate.value;
+
+        formData.append("enrolledInADOT", enrolledInADOT);
+        formData.append("dateEnrolledInADOT", dateEnrolledInADOT);
+        formData.append("followUpPersonnel", followUpPersonnel);
+        formData.append("dateDiscontinuedFromADOT", dateDiscontinuedFromADOT);
+
         formData.append("comment", comment);
 
         //Other data------>
         let patientCCC = cccNoInput.value;
-        let userId = 1;
+        let userId = userObject.id;
         let mflCode = facilitySelector.options[facilitySelector.selectedIndex].value;
         formData.append("patientCCC", patientCCC);
         formData.append("userId", userId);
@@ -1309,24 +1455,11 @@ function submitData(formData = null) {
         success: function (response) {
             clearForm();
             document.querySelector("#overlay").style.display = 'none';
-            location.reload();
+            // location.reload();
         },
         error: error => handleError(error.status, error.message)
     });
 
-    /********************************
-     * 'currentRegimen', 'regimenLine', 'regimenStartDate',  'kaletraFormulation', 'vlDate', 'vlOutcome',
-     'latestZScore', 'opportunisticInfection', 'disclosureStatus', 'iptStatus', 'schooling', 'statusAtTransition', 'enrolledInOVC',
-
-     'dateEnrolledInOVC', 'CPMISNumber', 'dateDiscontinuedFromOVC', 'statusAtOVCDiscontinuation', 'enrolledInOTZ', 'dateEnrolledInOTZ',
-     'OTZArtRegimen', 'OTZVL', 'OTZVLDate', 'missedLastAppointment', 'ArtAdherenceAssessment', 'completedOTZModules', 'statusAtOTZTransition',
-
-     'dateDiscontinuedFromOTZ', 'enrolledInPAMA', 'dateEnrolledInPAMA', 'caregiverInSameFacility', 'caregiverType', 'caregiver1CCC',
-     'caregiver2CCC', 'caregiverVL', 'caregiverVLDate', 'caregiverVLStatus', 'PAMAStatus3',
-     'PAMAStatus6', 'PAMAStatus12', 'PAMAStatus24', 'PAMAStatusCurrent', 'PAMAStatusTransition', 'dateDiscontinuedFromPAMA', 'comment'
-     *
-     *
-     */
 }
 
 function clearForm() {
@@ -1357,11 +1490,12 @@ function showNumberInput(value) {
 }
 
 function submitPatientData() {
+    newpatient = false;
     let cccNo = cccNoInput.value;
     let facility = facilitySelector.options[facilitySelector.selectedIndex].value;
     let county = countyInput.innerHTML;
     let sex = genderSelect.options[genderSelect.selectedIndex].value;
-    let dob = dobInput.value;
+    let dateOfBirth = dobInput.value;
     let dohd = dohdInput.value;
     let dec = decInput.value;
     let startRegimen =
@@ -1379,7 +1513,7 @@ function submitPatientData() {
             facility: facility,
             county: county,
             sex: sex,
-            dob: dob,
+            dateOfBirth: dateOfBirth,
             dohd: dohd,
             dec: dec,
             startRegimen: startRegimen,
@@ -1422,7 +1556,7 @@ function ovcOptionChanged(disableOptions = false) {
         ovcenrolledSelect.options[ovcenrolledSelect.selectedIndex].value;
     var ovcFields = document.querySelectorAll(".ovcClass");
     if (selectedValue == "Y") {
-        if (disableOptions) ovcenrolledSelect.disabled = true;
+        //if (disableOptions) ovcenrolledSelect.disabled = true;
         ovcFields.forEach((ovcField) => {
             ovcField.removeAttribute("disabled");
         });
@@ -1447,8 +1581,9 @@ function otzOptionChanged(disableOptions = false) {
         });
         if (disableOptions) {
             otzenrolledSelect.readOnly = true;
+            /*
             otzEnrollmentDateInput.setAttribute("disabled", "");
-            otzregimenSelect.setAttribute("disabled", "");
+            otzregimenSelect.setAttribute("disabled", "");*/
         }
     } else {
         otzFields.forEach((otzField) => {
@@ -1457,6 +1592,46 @@ function otzOptionChanged(disableOptions = false) {
     }
 }
 
+/**
+ *
+ * @param {boolean} disableOptions
+ */
+function vdotOptionChanged(disableOptions = false) {
+    var selectedValue = vdotEnrolledSelect.options[vdotEnrolledSelect.selectedIndex].value;
+    var vdotFields = document.querySelectorAll(".vdotClass");
+    if (selectedValue == "Y") {
+        vdotFields.forEach((vdotField) => {
+            vdotField.removeAttribute("disabled");
+        });
+        if (disableOptions) {
+            vdotEnrolledSelect.readOnly = true;
+        }
+    } else {
+        vdotFields.forEach((vdotField) => {
+            vdotField.setAttribute("disabled", "");
+        });
+    }
+}
+/**
+ *
+ * @param {boolean} disableOptions
+ */
+ function adotOptionChanged(disableOptions = false) {
+    var selectedValue = adotEnrolledSelect.options[adotEnrolledSelect.selectedIndex].value;
+    var adotFields = document.querySelectorAll(".adotClass");
+    if (selectedValue == "Y") {
+        adotFields.forEach((adotField) => {
+            adotField.removeAttribute("disabled");
+        });
+        if (disableOptions) {
+            adotEnrolledSelect.readOnly = true;
+        }
+    } else {
+        adotFields.forEach((adotField) => {
+            adotField.setAttribute("disabled", "");
+        });
+    }
+}
 /**
  *
  * @param {boolean} disableOptions

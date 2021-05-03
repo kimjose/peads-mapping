@@ -1,28 +1,37 @@
 <?php
-
+ini_set('max_execution_time', '0');
 
 require_once __DIR__ . "/../../models/User.php";
 require_once __DIR__ . "/../../models/Facility.php";
 require_once __DIR__ . "/../../models/AssignedFacility.php";
 require_once __DIR__ . "/../../models/Patient.php";
 require_once __DIR__ . "/../../models/Observation.php";
-session_start();
-$user = $_SESSION['user'];
-$user = User::findOrFail($user['id']);
-$assignedFacilities = AssignedFacility::select('facility')->where('userID', $user->id)->get();
-$facilities = [];
-foreach ($assignedFacilities as $assignedFacility) {
-    array_push($facilities, $assignedFacility->facility);
-}
 
-//echo json_encode($facilities);
+require_once "../../auth.php";
+
 $data = [];
 $patients = [];
-foreach ($assignedFacilities as $assignedFacility) {
-    $fPatients = Patient::where('facility', $assignedFacility->facility)->get();
-    if (sizeof($fPatients) > 0) {
-        foreach ($fPatients as $fPatient) {
-            array_push($patients, $fPatient);
+
+$permissionlist = $user->permissions;
+if (in_array("3", $permissionlist)) {
+    $assignedFacilities = Facility::all();
+    foreach ($assignedFacilities as $assignedFacility) {
+        $fPatients = Patient::where('facility', $assignedFacility->mfl_code)->get();
+        if (sizeof($fPatients) > 0) {
+            foreach ($fPatients as $fPatient) {
+                array_push($patients, $fPatient);
+            }
+        }
+    }
+} else {
+
+    $assignedFacilities = AssignedFacility::select('facility')->where('userID', $loggedUser->id)->get();
+    foreach ($assignedFacilities as $assignedFacility) {
+        $fPatients = Patient::where('facility', $assignedFacility->facility)->get();
+        if (sizeof($fPatients) > 0) {
+            foreach ($fPatients as $fPatient) {
+                array_push($patients, $fPatient);
+            }
         }
     }
 }
