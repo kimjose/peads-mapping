@@ -3,3 +3,5 @@ bootstrap.php
 .idea
 panel/logs
 panel/reports-excel/temp
+assets/dashboard_data.json
+logs

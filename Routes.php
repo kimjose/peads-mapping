@@ -20,6 +20,9 @@ $router->set404(function () {
     echo $notFound;
 });
 
-
+$router->get('/dashboard_data', function (){
+    ini_set('max_execution_time', '0');//Unlimited execution time
+    \controllers\DashboardController::loadDataToFile();
+});
 // Thunderbirds are go!
 $router->run();
