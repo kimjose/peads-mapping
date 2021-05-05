@@ -143,15 +143,23 @@
                                         </div>
                                         <table class="table-bordered">
                                             <thead>
-                                            <th class="thead-dark">Total Active</th>
-                                            <th class="thead-dark">Total enrolled in OVC</th>
-                                            <th class="thead-dark">percent(%)</th>
+                                            <th class="thead-dark">All Patients</th>
+                                            <th class="thead-dark">Suppressed</th>
+                                            <th class="thead-dark">Suppression Percent(%)</th>
                                             </thead>
                                             <tr class="border-right border-bottom-0">
-
+                                                <td id="tdTotalPatients">500</td>
+                                                <td id="tdTotalSuppressed">200</td>
+                                                <td id="tdSuppressionPercentage">38</td>
                                             </tr>
                                         </table>
-
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <canvas id="pieChartSuppression"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
 
 
                                     </div>
@@ -172,8 +180,8 @@
                                         </div>
                                         <table class="table-bordered">
                                             <thead>
-                                            <th class="thead-dark">Total Active</th>
-                                            <th class="thead-dark">Total enrolled in OVC</th>
+                                            <th class="thead-dark">Total Active(2-19yrs)</th>
+                                            <th class="thead-dark">OVC enrolled </th>
                                             <th class="thead-dark">percent(%)</th>
                                             </thead>
                                             <tr class="border-right border-bottom-0">
@@ -209,8 +217,8 @@
                                         </div>
                                         <table class="table-bordered">
                                             <thead>
-                                            <th class="thead-dark">Total Active</th>
-                                            <th class="thead-dark">Total enrolled in OVC</th>
+                                            <th class="thead-dark">Active(10-19yrs)</th>
+                                            <th class="thead-dark">OTZ Enrolled</th>
                                             <th class="thead-dark">percent(%)</th>
                                             </thead>
                                             <tr class="border-right border-bottom-0">
@@ -245,8 +253,8 @@
                                         </div>
                                         <table class="table-bordered">
                                             <thead>
-                                            <th class="thead-dark">Total Active</th>
-                                            <th class="thead-dark">Total enrolled</th>
+                                            <th class="thead-dark">Active(1-14yrs)</th>
+                                            <th class="thead-dark">PAMA enrolled</th>
                                             <th class="thead-dark">percent(%)</th>
                                             </thead>
                                             <tr class="border-right border-bottom-0">
@@ -270,6 +278,61 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+
+                    <!-- Content Column -->
+                    <div class="col-lg-6 mb-2">
+
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary text-center">Patient Categorization by Age
+                                    and Gender</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="patientCategorizationChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-2">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary text-center">Treatment optimization</h6>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <canvas id="treatmentChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+
+                    <!-- Content Column -->
+                    <div class="col-lg-12 mb-2">
+
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary text-center">ART regimen distribution and viral
+                                    suppression</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="regimenSuppressionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+<!--                </canvas>-->
 
             </div>
             <!-- /.container-fluid -->
