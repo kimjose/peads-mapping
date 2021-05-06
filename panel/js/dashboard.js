@@ -11,7 +11,6 @@ var treatmentChart = null;
 var regimenSuppressionChart = null;
 
 
-
 initialize()
 
 function initialize() {
@@ -80,24 +79,25 @@ function loadData(data) {
     let patientCategorizationData = [];
     let treatmentData = [];
     let regimenSuppressionDatasets = [];
+    let regimenSuppressionTableData = [];
     let ageCat0 = 0, ageCat1 = 0, ageCat2 = 0, ageCat3 = 0;
     let ageCat4 = 0, ageCat5 = 0, ageCat6 = 0, ageCat7 = 0;
-    let lpvr0 = 0, lpvr1 = 0, lpvr2 = 0, lpvr3 = 0, lpvr4 = 0;
-    let efv0 = 0, efv1 = 0, efv2 = 0, efv3 = 0, efv4 = 0;
-    let nvp0 = 0, nvp1 = 0, nvp2 = 0, nvp3 = 0, nvp4 = 0;
-    let dtg0 = 0, dtg1 = 0, dtg2 = 0, dtg3 = 0, dtg4 = 0;
-    let other0 = 0, other1 = 0, other2 = 0, other3 = 0, other4 = 0;
+    let lpvr0 = 0, lpvr1 = 0, lpvr2 = 0, lpvr3 = 0
+    let efv0 = 0, efv1 = 0
+    let atvr0 = 0, atvr1 = 0, atvr2 = 0, atvr3 = 0
+    let dtg0 = 0, dtg1 = 0, dtg2 = 0, dtg3 = 0
+    let other0 = 0, other1 = 0
     let regimenSuppressionOptions = [
-        'ABC+3TC+AZT', 'ABC+3TC+RAL', 'ABC+3TC+DTG', 'TDF+3TC+DTG', 'TDF+3TC+EFV', 'ABC+3TC+EFV', 'AZT+3TC+LPVr','ABC+3TC+LPVr',
+        'ABC+3TC+AZT', 'ABC+3TC+RAL', 'ABC+3TC+DTG', 'TDF+3TC+DTG', 'TDF+3TC+EFV', 'ABC+3TC+EFV', 'AZT+3TC+LPVr', 'ABC+3TC+LPVr',
         'AZT+3TC+EFV', 'TDF+3TC+LPVr', 'TDF+3TC+ATVr', 'AZT+3TC+ATVr', 'ABC+3TC+ATVr', 'AZT+3TC+DTG', 'TDF+3TC+DTG+DRVr'
     ]
     let regimenSuppressionValues = [
-        [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0],
-        [0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0], [0,0,0,0]]
+        [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
+        [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
     let regimenSuppressionTotals = [
-        [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0],
-        [0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0], [0,0,0,0]]
+        [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
+        [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     data.forEach(datum => {
         let age = calculateAge(new Date(datum.dob))
         let supressed = datum.vlOutcome === "Supressed"
@@ -117,56 +117,46 @@ function loadData(data) {
         }
 //get regimen, weight
         if (datum.weight == null || datum.weight === ''
-        || datum.currentRegimen == null
-        || datum.currentRegimen === ''){
+            || datum.currentRegimen == null
+            || datum.currentRegimen === '') {
             //Do nothing if any of these conditions pass
-        } else if (datum.currentRegimen.endsWith('LPVr')){
+        } else if (datum.currentRegimen.endsWith('LPVr')) {
             if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) lpvr0++
             if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) lpvr1++
             if (datum.regimenLine === "Second regimen" && datum.weight < 20) lpvr2++
             if (datum.regimenLine === "Second regimen" && datum.weight >= 20) lpvr3++
-            lpvr4++
-        } else if (datum.currentRegimen.endsWith('EFV')){
-            if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) efv0++
-            if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) efv1++
-            if (datum.regimenLine === "Second regimen" && datum.weight < 20) efv2++
-            if (datum.regimenLine === "Second regimen" && datum.weight >= 20) efv3++
-            efv4++
-        } else if (datum.currentRegimen.endsWith('NVP')){
-            if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) nvp0++
-            if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) nvp1++
-            if (datum.regimenLine === "Second regimen" && datum.weight < 20) nvp2++
-            if (datum.regimenLine === "Second regimen" && datum.weight >= 20) nvp3++
-            nvp4++
-        }  else if (datum.currentRegimen.endsWith('DTG')){
+        } else if (datum.currentRegimen.endsWith('EFV')) {
+            if (datum.weight < 20) efv0++
+            if (datum.weight >= 20) efv1++
+        } else if (datum.currentRegimen.endsWith('ATV/r')) {
+            if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) atvr0++
+            if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) atvr1++
+            if (datum.regimenLine === "Second regimen" && datum.weight < 20) atvr2++
+            if (datum.regimenLine === "Second regimen" && datum.weight >= 20) atvr3++
+        } else if (datum.currentRegimen.endsWith('DTG')) {
             if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) dtg0++
             if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) dtg1++
             if (datum.regimenLine === "Second regimen" && datum.weight < 20) dtg2++
             if (datum.regimenLine === "Second regimen" && datum.weight >= 20) dtg3++
-            dtg4++
-        }  else {
-            if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) other0++
-            if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) other1++
-            if (datum.regimenLine === "Second regimen" && datum.weight < 20) other2++
-            if (datum.regimenLine === "Second regimen" && datum.weight >= 20) other3++
-            other4++
+
+        } else {
+            if (datum.weight < 20) other0++
+            if (datum.weight >= 20) other1++
+
         }
 //For regimen suppression
-        for (let i = 0; i < regimenSuppressionOptions.length; i++ ){
+        for (let i = 0; i < regimenSuppressionOptions.length; i++) {
             if (datum.currentRegimen === regimenSuppressionOptions[i]) {
                 if (age >= 0 && age <= 4) {
                     if (supressed) regimenSuppressionValues[i][0]++
                     regimenSuppressionTotals[i][0]++
-                }
-                else if (age >= 5 && age <= 9) {
+                } else if (age >= 5 && age <= 9) {
                     if (supressed) regimenSuppressionValues[i][1]++
                     regimenSuppressionTotals[i][1]++
-                }
-                else if (age >= 10 && age <= 14) {
+                } else if (age >= 10 && age <= 14) {
                     if (supressed) regimenSuppressionValues[i][2]++
                     regimenSuppressionTotals[i][2]++
-                }
-                else if (age >= 15 && age <= 19) {
+                } else if (age >= 15 && age <= 19) {
                     if (supressed) regimenSuppressionValues[i][3]++
                     regimenSuppressionTotals[i][3]++
                 }
@@ -180,24 +170,27 @@ function loadData(data) {
         "females": femaleAgeCategories
     }
     treatmentData = {
-        "lpvr" : [lpvr0, lpvr1, lpvr2, lpvr3, lpvr4],
-        "efv" : [efv0, efv1, efv2, efv3, efv4],
-        "nvp" : [nvp0, nvp1, nvp2, nvp3, nvp4],
-        "dtg" : [dtg0, dtg1, dtg2, dtg3, dtg4],
-        "other" : [other0, other1, other2, other3, other4],
+        "under20": [dtg0, dtg2, efv0, lpvr0, lpvr2, atvr0, atvr2, other0],
+        "over20": [dtg1, dtg3, efv1, lpvr1, lpvr3, atvr1, atvr3, other1]
     }
-    for (let i = 0; i < regimenSuppressionOptions.length; i++ ){
-        let val0 = regimenSuppressionTotals[i][0] === 0 ? 0 : ((regimenSuppressionValues[i][0]/regimenSuppressionTotals[i][0]) * 100).toFixed(2)
-        let val1 = regimenSuppressionTotals[i][1] === 0 ? 0 : ((regimenSuppressionValues[i][1]/regimenSuppressionTotals[i][1]) * 100).toFixed(2)
-        let val2 = regimenSuppressionTotals[i][2] === 0 ? 0 : ((regimenSuppressionValues[i][2]/regimenSuppressionTotals[i][2]) * 100).toFixed(2)
-        let val3 = regimenSuppressionTotals[i][3] === 0 ? 0 : ((regimenSuppressionValues[i][3]/regimenSuppressionTotals[i][3]) * 100).toFixed(2)
+    for (let i = 0; i < regimenSuppressionOptions.length; i++) {
+        let val0 = regimenSuppressionTotals[i][0] === 0 ? 0 : ((regimenSuppressionValues[i][0] / regimenSuppressionTotals[i][0]) * 100).toFixed(2)
+        let val1 = regimenSuppressionTotals[i][1] === 0 ? 0 : ((regimenSuppressionValues[i][1] / regimenSuppressionTotals[i][1]) * 100).toFixed(2)
+        let val2 = regimenSuppressionTotals[i][2] === 0 ? 0 : ((regimenSuppressionValues[i][2] / regimenSuppressionTotals[i][2]) * 100).toFixed(2)
+        let val3 = regimenSuppressionTotals[i][3] === 0 ? 0 : ((regimenSuppressionValues[i][3] / regimenSuppressionTotals[i][3]) * 100).toFixed(2)
         let dataset = {
             label: regimenSuppressionOptions[i],
             data: [val0, val1, val2, val3],
-            backgroundColor: "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ","+ Math.floor(Math.random() * 255) + ")",
-            borderColor: "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ","+ Math.floor(Math.random() * 255) + ")",
+            backgroundColor: "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")",
+            borderColor: "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")",
+        }
+        let tableDatum = {
+            suppressedValues : [regimenSuppressionValues[i][0], regimenSuppressionValues[i][1], regimenSuppressionValues[i][2], regimenSuppressionValues[i][3]],
+            totals : [regimenSuppressionTotals[i][0], regimenSuppressionTotals[i][1], regimenSuppressionTotals[i][2], regimenSuppressionTotals[i][3]],
+            suppressedPercentage : [val0, val1, val2, val3]
         }
         regimenSuppressionDatasets.push(dataset)
+        regimenSuppressionTableData.push(tableDatum)
     }
     drawPatientSuppression(data)
     drawOvcData(ovcData)
@@ -206,13 +199,18 @@ function loadData(data) {
     drawPatientCategorization(patientCategorizationData)
     drawTreatmentChart(treatmentData)
     drawRegimenSuppressionChart(regimenSuppressionDatasets)
+    drawRegimenSuppressionTable(regimenSuppressionTableData, regimenSuppressionOptions);
 }
 
-function drawPatientSuppression(data){
+function drawPatientSuppression(data) {
     let active = data.length
     let suppressed = 0
+    let notSuppressed = 0
+    let notDone = 0
     data.forEach(datum => {
-        if (datum.enrolledInOVC === 'Y') suppressed++
+        if (datum.vlOutcome === 'Supressed') suppressed++
+        if (datum.vlOutcome === 'NotSupressed') notSuppressed++
+        if (datum.vlOutcome === 'Not Done') notDone++
     })
     document.getElementById('tdTotalPatients').innerText = active
     document.getElementById('tdTotalSuppressed').innerText = suppressed + ''
@@ -221,11 +219,11 @@ function drawPatientSuppression(data){
         patientSuppressionChart = new Chart(document.getElementById("pieChartSuppression").getContext('2d'), {
             type: 'pie',
             data: {
-                labels: ["Suppressed", "Not Suppressed"],
+                labels: ["S", "N.S", "NotDone"],
                 datasets: [{
-                    data: [300, 50],
-                    backgroundColor: ["#00FFCC", "#DCDCDC"],
-                    hoverBackgroundColor: ["#00FF33", "#C0C0C0"]
+                    data: [300, 50, 40],
+                    backgroundColor: ["#00FFCC", "#006699", "#DCDCDC"],
+                    hoverBackgroundColor: ["#00FF33", "#0A6AC9", "#C0C0C0"]
                 }]
             },
             options: {
@@ -233,7 +231,7 @@ function drawPatientSuppression(data){
             }
         });
     }
-    patientSuppressionChart.data.datasets[0].data = [suppressed, active - suppressed]
+    patientSuppressionChart.data.datasets[0].data = [suppressed, notSuppressed, notDone]
     patientSuppressionChart.update()
 }
 
@@ -388,66 +386,32 @@ function drawPamaData(data) {
 function drawTreatmentChart(data) {
     if (treatmentChart == null) {
         treatmentChart = new Chart(document.getElementById("treatmentChart").getContext('2d'), {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: ["First line(<20kg)", "First line(>20Kg)", "Second line(<20kg)", "Second line(>20kg)", "Total"],
-                datasets: [{
-                    label: "LPV/r",
-                    data: [65, 59, 80, 81, 56,],
-
-                    borderColor: [
-                        'rgba(200, 99, 132, .7)',
-                    ],
-                    borderWidth: 2
-                },
+                labels: ["DTG 1st Line", "DTG 2nd Line", "EFV", "LPV/r 1st Line", "LPV/r 2nd Line", "ATV/r 1st Line", "ATV/r 2nd Line", "Other"],
+                datasets: [
                     {
-                        label: "EFV",
-                        data: [28, 48, 40, 19, 86,],
-
-                        borderColor: [
-                            'rgba(230, 210, 10, .7)',
-                        ],
-                        borderWidth: 2
+                        label: '<20 Kgs',
+                        data: [20, 20, 20, 20, 20, 20, 20, 20],
+                        backgroundColor: '#98FF98',
+                        borderColor: '#89FF88',
                     },
                     {
-                        label: "NVP",
-                        data: [40, 19, 86, 27, 90],
-
-                        borderColor: [
-                            'rgba(10, 100, 10, .7)',
-                        ],
-                        borderWidth: 2
+                        label: '>=20 Kgs',
+                        data: [20, 20, 20, 20, 20, 20, 20, 20],
+                        backgroundColor: '#2B60DE',
+                        borderColor: '#1F45FC',
                     },
-                    {
-                        label: "DTG",
-                        data: [48, 40, 19, 27, 90],
-
-                        borderColor: [
-                            'rgba(60, 10, 130, .7)',
-                        ],
-                        borderWidth: 2
-                    },
-                    {
-                        label: "Other",
-                        data: [48, 40, 19, 27, 90],
-
-                        borderColor: [
-                            'rgba(60, 10, 130, .7)',
-                        ],
-                        borderWidth: 2
-                    }
-                ]
+                ],
             },
             options: {
                 responsive: true
             }
         });
     }
-    treatmentChart.data.datasets[0].data = data.lpvr
-    treatmentChart.data.datasets[1].data = data.efv
-    treatmentChart.data.datasets[2].data = data.nvp
-    treatmentChart.data.datasets[3].data = data.dtg
-    treatmentChart.data.datasets[4].data = data.other
+    treatmentChart.data.datasets[0].data = data.under20
+    treatmentChart.data.datasets[1].data = data.over20
+    treatmentChart.update()
 
 }
 
@@ -506,10 +470,37 @@ function drawRegimenSuppressionChart(datasets) {
             },
         });
     }
-    console.log(regimenSuppressionChart.data.datasets)
-    console.log(datasets)
     regimenSuppressionChart.data.datasets = datasets;
     regimenSuppressionChart.update()
+}
+
+function drawRegimenSuppressionTable(tableData, options) {
+    // console.log(tableData)
+    let regimenSuppressionTable = document.getElementById('regimenSuppressionTable')
+    let tbody = regimenSuppressionTable.querySelector('.table_body')
+    regimenSuppressionTable.removeChild(tbody)
+    let newBody = document.createElement('tbody')
+    newBody.classList.add('table_body')
+    for (let i = 0; i < options.length; i++) {
+        let row = newBody.insertRow(i)
+        let rowDatum = tableData[i]
+        console.log(rowDatum)
+        let cat0Value = rowDatum.suppressedValues[0], cat0Total = rowDatum.totals[0], cat0Perc = rowDatum.suppressedPercentage[0]
+        let cat1Value = rowDatum.suppressedValues[1], cat1Total = rowDatum.totals[1], cat1Perc = rowDatum.suppressedPercentage[1]
+        let cat2Value = rowDatum.suppressedValues[2], cat2Total = rowDatum.totals[2], cat2Perc = rowDatum.suppressedPercentage[2]
+        let cat3Value = rowDatum.suppressedValues[3], cat3Total = rowDatum.totals[3], cat3Perc = rowDatum.suppressedPercentage[3]
+
+        row.insertCell(0).appendChild(document.createTextNode(options[i]))
+        row.insertCell(1).appendChild(document.createTextNode(cat0Value + ' (' +cat0Perc + '%)'))
+        row.insertCell(2).appendChild(document.createTextNode((cat0Total - cat0Value) + ' (' + (cat0Total === 0 ? 0 :(100 - cat0Perc)).toFixed(2) + '%)'))
+        row.insertCell(3).appendChild(document.createTextNode(cat1Value + ' (' +cat1Perc + '%)'))
+        row.insertCell(4).appendChild(document.createTextNode((cat1Total - cat1Value) + ' (' + (cat1Total === 0 ? 0 :(100 - cat1Perc)).toFixed(2) + '%)'))
+        row.insertCell(5).appendChild(document.createTextNode(cat2Value + ' (' +cat2Perc + '%)'))
+        row.insertCell(6).appendChild(document.createTextNode((cat2Total - cat2Value) + ' (' + (cat2Total === 0 ? 0 : (100 - cat2Perc)).toFixed(2) + '%)'))
+        row.insertCell(7).appendChild(document.createTextNode(cat3Value + ' (' +cat3Perc + '%)'))
+        row.insertCell(8).appendChild(document.createTextNode((cat3Total - cat3Value) + ' (' + (cat3Total === 0 ? 0 : (100 - cat3Perc)).toFixed(2) + '%)'))
+    }
+    regimenSuppressionTable.appendChild(newBody)
 }
 
 function calculateAge(dob) {

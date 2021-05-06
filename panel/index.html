@@ -19,6 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <script src="vendor/jquery/jquery.js"></script>
     <script>
@@ -153,7 +154,7 @@
                                                 <td id="tdSuppressionPercentage">38</td>
                                             </tr>
                                         </table>
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 mt-2 mb-0">
                                             <div class="card">
                                                 <div class="card-body">
                                                     <canvas id="pieChartSuppression"></canvas>
@@ -181,7 +182,7 @@
                                         <table class="table-bordered">
                                             <thead>
                                             <th class="thead-dark">Total Active(2-19yrs)</th>
-                                            <th class="thead-dark">OVC enrolled </th>
+                                            <th class="thead-dark">OVC enrolled</th>
                                             <th class="thead-dark">percent(%)</th>
                                             </thead>
                                             <tr class="border-right border-bottom-0">
@@ -191,7 +192,7 @@
                                             </tr>
                                         </table>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 mt-2">
                                             <div class="card">
                                                 <div class="card-body">
                                                     <canvas id="pieChartOVC"></canvas>
@@ -228,7 +229,7 @@
                                             </tr>
                                         </table>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 mt-2">
                                             <div class="card">
                                                 <div class="card-body">
                                                     <canvas id="pieChartOTZ"></canvas>
@@ -264,7 +265,7 @@
                                             </tr>
                                         </table>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 mt-2">
                                             <div class="card">
                                                 <div class="card-body">
                                                     <canvas id="pieChartPAMA"></canvas>
@@ -312,27 +313,77 @@
                 </div>
 
                 <div class="row">
-
                     <!-- Content Column -->
                     <div class="col-lg-12 mb-2">
 
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary text-center">ART regimen distribution and viral
+                                <h6 class="m-0 font-weight-bold text-primary text-center">ART regimen distribution and
+                                    viral
                                     suppression</h6>
                             </div>
                             <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="regimenSuppressionChart"></canvas>
+                                <ul class="nav nav-tabs" style="font-size: 14px;">
+                                    <li class="nav-item active"><a data-toggle="tab" class="active" href="#tablePane">Table</a></li>
+                                    <li class="nav-item"><a data-toggle="tab" href="#graphPane">Graph</a></li>
+                                </ul>
+
+                                <br/>
+                                <div class="tab-content">
+                                    <div id="tablePane" class="tab-pane active">
+                                        <br />
+
+                                        <table id="regimenSuppressionTable" class="table-primary table-bordered" width="100%">
+                                            <thead>
+                                            <colgroup span="2"></colgroup>
+                                            <colgroup span="2"></colgroup>
+                                            <tr>
+                                                <td rowspan="2" class="text-dark text">Regimens</td>
+                                                <th colspan="2" class="text-center" scope="colgroup">0-4 years</th>
+                                                <th colspan="2" class="text-center" scope="colgroup">5-9 years</th>
+                                                <th colspan="2" class="text-center" scope="colgroup">10-14 years</th>
+                                                <th colspan="2" class="text-center" scope="colgroup">15-19 years</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Suppressed</th>
+                                                <th scope="col">Not Suppressed</th>
+                                                <th scope="col">Suppressed</th>
+                                                <th scope="col">Not Suppressed</th>
+                                                <th scope="col">Suppressed</th>
+                                                <th scope="col">Not Suppressed</th>
+                                                <th scope="col">Suppressed</th>
+                                                <th scope="col">Not Suppressed</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="table_body">
+                                            <tr>
+                                                <td scope="col">ABC/3TC/DTG</td>
+                                                <td scope="col">Suppressed</td>
+                                                <td scope="col">Not Suppressed</td>
+                                                <td scope="col">Suppressed</td>
+                                                <td scope="col">Not Suppressed</td>
+                                                <td scope="col">Suppressed</td>
+                                                <td scope="col">Not Suppressed</td>
+                                                <td scope="col">Suppressed</td>
+                                                <td scope="col">Not Suppressed</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div id="graphPane" class="tab-pane ">
+                                        <br />
+                                        <div class="chart-area">
+                                            <canvas id="regimenSuppressionChart"></canvas>
+                                        </div>
+                                    </div>
+
                                 </div>
+
                             </div>
                         </div>
                     </div>
-
-
                 </div>
 
-<!--                </canvas>-->
 
             </div>
             <!-- /.container-fluid -->
@@ -382,7 +433,8 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/chart.js/Chart.min.js"></script>
 
