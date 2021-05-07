@@ -2,6 +2,9 @@ const countySelect = document.getElementById('countySelect')
 const toSelect = document.getElementById('toSelect')
 const facilitySelect = document.getElementById('facilitySelect')
 var patientsData = null;
+var allTos = null;
+var allFacilities = null;
+var allCounties = null;
 var patientSuppressionChart = null
 var ovcChart = null;
 var otzChart = null;
@@ -26,8 +29,8 @@ function initialize() {
         success: response => {
 
             let counties = response.allCounties
-            let facilities = response.allFacilities
-            let tos = response.technicalOfficers
+            allFacilities = response.allFacilities
+            allTos = response.technicalOfficers
             patientsData = response.patientsData
 
             counties.forEach(county => {
@@ -36,13 +39,13 @@ function initialize() {
                 option.appendChild(document.createTextNode(county))
                 countySelect.appendChild(option)
             })
-            facilities.forEach(facility => {
+            allFacilities.forEach(facility => {
                 let option = document.createElement('option')
                 option.value = facility.mfl_code
                 option.appendChild(document.createTextNode(facility.name))
                 facilitySelect.appendChild(option)
             })
-            tos.forEach(to => {
+            allTos.forEach(to => {
                 let option = document.createElement('option')
                 option.value = to.id
                 option.appendChild(document.createTextNode(to.names))
@@ -58,17 +61,67 @@ function filterByCounty() {
     if (selected === "") {
 
     } else if (selected == 0) {
-
+        loadData(patientsData)
     } else {
-
+        let filtered = [];
+        let countyFacilities = [];
+        patientsData.forEach(patientData =>{
+            if (patientData.county === selected){
+                filtered.push(patientData)
+            }
+        })
+        allFacilities.forEach(facility => {
+            if (facility.county === selected){
+                countyFacilities.push(facility)
+            }
+        })
+        //todo filter tos and facilities
+        loadData(filtered)
     }
 }
 
 function filterByTo() {
+    let selected = toSelect.options[toSelect.selectedIndex].value
+    console.log(selected)
+    if (selected === "") {
+
+    } else if (selected == 0) {
+        loadData(patientsData)
+    } else {
+        let filtered = [];
+        let countyFacilities = [];
+        patientsData.forEach(patientData =>{
+            console.log(patientData.to_id)
+            if (patientData.to_id == selected){
+                filtered.push(patientData)
+            }
+        })
+        allFacilities.forEach(facility => {
+            if (facility.to_id === selected){
+                countyFacilities.push(facility)
+            }
+        })
+        //todo filter facilities
+        loadData(filtered)
+    }
 
 }
 
 function filterByFacility() {
+    let selected = facilitySelect.options[facilitySelect.selectedIndex].value
+    if (selected === "") {
+
+    } else if (selected == 0) {
+        loadData(patientsData)
+    } else {
+        let filtered = [];
+        patientsData.forEach(patientData =>{
+            if (patientData.facility === selected){
+                filtered.push(patientData)
+            }
+        })
+        loadData(filtered)
+    }
 
 }
 
@@ -128,7 +181,7 @@ function loadData(data) {
         } else if (datum.currentRegimen.endsWith('EFV')) {
             if (datum.weight < 20) efv0++
             if (datum.weight >= 20) efv1++
-        } else if (datum.currentRegimen.endsWith('ATV/r')) {
+        } else if (datum.currentRegimen.endsWith('ATVr')) {
             if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) atvr0++
             if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) atvr1++
             if (datum.regimenLine === "Second regimen" && datum.weight < 20) atvr2++
@@ -475,7 +528,7 @@ function drawRegimenSuppressionChart(datasets) {
 }
 
 function drawRegimenSuppressionTable(tableData, options) {
-    // console.log(tableData)
+
     let regimenSuppressionTable = document.getElementById('regimenSuppressionTable')
     let tbody = regimenSuppressionTable.querySelector('.table_body')
     regimenSuppressionTable.removeChild(tbody)
@@ -484,7 +537,6 @@ function drawRegimenSuppressionTable(tableData, options) {
     for (let i = 0; i < options.length; i++) {
         let row = newBody.insertRow(i)
         let rowDatum = tableData[i]
-        console.log(rowDatum)
         let cat0Value = rowDatum.suppressedValues[0], cat0Total = rowDatum.totals[0], cat0Perc = rowDatum.suppressedPercentage[0]
         let cat1Value = rowDatum.suppressedValues[1], cat1Total = rowDatum.totals[1], cat1Perc = rowDatum.suppressedPercentage[1]
         let cat2Value = rowDatum.suppressedValues[2], cat2Total = rowDatum.totals[2], cat2Perc = rowDatum.suppressedPercentage[2]
