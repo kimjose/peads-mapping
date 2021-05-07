@@ -46,8 +46,8 @@ WHERE A.transferred_out = 0");
             $dashboardData['allFacilities'] = $allFacilities;
             $dashboardData['patientsData'] = $patients;
 
-            if (!is_file(self::$dataFile)) {
-
+            if (!is_dir(self::$dataFile)) {
+mkdir(__DIR__ . '/../assets/');
             }
             $handler = fopen(self::$dataFile, 'w');
             fwrite($handler, json_encode($dashboardData));
