@@ -20,17 +20,6 @@ try {
 
     $permissionlist = $user->permissions;
     // if (!in_array("3", $permissionlist)) {
-    //     $assignedFacilities = Facility::all();
-    //     foreach ($assignedFacilities as $assignedFacility) {
-    //         $indexPatients = IndexClientLinelist::where('facility', $assignedFacility->mfl_code)->get();
-    //         $pds = DB::select("SELECT A.cccNo, A.county, A.facility, A.sex, A.dob, A.date_of_hiv_diagnosis, A.date_enrolled, A.dateStartedART, A.startRegimen, A.startKaletraFormulation,
-    //     B.*, D.name AS 'facilityName', E.`names` AS 'usernames', F.name AS 'lastOtzModuleCompleted' FROM linelist_index_clients A LEFT JOIN observations B ON A.cccNo = B.patientCCC AND 
-    // B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JOIN facilities D ON D.mfl_code = A.facility
-    //         LEFT JOIN users E ON E.id = B.userId LEFT JOIN otz_modules F ON F.id = B.completedOTZModules WHERE A.transferred_out = 0 AND `facility`= " . $assignedFacility->mfl_code);
-    //         foreach ($pds as $pd) {
-    //             array_push($data, $pd);
-    //         }
-    //     }
     // } else {
         $children = ChildrenLinelist::all();
         foreach ($children as $child) {
