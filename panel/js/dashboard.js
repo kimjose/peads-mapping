@@ -18,7 +18,6 @@ initialize()
 
 function initialize() {
 
-
     countySelect.addEventListener('change', () => filterByCounty())
     toSelect.addEventListener('change', () => filterByTo())
     facilitySelect.addEventListener('change', () => filterByFacility())
@@ -33,10 +32,12 @@ function initialize() {
             allTos = response.technicalOfficers
             patientsData = response.patientsData
 
+            console.log(counties);
+
             counties.forEach(county => {
                 let option = document.createElement('option')
-                option.value = county;
-                option.appendChild(document.createTextNode(county))
+                option.value = county.name;
+                option.appendChild(document.createTextNode(county.name))
                 countySelect.appendChild(option)
             })
             allFacilities.forEach(facility => {
@@ -57,22 +58,57 @@ function initialize() {
 }
 
 function filterByCounty() {
-    let selected = countySelect.options[countySelect.selectedIndex].value
-    if (selected === "") {
+    let selected = countySelect.options[countySelect.selectedIndex].value;
+    console.log(selected);
+    if (selected == "") {
 
     } else if (selected == 0) {
-        loadData(patientsData)
+        loadData(patientsData);
+        $('#toSelect').find('option').remove().end().append('<option selected hidden value="">Select Technical Officer</option>')
+        .val('').append('<option value="0">All Officers</option>').val('0');
+        allTos.forEach(to => {
+            let option = document.createElement('option')
+            option.value = to.id;
+            option.appendChild(document.createTextNode(to.names));
+            toSelect.appendChild(option)
+        });
+        $('#facilitySelect').find('option').remove().end().append('<option selected hidden value="">Select Facility</option>')
+        .val('').append('<option value="0">All Facilities</option>').val('0');
+        allFacilities.forEach(facility => {
+            let option = document.createElement('option')
+            option.value = facility.mfl_code
+            option.appendChild(document.createTextNode(facility.name))
+            facilitySelect.appendChild(option)
+        })
     } else {
         let filtered = [];
         let countyFacilities = [];
-        patientsData.forEach(patientData =>{
-            if (patientData.county === selected){
+        $('#toSelect').find('option').remove().end().append('<option selected hidden value="">Select Technical Officer</option>')
+        .val('').append('<option value="1">All Officers</option>').val('1');
+        console.log(allTos);
+        allTos.forEach(to => {
+            if(to.county == selected) {
+                let option = document.createElement('option')
+                option.value = to.id
+                option.appendChild(document.createTextNode(to.names))
+                toSelect.appendChild(option)
+            }
+        });
+
+        patientsData.forEach(patientData => {
+            if (patientData.county == selected) {
                 filtered.push(patientData)
             }
         })
+        $('#facilitySelect').find('option').remove().end().append('<option selected hidden value="">Select Facility</option>')
+        .val('').append('<option value="1">All Facilities</option>').val('1');
         allFacilities.forEach(facility => {
-            if (facility.county === selected){
-                countyFacilities.push(facility)
+            if (facility.county == selected) {
+                countyFacilities.push(facility);
+                let option = document.createElement('option')
+                option.value = facility.mfl_code
+                option.appendChild(document.createTextNode(facility.name))
+                facilitySelect.appendChild(option)
             }
         })
         //todo filter tos and facilities
@@ -83,25 +119,43 @@ function filterByCounty() {
 function filterByTo() {
     let selected = toSelect.options[toSelect.selectedIndex].value
     console.log(selected)
-    if (selected === "") {
+    if (selected == "") {
 
     } else if (selected == 0) {
         loadData(patientsData)
-    } else {
+    } else if (selected == 1) {
         let filtered = [];
-        let countyFacilities = [];
-        patientsData.forEach(patientData =>{
-            console.log(patientData.to_id)
-            if (patientData.to_id == selected){
+        let selectedcounty = countySelect.options[countySelect.selectedIndex].value;
+        patientsData.forEach(patientData => {
+            if (patientData.county == selectedcounty) {
                 filtered.push(patientData)
             }
         })
-        allFacilities.forEach(facility => {
-            if (facility.to_id === selected){
-                countyFacilities.push(facility)
+        loadData(filtered)
+    } else {
+        let filtered = [];
+        let countyFacilities = [];
+        let toFacilities = [];
+        
+        $('#facilitySelect').find('option').remove().end().append('<option selected hidden value="">Select Facility</option>')
+        .val('').append('<option value="1">All Facilities</option>').val('1');
+        allFacilities.forEach(fac => {  
+            if (fac.assignedto == selected){
+                toFacilities.push(fac)
+                let option = document.createElement('option')
+                option.value = fac.mfl_code
+                option.appendChild(document.createTextNode(fac.name))
+                facilitySelect.appendChild(option)
             }
         })
-        //todo filter facilities
+        
+        patientsData.forEach(patientData =>{
+            console.log(patientData.to_id)
+            if (patientData.to_id == selected){
+                filtered.push(patientData);
+            }
+        });
+        
         loadData(filtered)
     }
 
@@ -109,14 +163,24 @@ function filterByTo() {
 
 function filterByFacility() {
     let selected = facilitySelect.options[facilitySelect.selectedIndex].value
-    if (selected === "") {
+    if (selected == "") {
 
     } else if (selected == 0) {
         loadData(patientsData)
+    } else if (selected == 1) {
+        let filtered = [];
+        let selectedto = toSelect.options[toSelect.selectedIndex].value;
+        patientsData.forEach(patientData =>{
+            if (patientData.to_id == selectedto){
+                filtered.push(patientData);
+            }
+        });
+        
+        loadData(filtered);
     } else {
         let filtered = [];
         patientsData.forEach(patientData =>{
-            if (patientData.facility === selected){
+            if (patientData.facility == selected){
                 filtered.push(patientData)
             }
         })

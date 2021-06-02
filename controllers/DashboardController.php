@@ -27,12 +27,35 @@ class DashboardController
             $dashboardData = [];
 
             $tos = User::where('cadre', 8)->get();
-            $allFacilities = \Facility::all();
             foreach ($tos as $to) {
                 $toFacilities = \AssignedFacility::where('userID', $to->id)->get();
                 $to['facilities'] = $toFacilities;
             }
-            $counties = ['Makueni', 'Machakos', 'Kitui'];
+            $allFacilities = \Facility::all();
+            foreach ($allFacilities as $facility) {
+                $assignedto = \AssignedFacility::where('facility', $facility->mfl_code)->where('cadre', 8)->first();
+                $facility['assignedto'] = $assignedto->userID;
+            }
+
+            // kituitos = 
+            $counties = array(
+                array(
+                    "code" => 15,
+                    "name" => "Kitui",
+                    "tos" => User::where('cadre', 8)->where('county', 15)->get()
+                ),
+                array(
+                    "code" => 16,
+                    "name" => "Machakos",
+                    "tos" => User::where('cadre', 8)->where('county', 16)->get()
+                ),
+                array(
+                    "code" => 17,
+                    "name" => "Makueni",
+                    "tos" => User::where('cadre', 8)->where('county', 17)->get()
+                )
+            );
+            // $counties = json_encode($arr);
 
             $patients = DB::select("SELECT A.cccNo, A.county, A.facility, A.sex, A.dob, A.date_of_hiv_diagnosis, A.date_enrolled, A.dateStartedART, A.startRegimen, 
 A.startKaletraFormulation, D.userID AS 'to_id', B.* FROM patients A

@@ -158,8 +158,9 @@ try {
 }
 
 function getPatientAge($dob) {
-    $today = date("Y-m-d");
-    $diff = date_diff(date_create($dob), date_create($today));
+    $today = new DateTime();
+    $newdob = new DateTime(date("Y-m-d", strtotime($dob)));
+    $diff = $newdob->diff($today);
     return $diff->format('%y');
 }
 
