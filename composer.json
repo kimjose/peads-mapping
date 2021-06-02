@@ -1,16 +1,20 @@
 {
+
+    "name": "chs/peds_mapping",
+    "description": "Pediaric mapping application.",
+    "version": "1.0",
+
     "require": {
         "illuminate/database": "^7.30",
         "setasign/fpdf": "^1.8",
         "phpoffice/phpspreadsheet": "^1.16",
-        "box/spout": "^3.1"
+        "box/spout": "^3.1",
+        "bramus/router": "^1.5"
     },
     "autoload": {
         "classmap": [
-            "models"
-        ]
+            "models", "controllers"
+        ],
+        "files": ["bootstrap.php"]
     }
-    
-    
-
 }

@@ -19,13 +19,14 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
     <script src="vendor/jquery/jquery.js"></script>
-    <script> 
-      $(function(){
-        $("#includedContent").load("includes/navbar.html"); 
-      });
-    </script> 
+    <script>
+        $(function () {
+            $("#includedContent").load("includes/navbar.html");
+        });
+    </script>
 
 </head>
 
@@ -99,121 +100,290 @@
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                     </div> -->
 
-                    <!-- Page Heading -->
-                    <div class="row">
-                        <div class="col-xl-4">
-                            <div class="form-group">
-                                <label>County</label>
-                                <select id="countySelect" class="form-control" style='width:100%'>
-                                    <option selected hidden value="">Select County</option>
-                                    <option value="0">All Counties</option>
-                                </select>
-                            </div>
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>County</label>
+                            <select id="countySelect" class="form-control" style='width:100%'>
+                                <option selected hidden value="">Select County</option>
+                                <option value="0">All Counties</option>
+                            </select>
                         </div>
-                        <div class="col-xl-4">
-                            <div class="form-group">
-                                <label>Technical Officer</label>
-                                <select id="toSelect" class="form-control" style='width:100%'>
-                                    <option selected hidden value="">Select Technical Officer</option>
-                                    <option value="0">All Officers</option>
-                                </select>
-                            </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Technical Officer</label>
+                            <select id="toSelect" class="form-control" style='width:100%'>
+                                <option selected hidden value="">Select Technical Officer</option>
+                                <option value="0">All Officers</option>
+                            </select>
                         </div>
-                        <div class="col-xl-4">
-                            <div class="form-group">
-                                <label>Facility</label>
-                                <select id="userFacilitySelect" class="form-control" style='width:100%'
-                                        placeholder="Search by facility name">
-                                    <option selected hidden value="">Select Facility</option>
-                                    <option value="0">All Facilities</option>
-                                </select>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Facility</label>
+                            <select id="facilitySelect" class="form-control" style='width:100%'
+                                    placeholder="Search by facility name">
+                                <option selected hidden value="">Select Facility</option>
+                                <option value="0">All Facilities</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total
+                                            Pediatric Mapping Patients
+                                        </div>
+                                        <table class="table-bordered">
+                                            <thead>
+                                            <th class="thead-dark">All Patients</th>
+                                            <th class="thead-dark">Suppressed</th>
+                                            <th class="thead-dark">Suppression Percent(%)</th>
+                                            </thead>
+                                            <tr class="border-right border-bottom-0">
+                                                <td id="tdTotalPatients">500</td>
+                                                <td id="tdTotalSuppressed">200</td>
+                                                <td id="tdSuppressionPercentage">38</td>
+                                            </tr>
+                                        </table>
+                                        <div class="col-md-12 mt-2 mb-0">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <canvas id="pieChartSuppression"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row mt-2">
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total
-                                                Pediatric Mapping Patients
+                    <!-- OVC enrolled -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">OVC
+                                            Clients
+                                        </div>
+                                        <table class="table-bordered">
+                                            <thead>
+                                            <th class="thead-dark">Total Active(2-19yrs)</th>
+                                            <th class="thead-dark">OVC enrolled</th>
+                                            <th class="thead-dark">percent(%)</th>
+                                            </thead>
+                                            <tr class="border-right border-bottom-0">
+                                                <td id="tdOvcActive">500</td>
+                                                <td id="tdOvcEnrolled">200</td>
+                                                <td id="tdOvcPercentage">38</td>
+                                            </tr>
+                                        </table>
+
+                                        <div class="col-md-12 mt-2">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <canvas id="pieChartOVC"></canvas>
+                                                </div>
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="pedspatients">500</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-stethoscope fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total OVC Clients
-                                            </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="ovcclients">
-                                                300
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total
-                                                OTZ Clients
-                                            </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="otzclients">300</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-stethoscope fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total
-                                                PAMA Clients
-                                            </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="pamaclients">300</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-stethoscope fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            OTZ Clients
+                                        </div>
+                                        <table class="table-bordered">
+                                            <thead>
+                                            <th class="thead-dark">Active(10-19yrs)</th>
+                                            <th class="thead-dark">OTZ Enrolled</th>
+                                            <th class="thead-dark">percent(%)</th>
+                                            </thead>
+                                            <tr class="border-right border-bottom-0">
+                                                <td id="tdOtzActive">500</td>
+                                                <td id="tdOtzEnrolled">200</td>
+                                                <td id="tdOtzPercentage">38</td>
+                                            </tr>
+                                        </table>
+
+                                        <div class="col-md-12 mt-2">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <canvas id="pieChartOTZ"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            PAMA Clients
+                                        </div>
+                                        <table class="table-bordered">
+                                            <thead>
+                                            <th class="thead-dark">Active(1-14yrs)</th>
+                                            <th class="thead-dark">PAMA enrolled</th>
+                                            <th class="thead-dark">percent(%)</th>
+                                            </thead>
+                                            <tr class="border-right border-bottom-0">
+                                                <td id="tdPamaActive">500</td>
+                                                <td id="tdPamaEnrolled">200</td>
+                                                <td id="tdPamaPercentage">38</td>
+                                            </tr>
+                                        </table>
+
+                                        <div class="col-md-12 mt-2">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <canvas id="pieChartPAMA"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <!-- Content Column -->
+                    <div class="col-lg-6 mb-2">
+
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary text-center">Patient Categorization by Age
+                                    and Gender</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="patientCategorizationChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-2">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary text-center">Treatment optimization</h6>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <canvas id="treatmentChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
-                <!-- /.container-fluid -->
+
+                <div class="row">
+                    <!-- Content Column -->
+                    <div class="col-lg-12 mb-2">
+
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary text-center">ART regimen distribution and
+                                    viral
+                                    suppression</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="nav nav-tabs" style="font-size: 14px;">
+                                    <li class="nav-item active"><a data-toggle="tab" class="active" href="#tablePane">Table</a></li>
+                                    <li class="nav-item"><a data-toggle="tab" href="#graphPane">Graph</a></li>
+                                </ul>
+
+                                <br/>
+                                <div class="tab-content">
+                                    <div id="tablePane" class="tab-pane active">
+                                        <br />
+
+                                        <table id="regimenSuppressionTable" class="table-primary table-bordered" width="100%">
+                                            <thead>
+                                            <colgroup span="2"></colgroup>
+                                            <colgroup span="2"></colgroup>
+                                            <tr>
+                                                <td rowspan="2" class="text-dark text">Regimens</td>
+                                                <th colspan="2" class="text-center" scope="colgroup">0-4 years</th>
+                                                <th colspan="2" class="text-center" scope="colgroup">5-9 years</th>
+                                                <th colspan="2" class="text-center" scope="colgroup">10-14 years</th>
+                                                <th colspan="2" class="text-center" scope="colgroup">15-19 years</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">Suppressed</th>
+                                                <th scope="col">Not Suppressed</th>
+                                                <th scope="col">Suppressed</th>
+                                                <th scope="col">Not Suppressed</th>
+                                                <th scope="col">Suppressed</th>
+                                                <th scope="col">Not Suppressed</th>
+                                                <th scope="col">Suppressed</th>
+                                                <th scope="col">Not Suppressed</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="table_body">
+                                            <tr>
+                                                <td scope="col">ABC/3TC/DTG</td>
+                                                <td scope="col">Suppressed</td>
+                                                <td scope="col">Not Suppressed</td>
+                                                <td scope="col">Suppressed</td>
+                                                <td scope="col">Not Suppressed</td>
+                                                <td scope="col">Suppressed</td>
+                                                <td scope="col">Not Suppressed</td>
+                                                <td scope="col">Suppressed</td>
+                                                <td scope="col">Not Suppressed</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div id="graphPane" class="tab-pane ">
+                                        <br />
+                                        <div class="chart-area">
+                                            <canvas id="regimenSuppressionChart"></canvas>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
             </div>
-            <!-- End of Main Content -->
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
@@ -225,8 +395,8 @@
             </footer>
             <!-- End of Footer -->
 
-        </div>
-        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Content Wrapper -->
 
     </div>
     <!-- End of Page Wrapper -->
@@ -256,25 +426,28 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script src="js/bootstrap.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-    <script>
-        const usernametxt = document.getElementById("usernametxt");
-        let userObject = sessionStorage.getItem("user");
-        if (userObject == null) {
-            window.location.replace("login.html");
-        }
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+    const usernametxt = document.getElementById("usernametxt");
+    let userObject = sessionStorage.getItem("user");
+    if (userObject == null) {
+        window.location.replace("login.html");
+    }
 
-        var loggedinuser = JSON.parse(userObject);
-        usernametxt.innerHTML = loggedinuser.names;
-    </script>
+    var loggedinuser = JSON.parse(userObject);
+    usernametxt.innerHTML = loggedinuser.names;
+</script>
 
 </body>
 

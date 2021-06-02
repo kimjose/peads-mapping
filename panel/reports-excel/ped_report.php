@@ -22,28 +22,18 @@ try {
     $permissionlist = $user->permissions;
     if (in_array("3", $permissionlist)) {
         $assignedFacilities = Facility::all();
-        foreach ($assignedFacilities as $assignedFacility) {
-            $fPatients = Patient::where('facility', $assignedFacility->mfl_code)->where('transferred_out', 0)->get();
-            $pds = DB::select("SELECT A.cccNo, A.county, A.facility, A.sex, A.dob, A.date_of_hiv_diagnosis, A.date_enrolled, A.dateStartedART, A.startRegimen, A.startKaletraFormulation,
+    } else {
+        $assignedFacilities = DB::select("select b.* from assigned_facilities a left join facilities b on a.facility = b.mfl_code where a.userID = " . $loggedUser->id);
+    }
+    foreach ($assignedFacilities as $assignedFacility) {
+        $fPatients = Patient::where('facility', $assignedFacility->mfl_code)->where('transferred_out', 0)->get();
+        // echo json_encode($assignedFacility);
+        $pds = DB::select("SELECT A.cccNo, A.county, A.facility, A.sex, A.dob, A.date_of_hiv_diagnosis, A.date_enrolled, A.dateStartedART, A.startRegimen, A.startKaletraFormulation,
         B.*, D.name AS 'facilityName', E.`names` AS 'usernames', F.name AS 'lastOtzModuleCompleted' FROM patients A LEFT JOIN observations B ON A.cccNo = B.patientCCC AND 
     B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JOIN facilities D ON D.mfl_code = A.facility
             LEFT JOIN users E ON E.id = B.userId LEFT JOIN otz_modules F ON F.id = B.completedOTZModules WHERE A.transferred_out = 0 AND `facility`= " . $assignedFacility->mfl_code);
-            foreach ($pds as $pd) {
-                array_push($data, $pd);
-            }
-        }
-    } else {
-
-        $assignedFacilities = AssignedFacility::select('facility')->where('userID', $loggedUser->id)->get();
-        foreach ($assignedFacilities as $assignedFacility) {
-            $fPatients = Patient::where('facility', $assignedFacility->facility)->where('transferred_out', 0)->get();
-            $pds = DB::select("SELECT A.cccNo, A.county, A.facility, A.sex, A.dob, A.date_of_hiv_diagnosis, A.date_enrolled, A.dateStartedART, A.startRegimen, A.startKaletraFormulation,
-        B.*, D.name AS 'facilityName', E.`names` AS 'usernames', F.name AS 'lastOtzModuleCompleted' FROM patients A LEFT JOIN observations B ON A.cccNo = B.patientCCC AND 
-    B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JOIN facilities D ON D.mfl_code = A.facility
-            LEFT JOIN users E ON E.id = B.userId LEFT JOIN otz_modules F ON F.id = B.completedOTZModules WHERE A.transferred_out = 0 AND `facility`= " . $assignedFacility->facility);
-            foreach ($pds as $pd) {
-                array_push($data, $pd);
-            }
+        foreach ($pds as $pd) {
+            array_push($data, $pd);
         }
     }
     $filename = "temp/pediatric_report_";
@@ -56,11 +46,13 @@ try {
         ->setFontBold()
         ->setFontSize(12)
         ->setFontUnderline()
+        ->setShouldWrapText()
         ->setCellAlignment(\Box\Spout\Common\Entity\Style\CellAlignment::CENTER)
         ->build();
 
     $normalRowStyle = (new \Box\Spout\Writer\Common\Creator\Style\StyleBuilder())
         ->setFontSize(10)
+        ->setShouldWrapText()
         ->setCellAlignment(\Box\Spout\Common\Entity\Style\CellAlignment::CENTER)
         ->build();
 
