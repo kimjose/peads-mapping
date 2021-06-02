@@ -40,5 +40,11 @@
         "Salmonella septicemia, recurrent",
         "Wasting syndrome attributed to HIV",
         "Diarrhoea"
+    ],
+    "heiStatus" : [
+
+    ],
+    "traceModes" : [
+        "Phone", "Physical", "Both"
     ]
 }
