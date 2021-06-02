@@ -577,6 +577,16 @@ pre code {
     }
 }
 
+.gutters-sm {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+
+.gutters-sm>.col, .gutters-sm>[class*=col-] {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -4929,6 +4939,21 @@ a.badge-dark.focus, a.badge-dark:focus {
     position: absolute;
     top: 0;
   }
+
+.progress .profile-progress-bar {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #007bff;
+    transition: width .6s ease;
+}
   
   .progress .progress-left .progress-bar {
     left: 100%;
