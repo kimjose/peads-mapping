@@ -4,7 +4,7 @@
 namespace controllers;
 
 use Illuminate\Database\Capsule\Manager as DB;
-use User;
+use models\User;
 
 class DashboardController
 {

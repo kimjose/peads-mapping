@@ -8,7 +8,7 @@ init()
 function init() {
     $.ajax({
         type: "GET",
-        url: "datascript?request=get_facilities",
+        url: "get_facilities",
         success: function (response) {
             var mResponse = JSON.parse(response);
             var code = mResponse.code;
@@ -37,7 +37,7 @@ searchPatientsBtn.addEventListener('click',() => {
     }
     $.ajax({
         type: "GET",
-        url: "datascript?request=get_facility_patients&mfl_code=" + facility,
+        url: "get_facility_patient/" + facility,
         success: function (response) {
             var mResponse = JSON.parse(response);
             var code = mResponse.code;

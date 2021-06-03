@@ -2,28 +2,28 @@
 //Pediatric report with box/spout
 //ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
 ini_set('max_execution_time', '0');//Unlimited execution time
-require_once __DIR__ . "/../../models/User.php";
-require_once __DIR__ . "/../../models/Facility.php";
-require_once __DIR__ . "/../../models/AssignedFacility.php";
-require_once __DIR__ . "/../../models/Patient.php";
-require_once __DIR__ . "/../../models/Observation.php";
-require_once __DIR__ . "/../functions.php";
 
 require_once "../../auth.php";
+require_once __DIR__ . "/../../vendor/autoload.php";
 
+use Box\Spout\Common\Entity\Style\CellAlignment;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Illuminate\Database\Capsule\Manager as DB;
+use models\Facility;
+use models\Patient;
 
 try {
     
     $data = [];
     $patients = [];
 
+    $user = $_SESSION['user'];
     $permissionlist = $user->permissions;
     if (in_array("3", $permissionlist)) {
         $assignedFacilities = Facility::all();
     } else {
-        $assignedFacilities = DB::select("select b.* from assigned_facilities a left join facilities b on a.facility = b.mfl_code where a.userID = " . $loggedUser->id);
+        $assignedFacilities = DB::select("select b.* from assigned_facilities a left join facilities b on a.facility = b.mfl_code where a.userID = " . $user->id);
     }
     foreach ($assignedFacilities as $assignedFacility) {
         $fPatients = Patient::where('facility', $assignedFacility->mfl_code)->where('transferred_out', 0)->get();
@@ -42,18 +42,18 @@ try {
     $writer = WriterEntityFactory::createXLSXWriter();
     $writer->openToFile($filename);
 
-    $boldRowStyle = (new \Box\Spout\Writer\Common\Creator\Style\StyleBuilder())
+    $boldRowStyle = (new StyleBuilder())
         ->setFontBold()
         ->setFontSize(12)
         ->setFontUnderline()
         ->setShouldWrapText()
-        ->setCellAlignment(\Box\Spout\Common\Entity\Style\CellAlignment::CENTER)
+        ->setCellAlignment(CellAlignment::CENTER)
         ->build();
 
-    $normalRowStyle = (new \Box\Spout\Writer\Common\Creator\Style\StyleBuilder())
+    $normalRowStyle = (new StyleBuilder())
         ->setFontSize(10)
         ->setShouldWrapText()
-        ->setCellAlignment(\Box\Spout\Common\Entity\Style\CellAlignment::CENTER)
+        ->setCellAlignment(CellAlignment::CENTER)
         ->build();
 
     $headerCells = [

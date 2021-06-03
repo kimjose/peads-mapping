@@ -20,7 +20,7 @@ function initialize() {
 
   $.ajax({
     type: "GET",
-    url: "datascript?request=get_users",
+    url: "get_users",
     success: function (response) {
       var mResponse = JSON.parse(response);
       var code = mResponse.code;
@@ -35,7 +35,7 @@ function initialize() {
 
   $.ajax({
     type: "GET",
-    url: "datascript?request=get_cadres",
+    url: "get_cadres",
     success: function (response) {
       var mResponse = JSON.parse(response);
       var code = mResponse.code;

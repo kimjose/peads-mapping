@@ -103,7 +103,7 @@ btnSearchClient.addEventListener('click', () => {
     } else {
         $.ajax({
             type: "GET",
-            url: "datascript?request=get_index_client&indexccc=" + indexccc + "&indexname=" + indexname,
+            url: "get_index_client/" + indexccc + "/" + indexname,
             success: function (response) {
                 var mResponse = JSON.parse(response);
                 let code = mResponse.code;
@@ -199,7 +199,7 @@ savechildbtn.addEventListener('click', () => {
     } else {
         $.ajax({
             type: "POST",
-            url: "datascript?request=link_child",
+            url: "link_child",
             data: {
                 childid: childid,
                 childnames: childnames,
@@ -280,7 +280,7 @@ savechildtestbtn.addEventListener('click', () => {
     } else {
         $.ajax({
             type: "POST",
-            url: "datascript?request=add_child_test_results",
+            url: "add_child_test_results",
             data: {
                 patientid: patientid,
                 childid: childid,
@@ -322,7 +322,7 @@ function initialize(){
 
     $.ajax({
         type: "GET",
-        url: "datascript?request=get_facilities",
+        url: "get_facilities",
         success: function (response) {
             var mResponse = JSON.parse(response);
             var code = mResponse.code;
@@ -397,7 +397,7 @@ function savePatient() {
     } else {
         $.ajax({
             type: "POST",
-            url: "datascript?request=save_index_client",
+            url: "save_index_client",
             data: {
                 clientccc: clientccc,
                 clientname: clientname,
@@ -888,13 +888,13 @@ function funUnlinkChild(id) {
     if (del == true) {
         $.ajax({
             type: "POST",
-            url: "datascript?request=unlink_child",
+            url: "unlink_child",
             data: {
                 id: id,
             },
             success: function (response) {
-                var mResponse = JSON.parse(response);
-                var code = mResponse.code;
+                let mResponse = JSON.parse(response);
+                let code = mResponse.code;
                 if (code == 200){
                     populatepatientdate(mResponse.data);
                 } else {
@@ -912,19 +912,19 @@ function funUnlinkChild(id) {
 }
 
 function getAge(dOb) {
-    var now = new Date();
-    var dob = new Date(dOb);
+    let now = new Date();
+    let dob = new Date(dOb);
 
-    var agediff = now.getTime() - dob.getTime();
-    var age = Math.floor(agediff / (1000 * 60 * 60 * 24 * 365.25));
+    let agediff = now.getTime() - dob.getTime();
+    let age = Math.floor(agediff / (1000 * 60 * 60 * 24 * 365.25));
 
     return age;
 }
 
 function initialchildTestOptionChanged() {
-    var selectedValue =
+    let selectedValue =
         childTestedSelect.options[childTestedSelect.selectedIndex].value;
-    var initialtestFields = document.querySelectorAll(".initialtestclass");
+    let initialtestFields = document.querySelectorAll(".initialtestclass");
     if (selectedValue == "Y") {
         //if (disableOptions) ovcenrolledSelect.disabled = true;
         initialtestFields.forEach((initialtestField) => {
@@ -938,7 +938,7 @@ function initialchildTestOptionChanged() {
 }
 
 function initialTestOutcomeOptionChanged() {
-    var selectedValue =
+    let selectedValue =
     testOutcomeSelect.options[testOutcomeSelect.selectedIndex].value;
     if (selectedValue == "Positive") {
         linkedSelect.removeAttribute("disabled");
@@ -947,7 +947,7 @@ function initialTestOutcomeOptionChanged() {
     }
 }
 function initialLinkedOptionChanged() {
-    var selectedValue =
+    let selectedValue =
         linkedSelect.options[linkedSelect.selectedIndex].value;
     if (selectedValue == "Y") {
         childcccnoinput.disabled = false;
@@ -956,7 +956,7 @@ function initialLinkedOptionChanged() {
     }
 }
 function otherchildTestOptionChanged() {
-    var selectedValue =
+    let selectedValue =
         childTestedSelect2.options[childTestedSelect2.selectedIndex].value;
     var othertestFields = document.querySelectorAll(".othertestclass");
     if (selectedValue == "Y") {
@@ -971,8 +971,8 @@ function otherchildTestOptionChanged() {
 }
 
 function otherTestOutcomeOptionChanged() {
-    var selectedValue =
-    testOutcomeSelect2.options[testOutcomeSelect2.selectedIndex].value;
+    let selectedValue =
+        testOutcomeSelect2.options[testOutcomeSelect2.selectedIndex].value;
     if (selectedValue == "Positive") {
         linkedSelect2.removeAttribute("disabled");
     } else {
@@ -980,7 +980,7 @@ function otherTestOutcomeOptionChanged() {
     }
 }
 function otherLinkedOptionChanged() {
-    var selectedValue =
+    let selectedValue =
         linkedSelect2.options[linkedSelect2.selectedIndex].value;
     if (selectedValue == "Y") {
         childcccnoinput2.disabled = false;

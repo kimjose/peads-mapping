@@ -1,6 +1,6 @@
 <?php
 
-require_once "functions.php";
+require_once "../functions.php";
 require_once "../models/OTZModules.php";
 require_once "../models/User.php";
 require_once __DIR__ . "/../models/Observation.php";
@@ -53,9 +53,7 @@ try {
         $caregiver1VLStatus = $_POST['caregiver1VLStatus'];
         $caregiver2VL = $_POST['caregiver2VL'];
         $caregiver2VLDate = $_POST['caregiver2VLDate'];
-        // $caregiver2VLStatus = $_POST['caregiver2VLStatus'];
         $PAMAStatus3 = $_POST['PAMAStatus3'];
-
 
         $OTZArtRegimen = $_POST['OTZArtRegimen'];
         $OTZVL = $_POST['OTZVL'];
@@ -304,20 +302,19 @@ try {
     } elseif ($request == 'login') {
         $names = $_POST['names'];
         $password = $_POST['password'];
-        $user = User::where('names', $names)->where('active', 1)->firstOrFail();
+        $user = models\User::where('names', $names)->where('active', 1)->firstOrFail();
         if (password_verify($password, $user->password)) {
             $user->last_login = date("Y:m:d h:i:s", time());
             $user->save();
-            $usercategory = UserCategory::findOrFail($user->usercategory);
+            $usercategory = models\UserCategory::findOrFail($user->usercategory);
             $user['userCategoryName'] = $usercategory->name;
-            $cadre = Cadre::findOrFail($user->cadre);
+            $cadre = models\Cadre::findOrFail($user->cadre);
             $user['cadreName'] = $cadre->name;
             $permlist = $usercategory->permissions;
             $list = json_decode($permlist);
             $user['permissions'] = $list;
             session_start();
-            $user['p'] = 'p';
-            $_SESSION['user'] = serialize($user);
+            $_SESSION['user'] = $user;
             echo myJsonResponse(200, 'Logged in', $user);
         } else throw new Exception("Error Processing Request", 1);
     } elseif ($request == "get_facility_patients") {

@@ -9,12 +9,13 @@
         "setasign/fpdf": "^1.8",
         "phpoffice/phpspreadsheet": "^1.16",
         "box/spout": "^3.1",
-        "bramus/router": "^1.5"
+        "bramus/router": "^1.5",
+      "ext-json": "*"
     },
     "autoload": {
         "classmap": [
             "models", "controllers"
         ],
-        "files": ["bootstrap.php"]
+        "files": ["bootstrap.php","functions.php"]
     }
 }
