@@ -128,10 +128,10 @@
                                 <div class="row">
                                     <div class="col-lg-8">
                                         <div class="form-group">
-                                            <label>Search by HEI Number Number/Initials</label>
+                                            <label for="inputSearch">Search by HEI Number Number/Initials</label>
                                             <label id="search-error" class="errors">Enter at least 3 characters</label>
                                             <input type="text" name="names" class="form-control"
-                                                   placeholder="Enter HEI Number/Initials" id="clientSearchInput" autocomplete="off" required>
+                                                   placeholder="Enter HEI Number/Initials" id="inputSearch" autocomplete="off" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 my-auto">
@@ -142,7 +142,7 @@
                                     </div>
                                 </div>
 
-                                <div class="list-group mt-4 d-none" id="clientSearchResult">
+                                <div class="list-group mt-4 d-none" id="divClientSearchResult">
                                 </div>
 
                                 <div class="border border-dark mt-4 p-2" id="clientDetailsDiv">
@@ -194,13 +194,6 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td scope="row" class="border-right border-bottom-0">Enrolled in PMTCT
-                                                    </td>
-                                                    <td class="border-right border-bottom-0 border-right-0"
-                                                        id="tdPmtctEnrolled">_
-                                                    </td>
-                                                </tr>
-                                                <tr>
                                                     <td scope="row" class="border-right border-bottom-0">Date Enrolled in PMTCT
                                                     </td>
                                                     <td class="border-right border-bottom-0 border-right-0"
@@ -227,7 +220,7 @@
                                         </div>
                                     </div>
                                      <button class="btn btn-primary ml-4" data-toggle="modal"
-                                        data-target="#heiClientDialog" id="editClientBtn" onclick="clearHeiClientDialog();">
+                                        data-target="#heiClientDialog" id="btnEditClient" onclick="clearHeiClientDialog();">
                                         Edit Index Client Details
                                     </button>
                                 </div>
@@ -239,7 +232,7 @@
                             <div class="card-header py-3">
                                 <h1 class="h4 mb-2 text-gray-800 float-left">HEI Tracings</h1>
                                 <button class="btn btn-primary btn-icon-split ml-auto float-right" data-toggle="modal"
-                                        data-target="#traceDialog" id="addChildBtn" onclick="clearTraceDialog();" disabled>
+                                        data-target="#traceDialog" id="btnAddTrace" onclick="clearTraceDialog();">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-user-plus"></i>
                                     </span>
@@ -278,13 +271,13 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- add child dialog -->
+<!-- add Trace dialog -->
 <div class="modal fade" id="traceDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Link Child</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tracing Dialog</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -294,7 +287,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>ID: </label>
-                        <label id='labelChildID'></label>
+                        <label id='labelTraceId'></label>
                     </div>
 
                     <div class="form-group">
@@ -312,6 +305,13 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="selectTracingOutcome">Tracing outcome</label>
+                        <label id="tracing-outcome-error" class="errors">Field must be provided</label>
+                        <select name="outcome" id="selectTracingOutcome" class="form-control">
+                            <option selected hidden value="">Select option</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>HIV test done?</label>
                         <label id="hiv-tested-error" class="errors">This field is required</label>
                         <select id="selectHivTested" class="form-control">
@@ -321,7 +321,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>HIV test type</label>
+                        <label for="selectTestType">HIV test type</label>
                         <label id="test-type-error" class="errors">This field is required</label>
                         <select id="selectTestType" class="form-control">
                             <option value="" hidden>Select</option>
@@ -329,56 +329,46 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Date HIV Test Done</label>
+                        <label for="inputDateTested">Date HIV Test Done</label>
                         <label id="date-tested-error" class="errors">Date Tested must be provided</label>
-                        <input type="date" name="dob" id="dateTested" class="form-control"
+                        <input type="date" name="dob" id="inputDateTested" class="form-control"
                                placeholder="Enter Date Child Listed">
                     </div>
                     <div class="form-group">
-                        <label>Has the Child been tested?</label>
-                        <label id="tested-error" class="errors">You must indicate whether child has been tested</label>
-                        <select id="childTestedSelect" class="form-control">
+                        <label>HIV test results</label>
+                        <label id="tested-result-error" class="errors">Field required</label>
+                        <select id="selectTestResult" class="form-control">
+                            <option value="" hidden>Select Option</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selectLinked">Linked to care?</label>
+                        <label id="linked-error" class="errors">Field required</label>
+                        <select id="selectLinked" class="form-control">
                             <option value="" hidden>Select Option</option>
                             <option value="Y">Yes</option>
                             <option value="N">No</option>
-                            <option value="Unknown">Unknown</option>
+                            <option value="N/A">N/A</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Date Child Tested</label>
-                        <label id="dct-error" class="errors">Date Child Tested must be provided</label>
-                        <input type="date" name="dob" id="datetested" class="form-control initialtestclass"
-                               placeholder="Enter Date Child Tested" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Test Outcome</label>
-                        <label id="outcome-error" class="errors">Test outcome must be provided</label>
-                        <select id="testOutcomeSelect" class="form-control initialtestclass" disabled>
-                            <option value="" hidden>Select Option</option>
-                            <option value="Positive">Positive</option>
-                            <option value="Negative">Negative</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Has Child been Linked?</label>
-                        <label id="linked-error" class="errors">You must indicate whether child has been linked</label>
-                        <select id="linkedSelect" class="form-control initialoutcomeclass" disabled>
-                            <option value="" hidden>Select Option</option>
-                            <option value="Y">Yes</option>
-                            <option value="N">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>CCC Number</label>
+                        <label for="inputCccNo">CCC Number</label>
                         <label id="ccc-error" class="errors">Enter a valid CCC Number</label>
-                        <input type="text" name="cccno" id="childcccno" class="form-control initialoutcomeclass"
+                        <input type="text" name="cccno" id="inputCccNo" class="form-control"
                                placeholder="Enter CCC Number" autocomplete="off" disabled>
                     </div>
+                    <div class="form-group">
+                        <label for="inputRecommendation">Recommendation</label>
+                        <label id="recommendation-error" class="errors">Enter a valid CCC Number</label>
+                        <input type="text" name="cccno" id="inputRecommendation" class="form-control"
+                               placeholder="Enter CCC Number" autocomplete="off">
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="submit" name="savechildbtn" id="savechildbtn" class="btn btn-primary">Save</button>
+                    <button type="submit" name="btnTrace" id="btnSaveTrace" class="btn btn-primary">Save</button>
                 </div>
             </form>
 
@@ -386,13 +376,13 @@
     </div>
 </div>
 
-<!-- add patient dialog -->
+<!-- add HEI Client dialog -->
 <div class="modal fade" id="heiClientDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Index Client/Transfer In</h5>
+                <h5 class="modal-title">HEI Client Dialog</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -402,19 +392,19 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label>HEI Number</label>
+                        <label for="inputHeiNo">HEI Number</label>
                         <label id="client-no-error" class="errors">Enter a valid HEI Number</label>
                         <input type="text" name="cccno" id="inputHeiNo" class="form-control"
-                               placeholder="Enter CCC Number" autocomplete="off">
+                               placeholder="Enter HEI Number" autocomplete="off">
                    </div>
                     <div class="form-group">
-                        <label>Client Name(Initials)</label>
+                        <label for="inputHeiName">Client Name(Initials)</label>
                         <label id="client-name-error" class="errors">Initials must be provided</label>
                         <input type="text" name="name" id='inputHeiName' class="form-control"
                                placeholder="Enter Initials of the client" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <label>Date Of Birth</label>
+                        <label for="inputDob">Date Of Birth</label>
                         <label id="dob-error" class="errors">Date Of Birth error</label>
                         <input type="date" name="dob" id="inputDob" class="form-control p-data"
                                placeholder="Enter Date of Birth">
@@ -436,19 +426,11 @@
                             <option selected hidden value="">Select facility</option>
                         </select>
                     </div>
+
                     <div class="form-group">
-                        <label for="selectPmtctEnrolled">Enrolled in PMTCT</label>
-                        <label id="pmtctEnrolled-error" class="errors">Field must be provided</label>
-                        <select name="facility" id="selectPmtctEnrolled" class="form-control">
-                            <option selected hidden value="">Select option</option>
-                            <option value="Y">Yes</option>
-                            <option value="N">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Date Enrolled in PMTCT</label>
-                        <input type="date" name="dct" id="dateclientenrolledinput" class="form-control p-data"
-                               placeholder="Enter Date Client Enrolled to Care">
+                        <label for="inputDatePmtctEnrolled">Date Enrolled in PMTCT</label>
+                        <input type="date" name="dct" id="inputDatePmtctEnrolled" class="form-control p-data"
+                               placeholder="Enter Date Client Enrolled in PMTCT">
                     </div>
 
 
@@ -457,8 +439,6 @@
                         <label id="clientstatus-error" class="errors">Client Status must be provided</label>
                         <select id="selectStatus" class="form-control">
                             <option value="" hidden>Select Option</option>
-                            <option value="Lost to Follow Up">Lost to Follow Up</option>
-                            <option value="Transfer Out">Transfer Out</option>
                         </select>
                     </div>
                     <div class="form-group">

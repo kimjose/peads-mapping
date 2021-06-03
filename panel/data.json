@@ -41,10 +41,20 @@
         "Wasting syndrome attributed to HIV",
         "Diarrhoea"
     ],
-    "heiStatus" : [
-
+    "heiStatuses" : [
+        "Lost to Follow Up", "Transfer Out"
     ],
-    "traceModes" : [
+    "tracingModes" : [
         "Phone", "Physical", "Both"
+    ],
+    "tracingOutcomes" : [
+        "Confirmed Effective Transfer", "Non Effective Transfer", "Died", "Not Traced", "Traced Back",
+        "Traced not Found"
+    ],
+    "hivTestTypes" : [
+        "Antibody", "PCR", "Not Due"
+    ],
+    "hivTestResults" : [
+        "Positive", "Negative"
     ]
 }
