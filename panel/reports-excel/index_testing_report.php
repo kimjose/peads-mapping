@@ -6,20 +6,26 @@ require_once __DIR__ . "/../../models/Facility.php";
 require_once __DIR__ . "/../../models/IndexClientLinelist.php";
 require_once __DIR__ . "/../../models/ChildrenLinelist.php";
 require_once __DIR__ . "/../../models/ChildTestResults.php";
-require_once __DIR__ . "/../functions.php";
+require_once __DIR__ . "/../../vendor/autoload.php";
 
 require_once "../../auth.php";
 
+use Box\Spout\Common\Entity\Style\CellAlignment;
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Illuminate\Database\Capsule\Manager as DB;
+use models\ChildrenLinelist;
+use models\ChildTestResults;
+use models\Facility;
+use models\IndexClientLinelist;
 
 try {
     
     $data = [];
     $patients = [];
 
+    $user = $_SESSION['user'];
     $permissionlist = $user->permissions;
-    // if (!in_array("3", $permissionlist)) {
     // } else {
         $children = ChildrenLinelist::all();
         foreach ($children as $child) {
@@ -72,17 +78,17 @@ try {
     $writer = WriterEntityFactory::createXLSXWriter();
     $writer->openToFile($filename);
 
-    $boldRowStyle = (new \Box\Spout\Writer\Common\Creator\Style\StyleBuilder())
+    $boldRowStyle = (new StyleBuilder())
         ->setFontBold()
         ->setFontSize(12)
         ->setFontUnderline()
         ->setShouldWrapText()
-        ->setCellAlignment(\Box\Spout\Common\Entity\Style\CellAlignment::CENTER)
+        ->setCellAlignment(CellAlignment::CENTER)
         ->build();
 
-    $normalRowStyle = (new \Box\Spout\Writer\Common\Creator\Style\StyleBuilder())
+    $normalRowStyle = (new StyleBuilder())
         ->setFontSize(10)
-        ->setCellAlignment(\Box\Spout\Common\Entity\Style\CellAlignment::CENTER)
+        ->setCellAlignment(CellAlignment::CENTER)
         ->setShouldWrapText()
         ->build();
 

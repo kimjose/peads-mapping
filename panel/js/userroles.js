@@ -16,7 +16,7 @@ function initialize() {
 
     $.ajax({
         type: "GET",
-        url: "datascript?request=get_user_categories",
+        url: "get_user_categories",
         success: function (response) {
             var mResponse = JSON.parse(response);
             var code = mResponse.code;
@@ -38,7 +38,7 @@ function initialize() {
 
     $.ajax({
         type: "GET",
-        url: "datascript?request=get_permissions",
+        url: "get_permissions",
         success: function (response) {
             response = response.replace('/^s+|s+$/g, ""');
             var mResponse = JSON.parse(response);
@@ -61,14 +61,6 @@ function initialize() {
         },
     });
 }
-
-// function handleAjaxError(err) {
-//     if (err.status === 401) window.location.replace("login.html");
-//     else {
-//       errorDisplayDiv.querySelector("p").innerText = "Error loading data.";
-//       errorDisplayDiv.style.display = "block";
-//     }
-// }
 
 function loadtocheckbox(permissions) {
     for (var i = 0; i < permissions.length; i++) {
@@ -118,7 +110,7 @@ function addRole() {
 
     $.ajax({
         type: "POST",
-        url: "datascript?request=save_user_category",
+        url: "save_user_category",
         data: {
             roleid: roleid,
             name: name,

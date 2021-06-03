@@ -4,19 +4,20 @@
 //get the patients last observation
 //display the data;
 
-
-require_once __DIR__ . "/../../models/User.php";
-require_once __DIR__ . "/../../models/Facility.php";
-require_once __DIR__ . "/../../models/AssignedFacility.php";
-require_once __DIR__ . "/../../models/Patient.php";
-require_once __DIR__ . "/../../models/Observation.php";
+use Illuminate\Database\Capsule\Manager as DB;
+use models\AssignedFacility;
+use models\Patient;
+use models\User;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Font;
 
 
 session_start();
 $user = $_SESSION['user'];
 $user = User::findOrFail($user['id']);
 
-use Illuminate\Database\Capsule\Manager as DB;
 
 $assignedFacilities = AssignedFacility::select('facility')->where('userID', $user->id)->get();
 
@@ -34,7 +35,7 @@ B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) LEFT JO
 }
 
 //echo json_encode($data);
-$excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+$excel = new Spreadsheet();
 $sheet = $excel->getActiveSheet();
 $sheet->setCellValue('A1', "Patient CCCNO");
 $sheet->setCellValue('B1', "Facility");
@@ -180,20 +181,20 @@ $styleHeading = array(
         'size' => 12,
         'color' => array('rgb' => '000000'),
         'bold' => true,
-        'underline' => \PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_SINGLE
+        'underline' => Font::UNDERLINE_SINGLE
     ),
     'alignment' => array(
-        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+        'horizontal' => Alignment::HORIZONTAL_CENTER,
     ),
     'borders' => array(
         'bottom' => array(
-            'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM
+            'style' => Border::BORDER_MEDIUM
         ),
         'right' => array(
-            'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM
+            'style' => Border::BORDER_MEDIUM
         ),
         'left' => array(
-            'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_MEDIUM
+            'style' => Border::BORDER_MEDIUM
         )
     )
 );

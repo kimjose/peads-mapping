@@ -20,7 +20,7 @@ loadDataBtn.addEventListener("click", ()=>{
     }
     $.ajax({
         type:"GET",
-        url: "datascript?request=get_transfer_patient&cccNo=" +cccNo,
+        url: "get_transfer_patient/" + cccNo,
         success: (response)=>{
             let mResponse = JSON.parse(response);
             let code =  mResponse.code;
@@ -78,7 +78,7 @@ savePatientBtn.addEventListener("click", ()=>{
     formData.append("startKaletraFormulation", kaletraFormulation);
     $.ajax({
         type: "POST",
-        url: "datascript?request=transfer_in",
+        url: "transfer_in",
         data: formData,
         processData: false,
         contentType: false,

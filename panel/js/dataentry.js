@@ -408,7 +408,7 @@ function initialize() {
     var facilitiesLoaded = false
     $.ajax({
         type: "GET",
-        url: "datascript?request=get_otz_modules",
+        url: "otz_modules",
         success: function (response) {
             response = response.replace('/^s+|s+$/g, ""');
             var mResponse = JSON.parse(response);
@@ -434,7 +434,7 @@ function initialize() {
 
     $.ajax({
         type: "GET",
-        url: "datascript?request=get_regimens",
+        url: "get_regimens",
         success: function (response) {
             var mResponse = JSON.parse(response);
             let code = mResponse.code;
@@ -462,7 +462,7 @@ function initialize() {
 
     $.ajax({
         type: "GET",
-        url: "datascript?request=get_facilities",
+        url: "get_facilities",
         success: function (response) {
             var mResponse = JSON.parse(response);
             var code = mResponse.code;
@@ -502,7 +502,7 @@ function loadPreviousObservation(cccNo) {
 
     $.ajax({
         type: "GET",
-        url: "datascript?request=get_last_vls&cccNo=" + cccNo,
+        url: "get_last_vls/" + cccNo,
         success: function (response) {
             var mResponse = JSON.parse(response);
             console.log(mResponse.data);
@@ -549,7 +549,7 @@ function loadPreviousObservation(cccNo) {
 
     $.ajax({
         type: "GET",
-        url: "datascript?request=load_prev_obs&cccNo=" + cccNo,
+        url: "load_prev_obs/" + cccNo,
         success: function (response) {
             console.log(response);
             var mResponse = JSON.parse(response);
@@ -869,13 +869,6 @@ function loadObsData(observation) {
             caregiverenrolledSelect.selectedIndex = i;
         }
     }
-    /*var cgTypeOptions = caregivertypeSelect.options;
-    for (var i = 0; i < cgTypeOptions.length; i++) {
-      const cgTypeOption = cgTypeOptions[i];
-      if (cgTypeOption.value == observation.caregiverType) {
-        caregivertypeSelect.selectedIndex = i;
-      }
-    }*/
 
     let cgType = observation.caregiverType;
     if (cgType == "Mother") {
@@ -931,33 +924,6 @@ function loadObsData(observation) {
         motherlastvlDateInput.value = observation.caregiver1VLDate;
         fatherlastvlDateInput.value = observation.caregiver2VLDate;
     }
-    // caregiver1cccnoInput.value = observation.caregiver1CCC;
-    // caregiver2cccnoInput.value = observation.caregiver2CCC;
-
-    // caregivervlddateInput.value = observation.caregiver1VLDate;
-    /* var cgVLOptions = caregivervlstatustSelect.options;
-     for (var i = 0; i < cgVLOptions.length; i++) {
-       const cgVLOption = cgVLOptions[i];
-       if (cgVLOption.value == observation.caregiverType) {
-         caregivervlstatustSelect.selectedIndex = i;
-       }
-     }*/
-    // var pamaStatusOptions = pamastatusat3Select.options;
-    // for (var i = 0; i < pamaStatusOptions.length; i++) {
-    //     const pamaStatusOption = pamaStatusOptions[i];
-    //     if (pamaStatusOption.value == observation.PAMAStatus3) {
-    //         pamastatusat3Select.selectedIndex = i;
-    //     }
-    //     if (pamaStatusOption.value == observation.PAMAStatus6) {
-    //         pamastatusat6Select.selectedIndex = i;
-    //     }
-    //     if (pamaStatusOption.value == observation.PAMAStatus12) {
-    //         pamastatusat12Select.selectedIndex = i;
-    //     }
-    //     if (pamaStatusOption.value == observation.PAMAStatus24) {
-    //         pamastatusat24Select.selectedIndex = i;
-    //     }
-    // }
     var pamaStatusOptions2 = currentPamaStatusSelect.options;
     for (var i = 0; i < pamaStatusOptions2.length; i++) {
         const pamaStatusOption = pamaStatusOptions2[i];
@@ -1451,7 +1417,7 @@ function submitData(formData = null) {
     }
     $.ajax({
         type: "POST",
-        url: "datascript?request=submit_form",
+        url: "submit_form",
         data: formData,
         processData: false,
         contentType: false,

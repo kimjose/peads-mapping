@@ -2,6 +2,14 @@
 
 define("LOGS_DIR", __DIR__ . "/logs/");
 
+//Error reponses
+define('INVALID_DATA_RESPONSE_CODE', 411);
+define('FORBIDDEN_RESPONSE_CODE', 403);
+define('UNAUTHORIZED_RESPONSE_CODE', 401);
+define('SYSTEM_ERROR_CODE', -1);
+define('PRECONDITION_FAILED_ERROR_CODE', 412);
+define('SUCCESS_CODE', 200);
+
 function myJsonResponse($code, $message, $data = null)
 {
     $response = [];

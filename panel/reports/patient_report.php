@@ -1,17 +1,18 @@
 <?php
-ini_set('max_execution_time', '0');
 
-require_once __DIR__ . "/../../models/User.php";
-require_once __DIR__ . "/../../models/Facility.php";
-require_once __DIR__ . "/../../models/AssignedFacility.php";
-require_once __DIR__ . "/../../models/Patient.php";
-require_once __DIR__ . "/../../models/Observation.php";
+use models\AssignedFacility;
+use models\Facility;
+use models\Observation;
+use models\Patient;
+
+ini_set('max_execution_time', '0');
 
 require_once "../../auth.php";
 
 $data = [];
 $patients = [];
 
+$user = $_SESSION['user'];
 $permissionlist = $user->permissions;
 if (in_array("3", $permissionlist)) {
     $assignedFacilities = Facility::all();
@@ -25,7 +26,7 @@ if (in_array("3", $permissionlist)) {
     }
 } else {
 
-    $assignedFacilities = AssignedFacility::select('facility')->where('userID', $loggedUser->id)->get();
+    $assignedFacilities = AssignedFacility::select('facility')->where('userID', $user->id)->get();
     foreach ($assignedFacilities as $assignedFacility) {
         $fPatients = Patient::where('facility', $assignedFacility->facility)->get();
         if (sizeof($fPatients) > 0) {

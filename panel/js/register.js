@@ -23,7 +23,7 @@ btnRegister.addEventListener('click', ()=>{
     if(error) return;
     $.ajax({
         type : "POST",
-        url: "datascript?request=register",
+        url: "register",
         data: {
             names: names,
             password: password
