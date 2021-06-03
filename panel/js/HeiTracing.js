@@ -37,6 +37,8 @@ const selectStatus = document.getElementById("selectStatus")
 const inputStatusDate = document.getElementById("inputStatusDate")
 const saveClientBtn = document.getElementById("saveClientBtn")
 
+var client_id = 0
+
 function initialize(){
     $.ajax({
         dataType: "json",
@@ -81,15 +83,104 @@ function initialize(){
         error: (error) => {
             handleError(error.status, error.message);
         }
-    });
+    })
+    $.ajax({
+        type : "GET",
+        url : "get_facilities",
+        success : response => {
+            let mResponse = JSON.parse(response)
+            if (mResponse.code === 200) {
+                let facilities = mResponse.data
+                facilities.forEach(facility => {
+                    let option = document.createElement("option")
+                    option.setAttribute("value", facility.mfl_code)
+                    option.appendChild(document.createTextNode(facility.name))
+                    selectFacility.appendChild(option)
+                })
+            }
+        },
+        error : err => {
+
+        }
+    })
+    saveClientBtn.addEventListener('click', (event) => saveClient())
+    btnSaveTrace.addEventListener('click', () => saveTracing())
 }
 
 function saveClient(){
+    let hei_number = inputHeiNo.value
+    let facility_code = selectFacility.options[selectFacility.selectedIndex].value
+    let dob = inputDob.value
+    let gender = selectGender.options[selectGender.selectedIndex].value
+    let name = inputHeiName.value
+    let pmtct_enrollment_date = inputDatePmtctEnrolled.value
+    let status = selectStatus.options[selectStatus.selectedIndex].value
+    let status_date = inputStatusDate.value
+    let data = new FormData()
+    data.append("hei_number", hei_number)
+    data.append("facility_code", facility_code)
+    data.append("dob", dob)
+    data.append("gender", gender)
+    data.append("name", name)
+    data.append("status", status)
+    data.append("status_date", status_date)
+    data.append("pmtct_enrollment_date", pmtct_enrollment_date)
 
+    $.ajax({
+        type : "POST",
+        url : "save_hei_client",
+        processData : false,
+        cache: false,
+        contentType: false,
+        data : data,
+        success : response =>{
+            let mResponse = JSON.parse(response)
+            if (mResponse.code === 200){
+
+            } else {
+
+            }
+        },
+        error : ()=>{
+
+        }
+    })
 }
 
-function saveTrace() {
+function saveTracing() {
 
+    let date = inputDot.value
+    let mode = selectTracingMode.options[selectTracingMode.selectedIndex].value
+    let outcome = selectTracingOutcome.options[selectTracingOutcome.selectedIndex].value
+    let test_type = selectTestType.options[selectTestType.selectedIndex].value
+    let test_date = inputDateTested.value
+    let test_results = selectTestResult.options[selectTestResult.selectedIndex].value
+    let linked_to_care = selectLinked.options[selectLinked.selectedIndex].value
+    let ccc_no = inputCccNo.value
+    let recommendations = inputRecommendation.value
+    let id = labelTraceId.value
+
+    let data = new FormData()
+    data.append("date", date)
+    data.append("id", id)
+    data.append("mode", mode)
+    data.append("outcome", outcome)
+    data.append("test_type", test_type)
+    data.append("test_date", test_date)
+    data.append("test_results", test_results)
+    data.append("linked_to_care", linked_to_care)
+    data.append("ccc_no", ccc_no)
+    data.append("recommendations", recommendations)
+
+    $.ajax({
+        type : "POST",
+        url : "save_hei_tracing",
+        data : data,
+        success : response => {
+
+        },
+        error : err => {}
+    })
 }
 
 function searchClient(){
@@ -97,11 +188,12 @@ function searchClient(){
     if (searchString.length > 0) {
         ajax({
             type : "GET",
-            url: "/search_hei_client/" + searchString,
+            url: "/search_hei_clients/" + searchString,
             success : response => {
                 let mResponse = JSON.parse(response)
                 if (mResponse.code === 200){
                     let searchMatches = mResponse.data
+                    loadMatches(searchMatches)
                 } else {
 
                 }
@@ -116,8 +208,28 @@ function searchClient(){
 }
 
 function loadMatches(heiClients) {
+    heiClients.forEach(client => {
+        let button = document.createElement('button');
+        button.setAttribute("type", "button");
+        button.setAttribute("id", client.id);
+        button.classList.add("list-group-item", "list-group-item-action")
+        button.addEventListener("click",() => {
+            loadClient(client)
+        })
+        let name = client.name;
+        pbutton.innerHTML = "<b>" + client.name + "</b> <br/> " + patient.hei_number;
+
+        divClientSearchResult.appendChild(pbutton);
+        divClientSearchResult.classList.remove('d-none');
+    })
+}
+
+function loadClient(client){
 
 }
+function clearHeiClientDialog(){}
+
+function clearTraceDialog(){}
 
 
 

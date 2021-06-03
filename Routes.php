@@ -189,6 +189,24 @@ $router->post("/panel/add_child_test_results", function () {
 
 });
 
+$router->get("/panel/search_hei_clients/{searchString}", function ($searchString){
+    require_once "auth.php";
+    $controller = new \controllers\HeiController();
+    $controller->findClients($searchString);
+});
+
+$router->post("/panel/save_hei_client", function (){
+    require_once "auth.php";
+    $controller = new \controllers\HeiController();
+    $controller->saveClient();
+});
+
+$router->post("/panel/save_hei_tracing", function (){
+    require_once "auth.php";
+    $controller = new \controllers\HeiController();
+    $controller->saveTracing();
+});
+
 
 
 // Thunderbirds are go!
