@@ -1,5 +1,8 @@
 const inputSearch = document.getElementById("inputSearch")
 const divClientSearchResult = document.getElementById("divClientSearchResult")
+const btnSearchClient = document.getElementById("btnSearchClient")
+const divClientsDetails = document.getElementById("divClientsDetails")
+const divHeiTracingCard = document.getElementById("divHeiTracingCard")
 
 const tdClientNo = document.getElementById("tdClientNo")
 const tdClientName = document.getElementById("tdClientName")
@@ -13,7 +16,6 @@ const tdStatusDate = document.getElementById("tdStatusDate")
 const btnEditClient = document.getElementById("btnEditClient")
 
 
-const labelTraceId = document.getElementById("labelTraceId")
 const inputDot = document.getElementById("inputDot")
 const selectTracingMode = document.getElementById("selectTracingMode")
 const selectTracingOutcome = document.getElementById("selectTracingOutcome")
@@ -37,7 +39,10 @@ const selectStatus = document.getElementById("selectStatus")
 const inputStatusDate = document.getElementById("inputStatusDate")
 const saveClientBtn = document.getElementById("saveClientBtn")
 
-var client_id = 0
+var activeClient = null
+var editedClientId = ''
+var editedTraceId = ''
+
 
 function initialize(){
     $.ajax({
@@ -105,6 +110,8 @@ function initialize(){
     })
     saveClientBtn.addEventListener('click', (event) => saveClient())
     btnSaveTrace.addEventListener('click', () => saveTracing())
+    btnSearchClient.addEventListener('click', () => searchClient())
+    document.getElementById('btnEditClient').addEventListener('click', () => editClient())
 }
 
 function saveClient(){
@@ -117,6 +124,7 @@ function saveClient(){
     let status = selectStatus.options[selectStatus.selectedIndex].value
     let status_date = inputStatusDate.value
     let data = new FormData()
+    data.append('id', activeClient == null ? '' : activeClient.id)
     data.append("hei_number", hei_number)
     data.append("facility_code", facility_code)
     data.append("dob", dob)
@@ -136,7 +144,8 @@ function saveClient(){
         success : response =>{
             let mResponse = JSON.parse(response)
             if (mResponse.code === 200){
-
+                loadClient(mResponse.data)
+                $("#heiClientDialog").modal("hide");
             } else {
 
             }
@@ -152,19 +161,21 @@ function saveTracing() {
     let date = inputDot.value
     let mode = selectTracingMode.options[selectTracingMode.selectedIndex].value
     let outcome = selectTracingOutcome.options[selectTracingOutcome.selectedIndex].value
+    let tested = selectHivTested.options[selectHivTested.selectedIndex].value
     let test_type = selectTestType.options[selectTestType.selectedIndex].value
     let test_date = inputDateTested.value
     let test_results = selectTestResult.options[selectTestResult.selectedIndex].value
     let linked_to_care = selectLinked.options[selectLinked.selectedIndex].value
     let ccc_no = inputCccNo.value
     let recommendations = inputRecommendation.value
-    let id = labelTraceId.value
 
     let data = new FormData()
     data.append("date", date)
-    data.append("id", id)
+    data.append("id", editedTraceId)
+    data.append("client_id", activeClient.id)
     data.append("mode", mode)
     data.append("outcome", outcome)
+    data.append("tested", tested)
     data.append("test_type", test_type)
     data.append("test_date", test_date)
     data.append("test_results", test_results)
@@ -176,8 +187,15 @@ function saveTracing() {
         type : "POST",
         url : "save_hei_tracing",
         data : data,
+        processData : false,
+        cache: false,
+        contentType: false,
         success : response => {
-
+            let mResponse = JSON.parse(response)
+            if (mResponse.code === 200){
+                loadTracings(mResponse.data)
+                $("#traceDialog").modal("hide");
+            }
         },
         error : err => {}
     })
@@ -185,10 +203,15 @@ function saveTracing() {
 
 function searchClient(){
     let searchString = inputSearch.value.trim()
-    if (searchString.length > 0) {
-        ajax({
+    if (searchString.length > 2) {
+        divHeiTracingCard.innerHTML = ''
+        divClientsDetails.classList.add('d-none')
+        btnAddTrace.setAttribute("disabled", "")
+        activeClient = null
+
+        $.ajax({
             type : "GET",
-            url: "/search_hei_clients/" + searchString,
+            url: "search_hei_clients/" + searchString,
             success : response => {
                 let mResponse = JSON.parse(response)
                 if (mResponse.code === 200){
@@ -208,6 +231,10 @@ function searchClient(){
 }
 
 function loadMatches(heiClients) {
+    let currentButtons = divClientSearchResult.querySelectorAll('button')
+    currentButtons.forEach(currentButton => {
+        divClientSearchResult.removeChild(currentButton)
+    })
     heiClients.forEach(client => {
         let button = document.createElement('button');
         button.setAttribute("type", "button");
@@ -216,20 +243,155 @@ function loadMatches(heiClients) {
         button.addEventListener("click",() => {
             loadClient(client)
         })
-        let name = client.name;
-        pbutton.innerHTML = "<b>" + client.name + "</b> <br/> " + patient.hei_number;
+        button.innerHTML = "<b>" + client.name + "</b> <br/> " + client.hei_number;
 
-        divClientSearchResult.appendChild(pbutton);
+        divClientSearchResult.appendChild(button);
         divClientSearchResult.classList.remove('d-none');
     })
 }
 
 function loadClient(client){
-
+    activeClient = client
+    tdClientNo.innerText = client.hei_number
+    tdClientName.innerText = client.name
+    tdClientDob.innerText = client.dob
+    tdClientGender.innerText = client.gender
+    tdFacilityCode.innerText = client.facility_code
+    tdFacilityName.innerText = client.facility_name
+    tdPmtctDate.innerText = client.pmtct_enrollment_date
+    tdHeiStatus.innerText = client.status
+    tdStatusDate.innerText = client.status_date
+    divClientSearchResult.classList.add('d-none')
+    divClientsDetails.classList.remove('d-none')
+    loadTracings(client.tracings)
 }
-function clearHeiClientDialog(){}
 
-function clearTraceDialog(){}
+function loadTracings(tracings){
+    if (btnAddTrace.hasAttribute("disabled")){
+        btnAddTrace.removeAttribute("disabled")
+    }
+    divHeiTracingCard.innerHTML = ''
+    tracings.forEach(tracing => {
+
+        var card = document.createElement('div');
+        card.classList.add("card", "shadow", "mb-3");
+
+        const headerlink = document.createElement('a');
+        headerlink.setAttribute('href', '#collapseCard' + tracing.id);
+        headerlink.classList.add("d-block", "card-header", "py-3");
+        headerlink.setAttribute('data-toggle', "collapse");
+        headerlink.setAttribute('role', "button");
+        headerlink.setAttribute('aria-expanded', "true");
+        headerlink.setAttribute('aria-controls', "collapseCard" + tracing.id);
+
+        const cardTitle = document.createElement('h6');
+        cardTitle.classList.add("m-0", "font-weight-bold", "text-primary", "text-center");
+        cardTitle.innerHTML = "Tracing " + tracing.date;
+        headerlink.appendChild(cardTitle);
+
+        const divCollapsable = document.createElement("div");
+        divCollapsable.classList.add("collapse", "hide");
+        divCollapsable.setAttribute('id', 'collapseCard' + tracing.id);
+
+        const cardBody = document.createElement('div');
+        cardBody.classList.add("card-body");
+        var rowdiv = document.createElement('div');
+        rowdiv.classList.add("row", "justify-content-center");
+
+        var divcol = document.createElement('div');
+        divcol.classList.add("col-auto");
+
+        var table = document.createElement('table');
+        table.classList.add("table", "table-responsive", "table-striped",  "table-bordered");
+        table.setAttribute('width', "100%");
+        var tbody = document.createElement('tbody');
+
+
+        let cssClasses = ["row", "m-0"]
+        let tr1 = createRow(cssClasses, ['Mode of tracing.', tracing.mode], 2)
+        let tr2 = createRow(cssClasses, ['Tracing Outcome.', tracing.outcome], 2)
+        let tr3 = createRow(cssClasses, ['HIV test done.', tracing.hiv_tested], 2)
+        let tr4 = createRow(cssClasses, ['Type of HIV Test.', tracing.hiv_test_type], 2)
+        let tr5 = createRow(cssClasses, ['Date HIV test done .', tracing.hiv_test_date], 2)
+        let tr6 = createRow(cssClasses, ['HIV test results (PCR or Antibody).', tracing.hiv_test_results], 2)
+        let tr7 = createRow(cssClasses, ['Linked to Care .', tracing.linked_to_care], 2)
+        let tr8 = createRow(cssClasses, ['CCC Number .', tracing.ccc_no], 2)
+        let tr9 = createRow(cssClasses, ['Recommendations.', tracing.recommendations], 2)
+        tbody.append(tr1,tr2, tr3, tr4, tr5, tr6, tr7, tr8, tr9)
+        table.appendChild(tbody)
+
+        const editbtn = document.createElement('div');
+        editbtn.classList.add("btn", "btn-primary", "mr-2");
+        editbtn.setAttribute('data-toggle', "modal");
+        editbtn.setAttribute("data-target", "#traceDialog");
+        editbtn.innerHTML = 'Edit Details';
+        editbtn.addEventListener('click', () => editTracing(tracing));
+
+        var buttondiv = document.createElement('div');
+        buttondiv.classList.add("float-right", "mb-4");
+        buttondiv.append(editbtn)
+        divcol.appendChild(table)
+        rowdiv.appendChild(divcol)
+        cardBody.appendChild(rowdiv)
+        cardBody.appendChild(buttondiv)
+
+        divCollapsable.appendChild(cardBody)
+
+        card.appendChild(headerlink)
+        card.appendChild(divCollapsable)
+
+        divHeiTracingCard.appendChild(card);
+    })
+}
+
+function clearHeiClientDialog(){
+    editedClientId = ''
+    document.getElementById('clientForm').reset()
+}
+
+function clearTraceDialog(){
+    editedTraceId = ''
+    document.getElementById('tracingForm').reset()
+}
+
+function createRow(rowClasses, texts, cols){
+    const tr = document.createElement('tr');
+    rowClasses.forEach(rowClass => tr.classList.add(rowClass))
+    tr.classList.add(rowClasses);
+    for (let i = 0; i < cols; i++){
+        const td = document.createElement('td');
+        td.classList.add("d-inline-block", "col-6");
+        td.innerHTML = texts[i];
+        tr.appendChild(td)
+    }
+    return tr
+}
+
+function editClient(){
+    editedClientId = activeClient.id
+    inputHeiName.value = activeClient.name
+    inputHeiNo.value = activeClient.hei_number
+    inputDob.value =activeClient.dob
+    $('#selectGender').val(activeClient.gender)
+    $('#selectFacility').val(activeClient.facility_code)
+    $('#selectStatus').val(activeClient.status)
+    inputDatePmtctEnrolled.value = activeClient.pmtct_enrollment_date
+    inputStatusDate.value = activeClient.status_date
+}
+
+function editTracing(tracing){
+    editedTraceId = tracing.id
+    inputDot.value = tracing.date
+    $('#selectTracingMode').val(tracing.mode)
+    $('#selectTracingOutcome').val(tracing.outcome)
+    $('#selectHivTested').val(tracing.hiv_tested)
+    $('#selectTestType').val(tracing.hiv_test_type)
+    $('#selectTestResult').val(tracing.hiv_test_results)
+    $('#selectLinked').val(tracing.linked_to_care)
+    inputDateTested.value = tracing.hiv_test_date
+    inputCccNo.value = tracing.ccc_no
+    inputRecommendation.value = tracing.recommendations
+}
 
 
 
@@ -242,8 +404,14 @@ function clearTraceDialog(){}
 
 
 
+//todo logics and safety checks
 
-
+$("#heiClientDialog").on("hide.bs.modal", () => {
+  clearHeiClientDialog()
+});
+$("#traceDialog").on("hide.bs.modal", () => {
+    clearTraceDialog()
+});
 
 
 initialize()

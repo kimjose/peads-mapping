@@ -45,7 +45,7 @@
         "Lost to Follow Up", "Transfer Out"
     ],
     "tracingModes" : [
-        "Phone", "Physical", "Both"
+        "Phone tracing", "Physical tracing", "Both"
     ],
     "tracingOutcomes" : [
         "Confirmed Effective Transfer", "Non Effective Transfer", "Died", "Not Traced", "Traced Back",

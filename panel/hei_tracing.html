@@ -117,7 +117,8 @@
                             <div class="card-header py-3">
                                 <h1 class="h4 mb-2 text-gray-800 float-left">HEI Client Info:</h1>
                                 <button class="btn btn-primary btn-icon-split ml-auto float-right" data-toggle="modal"
-                                        data-target="#heiClientDialog" id="addHeiClientBtn" onclick="clearHeiClientDialog();">
+                                        data-target="#heiClientDialog" id="addHeiClientBtn"
+                                        onclick="clearHeiClientDialog();">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-user-plus"></i>
                                     </span>
@@ -131,7 +132,8 @@
                                             <label for="inputSearch">Search by HEI Number Number/Initials</label>
                                             <label id="search-error" class="errors">Enter at least 3 characters</label>
                                             <input type="text" name="names" class="form-control"
-                                                   placeholder="Enter HEI Number/Initials" id="inputSearch" autocomplete="off" required>
+                                                   placeholder="Enter HEI Number/Initials" id="inputSearch"
+                                                   autocomplete="off" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 my-auto">
@@ -145,14 +147,20 @@
                                 <div class="list-group mt-4 d-none" id="divClientSearchResult">
                                 </div>
 
-                                <div class="border border-dark mt-4 p-2" id="clientDetailsDiv">
+                                <div class="border border-dark mt-4 p-2 d-none" id="divClientsDetails">
                                     <div class="row justify-content-center">
                                         <div class="col-auto">
-                                            <table class="table table-responsive" width="100%">
+                                            <table class="table table-responsive table-bordered" width="100%">
+                                                <thead>
+
+                                                <th>Property</th>
+                                                <th>Value</th>
+                                                </thead>
                                                 <tbody>
                                                 <tr>
                                                     <td scope="row"
-                                                        class="border-right border-top-0 border-bottom-0">Client HEI Number
+                                                        class="border-right border-top-0 border-bottom-0">Client HEI
+                                                        Number
                                                     </td>
                                                     <td class="border-right border-top-0 border-bottom-0 border-right-0"
                                                         id="tdClientNo">_
@@ -173,7 +181,8 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td scope="row" class="border-right border-bottom-0">HEI Client Gender
+                                                    <td scope="row" class="border-right border-bottom-0">HEI Client
+                                                        Gender
                                                     </td>
                                                     <td class="border-right border-bottom-0 border-right-0"
                                                         id="tdClientGender">_
@@ -187,14 +196,16 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td scope="row" class="border-right border-bottom-0">Facility MFL Code
+                                                    <td scope="row" class="border-right border-bottom-0">Facility MFL
+                                                        Code
                                                     </td>
                                                     <td class="border-right border-bottom-0 border-right-0"
                                                         id="tdFacilityCode">_
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td scope="row" class="border-right border-bottom-0">Date Enrolled in PMTCT
+                                                    <td scope="row" class="border-right border-bottom-0">Date Enrolled
+                                                        in PMTCT
                                                     </td>
                                                     <td class="border-right border-bottom-0 border-right-0"
                                                         id="tdPmtctDate">_
@@ -208,7 +219,8 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td scope="row" class="border-right border-bottom-0">Date Lost to Follow Up/ Transferred Out
+                                                    <td scope="row" class="border-right border-bottom-0">Date Lost to
+                                                        Follow Up/ Transferred Out
                                                     </td>
                                                     <td class="border-right border-bottom-0 border-right-0"
                                                         id="tdStatusDate">_
@@ -219,8 +231,9 @@
                                             </table>
                                         </div>
                                     </div>
-                                     <button class="btn btn-primary ml-4" data-toggle="modal"
-                                        data-target="#heiClientDialog" id="btnEditClient" onclick="clearHeiClientDialog();">
+                                    <button class="btn btn-primary ml-4" data-toggle="modal"
+                                            data-target="#heiClientDialog" id="btnEditClient"
+                                            onclick="clearHeiClientDialog();">
                                         Edit Index Client Details
                                     </button>
                                 </div>
@@ -232,14 +245,14 @@
                             <div class="card-header py-3">
                                 <h1 class="h4 mb-2 text-gray-800 float-left">HEI Tracings</h1>
                                 <button class="btn btn-primary btn-icon-split ml-auto float-right" data-toggle="modal"
-                                        data-target="#traceDialog" id="btnAddTrace" onclick="clearTraceDialog();">
+                                        data-target="#traceDialog" id="btnAddTrace" onclick="clearTraceDialog();" disabled>
                                     <span class="icon text-white-50">
                                         <i class="fas fa-user-plus"></i>
                                     </span>
                                     <span class="text">Add Trace</span>
                                 </button>
                             </div>
-                            <div class="card-body" id="heiTracingCard">
+                            <div class="card-body" id="divHeiTracingCard">
                             </div>
                         </div>
                     </div>
@@ -285,10 +298,6 @@
             <form action="code.php" method="POST" onsubmit="event.preventDefault();" id="tracingForm">
 
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>ID: </label>
-                        <label id='labelTraceId'></label>
-                    </div>
 
                     <div class="form-group">
                         <label>Date of Trace/Retrace</label>
@@ -316,8 +325,8 @@
                         <label id="hiv-tested-error" class="errors">This field is required</label>
                         <select id="selectHivTested" class="form-control">
                             <option value="" hidden>Select</option>
-                            <option value="Y">Yes</option>
-                            <option value="N">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -346,8 +355,8 @@
                         <label id="linked-error" class="errors">Field required</label>
                         <select id="selectLinked" class="form-control">
                             <option value="" hidden>Select Option</option>
-                            <option value="Y">Yes</option>
-                            <option value="N">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
                             <option value="N/A">N/A</option>
                         </select>
                     </div>
@@ -355,13 +364,13 @@
                         <label for="inputCccNo">CCC Number</label>
                         <label id="ccc-error" class="errors">Enter a valid CCC Number</label>
                         <input type="text" name="cccno" id="inputCccNo" class="form-control"
-                               placeholder="Enter CCC Number" autocomplete="off" disabled>
+                               placeholder="Enter CCC Number" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="inputRecommendation">Recommendation</label>
                         <label id="recommendation-error" class="errors">Enter a valid CCC Number</label>
-                        <input type="text" name="cccno" id="inputRecommendation" class="form-control"
-                               placeholder="Enter CCC Number" autocomplete="off">
+                        <textarea type="text" name="cccno" id="inputRecommendation" class="form-control"
+                                  placeholder="Enter a recommendation" autocomplete="off"></textarea>
                     </div>
 
 
@@ -387,7 +396,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="code.php" method="POST" onsubmit="event.preventDefault();" id="addPatientForm">
+            <form action="code.php" method="POST" onsubmit="event.preventDefault();" id="clientForm">
 
                 <div class="modal-body">
 
@@ -396,7 +405,7 @@
                         <label id="client-no-error" class="errors">Enter a valid HEI Number</label>
                         <input type="text" name="cccno" id="inputHeiNo" class="form-control"
                                placeholder="Enter HEI Number" autocomplete="off">
-                   </div>
+                    </div>
                     <div class="form-group">
                         <label for="inputHeiName">Client Name(Initials)</label>
                         <label id="client-name-error" class="errors">Initials must be provided</label>
@@ -450,7 +459,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button type="submit" name="savebtn" id="saveClientBtn" class="btn btn-primary"
-                    >Save</button>
+                    >Save
+                    </button>
                 </div>
             </form>
 

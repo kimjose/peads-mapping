@@ -7,6 +7,8 @@ namespace controllers;
 use models\HeiClient;
 use models\HeiTracing;
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 class HeiController
 {
     protected $user = null;
@@ -15,9 +17,7 @@ class HeiController
         $this->user = $_SESSION['user'];
     }
 
-    public function saveClient(){
-        $fillable = ['hei_number', 'facility_code', 'dob', 'gender', 'name', 'status', 'status_date',
-            'pmtct_enrollment_date'];
+    public function saveClient() {
         try {
             $id = null;
             $hei_number = $_POST['hei_number'];
@@ -28,7 +28,7 @@ class HeiController
             $status = $_POST['status'];
             $status_date = $_POST['status_date'];
             $pmtct_enrollment_date = $_POST['pmtct_enrollment_date'];
-            if (isset($_POST['id']) && $_POST['id']){
+            if (isset($_POST['id']) && $_POST['id'] != ''){
                 $id = $_POST['id'];
                 $client = HeiClient::findOrFail($id);
                 $client->hei_number = $hei_number;
@@ -41,27 +41,27 @@ class HeiController
                 $client->pmtct_enrollment_date = $pmtct_enrollment_date;
                 $client->save();
             } else {
-                HeiClient::create([
+                $client = HeiClient::create([
                     'hei_number' => $hei_number,
                     'facility_code' => $facility_code,
                     'dob' => $dob,
                     'gender' => $gender,
                     'name' => $name,
+                    'pmtct_enrollment_date' => $pmtct_enrollment_date,
                     'status' => $status,
                     'status_date' => $status_date
                 ]);
             }
+            $client['tracings'] = $this->getClientTracings($client->id);
+            echo myJsonResponse(200, "Hei Client has been saved successfully", $client);
         } catch (\Throwable $e){
             echo myJsonResponse($e->getCode(), $e->getMessage());
             logError($e->getCode(), $e->getMessage());
             http_response_code(PRECONDITION_FAILED_ERROR_CODE);
         }
-
     }
 
     public function saveTracing(){
-        $fillable = ['date', 'client_id', 'mode', 'outcome', 'tested', 'test_type',
-            'test_date', 'test_results', 'linked_to_care', 'ccc_no', 'recommendations'];
         try {
             $date = $_POST['date'];
             $client_id = $_POST['client_id'];
@@ -81,10 +81,10 @@ class HeiController
                 $tracing->client_id = $client_id;
                 $tracing->mode = $mode;
                 $tracing->outcome = $outcome;
-                $tracing->tested = $tested;
-                $tracing->test_type = $test_type;
-                $tracing->test_date = $test_date;
-                $tracing->test_results = $test_results;
+                $tracing->hiv_tested = $tested;
+                $tracing->hiv_test_type = $test_type;
+                $tracing->hiv_test_date = $test_date;
+                $tracing->hiv_test_results = $test_results;
                 $tracing->linked_to_care = $linked_to_care;
                 $tracing->ccc_no = $ccc_no;
                 $tracing->recommendations = $recommendations;
@@ -95,16 +95,16 @@ class HeiController
                     'client_id' => $client_id,
                     'mode' => $mode,
                     'outcome' => $outcome,
-                    'tested' => $tested,
-                    'test_type' => $test_type,
-                    'test_date' => $test_date,
-                    'test_results' => $test_results,
+                    'hiv_tested' => $tested,
+                    'hiv_test_type' => $test_type,
+                    'hiv_test_date' => $test_date,
+                    'hiv_test_results' => $test_results,
                     'linked_to_care' => $linked_to_care,
                     'ccc_no' => $ccc_no,
                     'recommendations' => $recommendations,
                 ]);
             }
-
+            echo myJsonResponse(SUCCESS_CODE, "Trace saved successfully", $this->getClientTracings($client_id));
         } catch (\Throwable $e) {
             echo myJsonResponse($e->getCode(), $e->getMessage());
             logError($e->getCode(), $e->getMessage());
@@ -112,26 +112,32 @@ class HeiController
         }
     }
 
+    /***
+     * @param $client_id string id of the client
+     * @return HeiTracing[]
+    */
+    public function getClientTracings($client_id)
+    {
+        return HeiTracing::where('client_id', $client_id)->get();
+    }
+
     public function findClients($searchString) {
-        try{
-            $clients = [];
-            $clientsByNo = HeiClient::where("hei_number", $searchString)->get();
-            $clientsByName = HeiClient::where("name", "LIKE", $searchString)->get();
-            foreach ($clientsByNo as $client ) {
-                array_push($clients, $client);
-            }
-            foreach ($clientsByName as $client ) {
-                array_push($clients, $client);
-            }
+        try {
+            $query = "SELECT A.*, B.name AS 'facility_name' FROM hei_clients A LEFT JOIN facilities B ON A.facility_code = B.mfl_code
+WHERE A.hei_number LIKE '$searchString%' OR A.name LIKE '$searchString%'";
+            $clients = DB::select($query);
             foreach ($clients as $client){
-                $tracings = HeiTracing::where("client_id", $client->id)->get();
-                $client['tracings'] = $tracings;
+                $client->tracings = $this->getClientTracings($client->id);
             }
-            echo myJsonResponse(200, "Data fetched.", $clients);
+            echo myJsonResponse(SUCCESS_CODE, "Data fetched.", $clients);
         } catch (\Throwable $e){
             echo myJsonResponse($e->getCode(), $e->getMessage());
             logError($e->getCode(), $e->getMessage());
             http_response_code(PRECONDITION_FAILED_ERROR_CODE);
         }
+    }
+
+    public function getClient($id){
+
     }
 }
