@@ -1476,7 +1476,7 @@ function submitPatientData() {
     document.querySelector("#overlay").style.display = 'flex';
     $.ajax({
         type: "POST",
-        url: "datascript?request=save_patient_data",
+        url: "save_ped_patient_data",
         data: {
             cccNo: cccNo,
             facility: facility,
