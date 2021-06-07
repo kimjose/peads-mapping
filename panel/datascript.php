@@ -1,6 +1,6 @@
 <?php
 
-require_once "../functions.php";
+// require_once "../functions.php";
 require_once "../models/OTZModules.php";
 require_once "../models/User.php";
 require_once __DIR__ . "/../models/Observation.php";
@@ -15,6 +15,10 @@ require_once __DIR__ . "/../models/UserCategory.php";
 require_once __DIR__ . "/../models/ChildrenLinelist.php";
 require_once __DIR__ . "/../models/IndexClientLinelist.php";
 require_once __DIR__ . "/../models/ChildTestResults.php";
+
+use models\IndexClientLinelist;
+use models\Facility;
+use models\ChildrenLinelist;
 
 use Illuminate\Database\Capsule\Manager as DB;
 

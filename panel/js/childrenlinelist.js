@@ -92,7 +92,7 @@ btnSearchClient.addEventListener('click', () => {
     } else {
         if (!isNaN(searchcred)) {
             indexccc = searchcred;
-            indexname = '';
+            indexname = 'o';
         } else {
             indexccc = 0;
             indexname = searchcred;
@@ -625,7 +625,7 @@ function populateChildren(children) {
 
         var th1 = document.createElement("th");
         th1.classList.add("d-inline-block", "col-12", "text-center");
-        th1.innerHTML = "Initial Test Before Enrollment";
+        th1.innerHTML = "HIV Test Before";
 
         tr6.appendChild(th1);
         thead1.appendChild(tr6);
@@ -637,7 +637,7 @@ function populateChildren(children) {
 
         var td5 = document.createElement('td');
         td5.classList.add("d-inline-block", "col-8");
-        td5.innerHTML = "Had the child been tested before enrollment?";
+        td5.innerHTML = "Had the child been tested before?";
 
         var td6 = document.createElement('td');
         td6.classList.add("d-inline-block", "col-4");
