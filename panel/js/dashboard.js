@@ -111,7 +111,6 @@ function filterByCounty() {
                 facilitySelect.appendChild(option)
             }
         })
-        //todo filter tos and facilities
         loadData(filtered)
     }
 }

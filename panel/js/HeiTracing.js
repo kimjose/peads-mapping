@@ -39,12 +39,21 @@ const selectStatus = document.getElementById("selectStatus")
 const inputStatusDate = document.getElementById("inputStatusDate")
 const saveClientBtn = document.getElementById("saveClientBtn")
 
+const labelTracingErrors = document.getElementById("labelTracingErrors")
+
 var activeClient = null
 var editedClientId = ''
 var editedTraceId = ''
 
 
 function initialize(){
+    $("#heiClientDialog").on("hide.bs.modal", () => {
+        clearHeiClientDialog()
+    });
+    $("#traceDialog").on("hide.bs.modal", () => {
+        clearTraceDialog()
+    });
+
     $.ajax({
         dataType: "json",
         url: "data.json",
@@ -112,6 +121,63 @@ function initialize(){
     btnSaveTrace.addEventListener('click', () => saveTracing())
     btnSearchClient.addEventListener('click', () => searchClient())
     document.getElementById('btnEditClient').addEventListener('click', () => editClient())
+
+    selectTracingOutcome.addEventListener('change', ()=>outcomeChanged())
+    selectLinked.addEventListener('change', ()=>linkedChanged())
+    selectTestResult.addEventListener('change', ()=>testResultChanged())
+}
+
+function outcomeChanged(){
+    let selected = selectTracingOutcome.options[selectTracingOutcome.selectedIndex].value
+    console.log(selected)
+    if (selected === 'Confirmed Effective Transfer' ||
+        selected === 'Traced Back'){
+        selectHivTested.removeAttribute('disabled')
+        selectTestType.removeAttribute('disabled')
+        selectTestResult.removeAttribute('disabled')
+        selectLinked.removeAttribute('disabled')
+        inputDateTested.removeAttribute('disabled')
+        inputCccNo.removeAttribute('disabled')
+
+    } else {
+
+        selectHivTested.selectedIndex = 0
+        selectTestResult.selectedIndex = 0
+        selectTestType.selectedIndex = 0
+        selectLinked.selectedIndex = 0
+        inputDateTested.value = ''
+        inputCccNo.value = ''
+        selectHivTested.setAttribute('disabled', '')
+        selectTestType.setAttribute('disabled', '')
+        selectTestResult.setAttribute('disabled', '')
+        selectLinked.setAttribute('disabled', '')
+        inputDateTested.setAttribute('disabled', '')
+        inputCccNo.setAttribute('disabled', '')
+    }
+}
+
+function linkedChanged(){
+    let selected = selectLinked.options[selectLinked.selectedIndex].value
+    if (selected === 'Yes') inputCccNo.removeAttribute('disabled')
+    else {
+        inputCccNo.value = ''
+        inputCccNo.setAttribute('disabled', '')
+    }
+}
+
+function testResultChanged(){
+    let selected = selectTestResult.options[selectTestResult.selectedIndex].value
+    console.log(selected)
+    if (selected === 'Positive'){
+        selectLinked.removeAttribute('disabled')
+        inputCccNo.removeAttribute('disabled')
+
+    } else {
+        selectLinked.selectedIndex = 0
+        selectLinked.setAttribute('disabled', '')
+        inputCccNo.setAttribute('disabled', '')
+        inputCccNo.value = ''
+    }
 }
 
 function saveClient(){
@@ -157,6 +223,9 @@ function saveClient(){
 }
 
 function saveTracing() {
+    labelTracingErrors.innerText = ''
+    let errors = ''
+
 
     let date = inputDot.value
     let mode = selectTracingMode.options[selectTracingMode.selectedIndex].value
@@ -166,9 +235,32 @@ function saveTracing() {
     let test_date = inputDateTested.value
     let test_results = selectTestResult.options[selectTestResult.selectedIndex].value
     let linked_to_care = selectLinked.options[selectLinked.selectedIndex].value
-    let ccc_no = inputCccNo.value
+    let ccc_no = inputCccNo.value.trim()
     let recommendations = inputRecommendation.value
 
+    if (date === '') errors += "\n Enter a valid date of tracing."
+    if (mode === '') errors += "\n Select a valid tracing mode."
+    if (outcome === '') errors += "\n Select a valid tracing outcome."
+
+    if (outcome === 'Confirmed Effective Transfer'
+    || outcome === 'Traced Back'){
+        if (tested === '') errors += "\n Select a valid option for HIV tested."
+        if (tested === 'Yes') {
+            if (test_type === '') errors += "\n Select a valid test type."
+            if (test_date === '') errors += "\n Enter a valid test date."
+            if (test_results === '') errors += "\n Enter results of the HIV test."
+            if (linked_to_care === '') errors += "\n Select a valid option for linked to care."
+            if (linked_to_care === 'Yes') {
+                if (ccc_no === '' ||ccc_no.length !== 10) errors += "\n Enter a valid ccc number."
+            }
+        }
+    }
+    errors = errors.trim()
+    console.log(errors)
+    if (errors !== '') {
+        labelTracingErrors.innerText = errors
+        return
+    }
     let data = new FormData()
     data.append("date", date)
     data.append("id", editedTraceId)
@@ -352,6 +444,7 @@ function clearHeiClientDialog(){
 function clearTraceDialog(){
     editedTraceId = ''
     document.getElementById('tracingForm').reset()
+    labelTracingErrors.innerHTML = ''
 }
 
 function createRow(rowClasses, texts, cols){
@@ -391,6 +484,9 @@ function editTracing(tracing){
     inputDateTested.value = tracing.hiv_test_date
     inputCccNo.value = tracing.ccc_no
     inputRecommendation.value = tracing.recommendations
+    outcomeChanged()
+    linkedChanged()
+    testResultChanged()
 }
 
 
@@ -404,14 +500,9 @@ function editTracing(tracing){
 
 
 
-//todo logics and safety checks
+//todo logics and safety checks & error handling
 
-$("#heiClientDialog").on("hide.bs.modal", () => {
-  clearHeiClientDialog()
-});
-$("#traceDialog").on("hide.bs.modal", () => {
-    clearTraceDialog()
-});
+
 
 
 initialize()

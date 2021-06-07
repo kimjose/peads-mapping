@@ -83,7 +83,7 @@ class HeiController
                 $tracing->outcome = $outcome;
                 $tracing->hiv_tested = $tested;
                 $tracing->hiv_test_type = $test_type;
-                $tracing->hiv_test_date = $test_date;
+                $tracing->hiv_test_date = $test_date == '' ? null : $test_date;
                 $tracing->hiv_test_results = $test_results;
                 $tracing->linked_to_care = $linked_to_care;
                 $tracing->ccc_no = $ccc_no;
@@ -97,7 +97,7 @@ class HeiController
                     'outcome' => $outcome,
                     'hiv_tested' => $tested,
                     'hiv_test_type' => $test_type,
-                    'hiv_test_date' => $test_date,
+                    'hiv_test_date' => $test_date == '' ? null : $test_date,
                     'hiv_test_results' => $test_results,
                     'linked_to_care' => $linked_to_care,
                     'ccc_no' => $ccc_no,
