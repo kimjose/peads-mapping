@@ -22,56 +22,16 @@ use models\IndexClientLinelist;
 try {
     
     $data = [];
-    $patients = [];
 
     $user = $_SESSION['user'];
     $permissionlist = $user->permissions;
-    // } else {
-        $children = ChildrenLinelist::all();
-        foreach ($children as $child) {
-            $pData = [];
-            $indexclient = IndexClientLinelist::where("cccNo", $child->indexCCC)->first();
-            if($indexclient == null) throw new Exception("No query result " . $child->indexCCC, 1);
-            
-            $pData['mflcode'] = $indexclient->facility;
-            $facility = Facility::where('mfl_code', $indexclient->facility)->firstOrFail();
-            $pData['facilityname'] = $facility->name;
-            $pData['county'] = $facility->county;
-            $pData['indexCCC'] = $child->indexCCC;
-            $pData['indexInitials'] = $indexclient->names;
-            $pData['dateindextested'] = $indexclient->date_tested;
-            $pData['dateindexlinelisted'] = $indexclient->date_listed;
-            $pData['dateindexenrolledtocare'] = $indexclient->dateEnrolledToCare;
-            $pData['indexcurrentstatus'] = $indexclient->currentStatus;
-            $pData['childinitials'] = $child->names;
-            $pData['datechildlisted'] = $child->date_listed;
-            $age = getPatientAge($child->dob);
-            $pData['childage'] = $age;
-            $pData['initialtested'] = $child->tested;
-            $pData['initialdatetested'] = $child->date_tested;
-            $pData['initialtestoutcome'] = $child->test_outcome;
-            $pData['initialislinked'] = $child->islinked;
-            $pData['initialchildccc'] = $child->cccNo;
-
-            $followuptest = ChildTestResults::where('childId', $child->id)->first();
-            if ($followuptest != null) {
-                $pData['followuptested'] = $followuptest->tested;
-                $pData['followupdatetested'] = $followuptest->date_tested;
-                $pData['followuptestoutcome'] = $followuptest->test_outcome;
-                $pData['followupislinked'] = $followuptest->islinked;
-                $pData['followupchildccc'] = $followuptest->cccNo;
-            } else {
-                $pData['followuptested'] = '';
-                $pData['followupdatetested'] = '';
-                $pData['followuptestoutcome'] = '';
-                $pData['followupislinked'] = '';
-                $pData['followupchildccc'] = '';
-            }
-            
-            array_push($data, $pData);
-            
-        }
-    // }
+    if  (in_array("3", $permissionlist)) {
+        $data = DB::select("SELECT * FROM `index_testing_linelist`");
+    } else {
+        $data = DB::select ("SELECT A.* FROM index_testing_linelist A  left join facilities B on A.mflCode = B.mfl_code 
+            left join assigned_facilities C on B.mfl_code = C.facility where C.userID =" . $user->id);
+    }
+    
     $filename = "temp/index_testing_";
     $filename .= time();
     $filename .= ".xlsx";
@@ -123,28 +83,28 @@ try {
 
     foreach ($data as $datum) {
         $rowCells = [
-            WriterEntityFactory::createCell($datum['mflcode']),
-            WriterEntityFactory::createCell($datum['facilityname']),
-            WriterEntityFactory::createCell($datum['county']),
-            WriterEntityFactory::createCell($datum['indexCCC']),
-            WriterEntityFactory::createCell($datum['indexInitials']),
-            WriterEntityFactory::createCell($datum['dateindextested']),
-            WriterEntityFactory::createCell($datum['dateindexlinelisted']),
-            WriterEntityFactory::createCell($datum['dateindexenrolledtocare']),
-            WriterEntityFactory::createCell($datum['indexcurrentstatus']),
-            WriterEntityFactory::createCell($datum['childinitials']),
-            WriterEntityFactory::createCell($datum['datechildlisted']),
-            WriterEntityFactory::createCell($datum['childage']),
-            WriterEntityFactory::createCell($datum['initialtested']),
-            WriterEntityFactory::createCell($datum['initialdatetested']),
-            WriterEntityFactory::createCell($datum['initialtestoutcome']),
-            WriterEntityFactory::createCell($datum['initialislinked']),
-            WriterEntityFactory::createCell($datum['initialchildccc']),
-            WriterEntityFactory::createCell($datum['followuptested']),
-            WriterEntityFactory::createCell($datum['followupdatetested']),
-            WriterEntityFactory::createCell($datum['followuptestoutcome']),
-            WriterEntityFactory::createCell($datum['followupislinked']),
-            WriterEntityFactory::createCell($datum['followupchildccc']),
+            WriterEntityFactory::createCell($datum->mflCode),
+            WriterEntityFactory::createCell($datum->facilityName),
+            WriterEntityFactory::createCell($datum->county),
+            WriterEntityFactory::createCell($datum->indexCCC),
+            WriterEntityFactory::createCell($datum->indexNames),
+            WriterEntityFactory::createCell($datum->dateConfirmedPositive),
+            WriterEntityFactory::createCell($datum->dateIndexListed),
+            WriterEntityFactory::createCell($datum->dateEnrolledToCare),
+            WriterEntityFactory::createCell($datum->currentStatus),
+            WriterEntityFactory::createCell($datum->childInitials),
+            WriterEntityFactory::createCell($datum->dateChildListed),
+            WriterEntityFactory::createCell($datum->childAge),
+            WriterEntityFactory::createCell($datum->initialTested),
+            WriterEntityFactory::createCell($datum->dateInitialTested),
+            WriterEntityFactory::createCell($datum->initialTestOutcome),
+            WriterEntityFactory::createCell($datum->isInitiallyLinked),
+            WriterEntityFactory::createCell($datum->cccNo),
+            WriterEntityFactory::createCell($datum->followUpTested),
+            WriterEntityFactory::createCell($datum->datefollowUpTested),
+            WriterEntityFactory::createCell($datum->followUpTestOutcome),
+            WriterEntityFactory::createCell($datum->followUpLinked),
+            WriterEntityFactory::createCell($datum->followUpcccNo),
         ];
         try {
             $writer->addRow(WriterEntityFactory::createRow($rowCells, $normalRowStyle));
