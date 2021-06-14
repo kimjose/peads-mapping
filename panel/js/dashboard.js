@@ -205,21 +205,21 @@ function loadData(data) {
     let other0 = 0, other1 = 0
     let regimenSuppressionOptions = [
         'ABC+3TC+AZT', 'ABC+3TC+RAL', 'ABC+3TC+DTG', 'TDF+3TC+DTG', 'TDF+3TC+EFV', 'ABC+3TC+EFV', 'AZT+3TC+LPVr', 'ABC+3TC+LPVr',
-        'AZT+3TC+EFV', 'TDF+3TC+LPVr', 'TDF+3TC+ATVr', 'AZT+3TC+ATVr', 'ABC+3TC+ATVr', 'AZT+3TC+DTG', 'TDF+3TC+DTG+DRVr'
+        'AZT+3TC+EFV', 'TDF+3TC+LPVr', 'TDF+3TC+ATVr', 'AZT+3TC+ATVr', 'ABC+3TC+ATVr', 'AZT+3TC+DTG', 'TDF+3TC+DTG+DRVr', 'Total'
     ]
     let regimenSuppressionValues = [
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
-        [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+        [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
     let regimenSuppressionTotals = [
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
-        [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+        [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     data.forEach(datum => {
         let age = calculateAge(new Date(datum.dob))
         let supressed = datum.vlOutcome === "Supressed"
-        if (age >= 2 && age <= 19) ovcData.push(datum)
-        if (age >= 10 && age <= 19) otzData.push(datum)
-        if (age >= 1 && age <= 14) pamaData.push(datum)
+        if (age >= 2 && age <= 19 && datum.statusAtOVCDiscontinuation == 'Active') ovcData.push(datum)
+        if (age >= 10 && age <= 19 && datum.statusAtOTZTransition == 'Active') otzData.push(datum)
+        if (age >= 1 && age <= 14 && datum.PAMAStatusCurrent == 'Active') pamaData.push(datum)
         if (datum.sex === 'M') {
             if (age >= 0 && age <= 4) ageCat0++
             else if (age >= 5 && age <= 9) ageCat1++
@@ -501,7 +501,8 @@ function drawPamaData(data) {
 
 function drawTreatmentChart(data) {
     if (treatmentChart == null) {
-        treatmentChart = new Chart(document.getElementById("treatmentChart").getContext('2d'), {
+        let ctx = document.getElementById("treatmentChart").getContext('2d');
+        treatmentChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ["DTG 1st Line", "DTG 2nd Line", "EFV", "LPV/r 1st Line", "LPV/r 2nd Line", "ATV/r 1st Line", "ATV/r 2nd Line", "Other"],
@@ -521,7 +522,31 @@ function drawTreatmentChart(data) {
                 ],
             },
             options: {
-                responsive: true
+                responsive: true,
+                tooltips: {
+                    enabled: false
+                },
+                hover: {
+                    animationDuration: 0
+                },
+                animation: {
+                    duration: 1,
+                    onComplete: function () {
+                        var chartInstance = this.chart,
+                            ctx = chartInstance.ctx;
+                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+            
+                        this.data.datasets.forEach(function (dataset, i) {
+                            var meta = chartInstance.controller.getDatasetMeta(i);
+                            meta.data.forEach(function (bar, index) {
+                                var data = dataset.data[index];                            
+                                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                            });
+                        });
+                    }
+                }
             }
         });
     }

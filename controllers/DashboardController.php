@@ -5,6 +5,8 @@ namespace controllers;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use models\User;
+use models\Facility;
+use models\AssignedFacility;
 
 class DashboardController
 {
@@ -28,13 +30,16 @@ class DashboardController
 
             $tos = User::where('cadre', 8)->get();
             foreach ($tos as $to) {
-                $toFacilities = \AssignedFacility::where('userID', $to->id)->get();
+                $toFacilities = AssignedFacility::where('userID', $to->id)->get();
                 $to['facilities'] = $toFacilities;
             }
-            $allFacilities = \Facility::all();
+            $allFacilities = Facility::all();
             foreach ($allFacilities as $facility) {
-                $assignedto = \AssignedFacility::where('facility', $facility->mfl_code)->where('cadre', 8)->first();
-                $facility['assignedto'] = $assignedto->userID;
+                $assignedto = AssignedFacility::where('facility', $facility->mfl_code)->where('cadre', 8)->first();
+                $facility['assignedto'] = '';
+                if($assignedto != null) {
+                    $facility['assignedto'] = $assignedto->userID;
+                }    
             }
 
             // kituitos = 
