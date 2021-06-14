@@ -14,7 +14,7 @@
     },
     "autoload": {
         "classmap": [
-            "models", "controllers"
+            "models", "controllers", "controllers/utils"
         ],
         "files": ["bootstrap.php","functions.php"]
     }

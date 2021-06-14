@@ -206,6 +206,11 @@ $router->post("/panel/save_hei_tracing", function (){
     $controller = new \controllers\HeiController();
     $controller->saveTracing();
 });
+$router->get("/reports/hei_tracings", function (){
+    require_once "auth.php";
+    $controller = new \controllers\ReportsController();
+    $controller->heiTracingReport();
+});
 
 
 

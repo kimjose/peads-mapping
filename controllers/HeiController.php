@@ -4,6 +4,7 @@
 namespace controllers;
 
 
+use models\AssignedFacility;
 use models\HeiClient;
 use models\HeiTracing;
 
@@ -15,6 +16,12 @@ class HeiController
     public function __construct()
     {
         $this->user = $_SESSION['user'];
+        $facilities = AssignedFacility::where('userID', $this->user->id)->get();
+        $facilityCodes = [];
+        foreach ($facilities as $facility) {
+            array_push($facilityCodes, $facility->facility);
+        }
+        $this->user->facilities = $facilityCodes;
     }
 
     public function saveClient() {
@@ -126,10 +133,12 @@ class HeiController
             $query = "SELECT A.*, B.name AS 'facility_name' FROM hei_clients A LEFT JOIN facilities B ON A.facility_code = B.mfl_code
 WHERE A.hei_number LIKE '$searchString%' OR A.name LIKE '$searchString%'";
             $clients = DB::select($query);
+            $userClients = [];
             foreach ($clients as $client){
                 $client->tracings = $this->getClientTracings($client->id);
+                if (in_array($client->facility_code, $this->user->facilities)) array_push($client);
             }
-            echo myJsonResponse(SUCCESS_CODE, "Data fetched.", $clients);
+            echo myJsonResponse(SUCCESS_CODE, "Data fetched.", $userClients);
         } catch (\Throwable $e){
             echo myJsonResponse($e->getCode(), $e->getMessage());
             logError($e->getCode(), $e->getMessage());

@@ -40,6 +40,7 @@ const inputStatusDate = document.getElementById("inputStatusDate")
 const saveClientBtn = document.getElementById("saveClientBtn")
 
 const labelTracingErrors = document.getElementById("labelTracingErrors")
+const labelClientErrors = document.getElementById("labelClientErrors")
 
 var activeClient = null
 var editedClientId = ''
@@ -181,6 +182,8 @@ function testResultChanged(){
 }
 
 function saveClient(){
+    labelClientErrors.innerText = ''
+    let errors = ''
     let hei_number = inputHeiNo.value
     let facility_code = selectFacility.options[selectFacility.selectedIndex].value
     let dob = inputDob.value
