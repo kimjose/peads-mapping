@@ -66,7 +66,7 @@ linkedSelect.addEventListener('click', () => initialLinkedOptionChanged());
 
 childTestedSelect2.addEventListener('click', () => otherchildTestOptionChanged());
 testOutcomeSelect2.addEventListener('click', () => otherTestOutcomeOptionChanged());
-linkedSelect2.addEventListener('click', () => otherTestOutcomeOptionChanged());
+linkedSelect2.addEventListener('click', () => otherLinkedOptionChanged());
 
 savePatientBtn.addEventListener('click', () => {
     savePatient();
