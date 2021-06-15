@@ -74,12 +74,13 @@ WHERE A.transferred_out = 0");
             $dashboardData['allFacilities'] = $allFacilities;
             $dashboardData['patientsData'] = $patients;
 
-            if (!is_dir(self::$dataFile)) {
+            if (!is_dir(__DIR__ . '/../assets/')) {
 mkdir(__DIR__ . '/../assets/');
             }
             $handler = fopen(self::$dataFile, 'w');
             fwrite($handler, json_encode($dashboardData));
             fclose($handler);
+            echo myJsonResponse(200, "Dashboard data loaded successfully");
         } catch (\Throwable $e) {
             logError($e->getCode(), $e->getMessage());
             http_response_code(412);
