@@ -220,77 +220,82 @@ function loadData(data) {
         if (age >= 2 && age <= 19 && datum.statusAtOVCDiscontinuation === 'Active') ovcData.push(datum)
         if (age >= 10 && age <= 19 && datum.statusAtOTZTransition === 'Active') otzData.push(datum)
         if (age >= 1 && age <= 14 && datum.PAMAStatusCurrent === 'Active') pamaData.push(datum)
-        if (datum.sex === 'M') {
-            if (age >= 0 && age <= 4) ageCat0++
-            else if (age >= 5 && age <= 9) ageCat1++
-            else if (age >= 10 && age <= 14) ageCat2++
-            else if (age >= 15 && age <= 19) ageCat3++
-        } else if (datum.sex === 'F') {
-            if (age >= 0 && age <= 4) ageCat4++
-            else if (age >= 5 && age <= 9) ageCat5++
-            else if (age >= 10 && age <= 14) ageCat6++
-            else if (age >= 15 && age <= 19) ageCat7++
-        }
+        if (datum.statusAtTransition === "Active") {
+            if (datum.sex === 'M') {
+                if (age >= 0 && age <= 4) ageCat0++
+                else if (age >= 5 && age <= 9) ageCat1++
+                else if (age >= 10 && age <= 14) ageCat2++
+                else if (age >= 15 && age <= 19) ageCat3++
+            } else if (datum.sex === 'F') {
+                if (age >= 0 && age <= 4) ageCat4++
+                else if (age >= 5 && age <= 9) ageCat5++
+                else if (age >= 10 && age <= 14) ageCat6++
+                else if (age >= 15 && age <= 19) ageCat7++
+            }
 //get regimen, weight
-        if (datum.weight == null || datum.weight === ''
-            || datum.currentRegimen == null
-            || datum.currentRegimen === '') {
-            //Do nothing if any of these conditions pass
-        } else if (datum.currentRegimen.endsWith('LPVr')) {
-            if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) lpvr0++
-            if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) lpvr1++
-            if (datum.regimenLine === "Second regimen" && datum.weight < 20) lpvr2++
-            if (datum.regimenLine === "Second regimen" && datum.weight >= 20) lpvr3++
-        } else if (datum.currentRegimen.endsWith('EFV')) {
-            if (datum.weight < 20) efv0++
-            if (datum.weight >= 20) efv1++
-        } else if (datum.currentRegimen.endsWith('ATVr')) {
-            if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) atvr0++
-            if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) atvr1++
-            if (datum.regimenLine === "Second regimen" && datum.weight < 20) atvr2++
-            if (datum.regimenLine === "Second regimen" && datum.weight >= 20) atvr3++
-        } else if (datum.currentRegimen.endsWith('DTG')) {
-            if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) dtg0++
-            if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) dtg1++
-            if (datum.regimenLine === "Second regimen" && datum.weight < 20) dtg2++
-            if (datum.regimenLine === "Second regimen" && datum.weight >= 20) dtg3++
+            if (datum.weight == null || datum.weight === ''
+                || datum.currentRegimen == null
+                || datum.currentRegimen === '') {
+                //Do nothing if any of these conditions pass
+            } else if (datum.currentRegimen.endsWith('LPVr')) {
+                if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) lpvr0++
+                if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) lpvr1++
+                if (datum.regimenLine === "Second regimen" && datum.weight < 20) lpvr2++
+                if (datum.regimenLine === "Second regimen" && datum.weight >= 20) lpvr3++
+            } else if (datum.currentRegimen.endsWith('EFV')) {
+                if (datum.weight < 20) efv0++
+                if (datum.weight >= 20) efv1++
+            } else if (datum.currentRegimen.endsWith('ATVr')) {
+                if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) atvr0++
+                if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) atvr1++
+                if (datum.regimenLine === "Second regimen" && datum.weight < 20) atvr2++
+                if (datum.regimenLine === "Second regimen" && datum.weight >= 20) atvr3++
+            } else if (datum.currentRegimen.endsWith('DTG')) {
+                if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) dtg0++
+                if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) dtg1++
+                if (datum.regimenLine === "Second regimen" && datum.weight < 20) dtg2++
+                if (datum.regimenLine === "Second regimen" && datum.weight >= 20) dtg3++
 
-        } else {
-            if (datum.weight < 20) other0++
-            if (datum.weight >= 20) other1++
+            } else {
+                if (datum.weight < 20) other0++
+                if (datum.weight >= 20) other1++
 
+            }
         }
 //For regimen suppression
         for (let i = 0; i < regimenSuppressionOptions.length; i++) {
-            if (datum.currentRegimen === regimenSuppressionOptions[i]) {
-                if (age >= 0 && age <= 4) {
-                    if (supressed) {
-                        regimenSuppressionValues[i][0]++
-                        regimenSuppressionValues[regimenSuppressionOptions.length - 1][0]++
+            if (datum.statusAtTransition === "Active"){
+
+                if (datum.currentRegimen === regimenSuppressionOptions[i]) {
+                    if (age >= 0 && age <= 4) {
+                        if (supressed) {
+                            regimenSuppressionValues[i][0]++
+                            regimenSuppressionValues[regimenSuppressionOptions.length - 1][0]++
+                        }
+                        regimenSuppressionTotals[i][0]++
+                        regimenSuppressionTotals[regimenSuppressionOptions.length - 1][0]++
+                    } else if (age >= 5 && age <= 9) {
+                        if (supressed) {
+                            regimenSuppressionValues[i][1]++
+                            regimenSuppressionValues[regimenSuppressionOptions.length - 1][1]++
+                        }
+                        regimenSuppressionTotals[i][1]++
+                        regimenSuppressionTotals[regimenSuppressionOptions.length - 1][1]++
+                    } else if (age >= 10 && age <= 14) {
+                        if (supressed) {
+                            regimenSuppressionValues[i][2]++
+                            regimenSuppressionValues[regimenSuppressionOptions.length - 1][2]++
+                        }
+                        regimenSuppressionTotals[i][2]++
+                        regimenSuppressionTotals[regimenSuppressionOptions.length - 1][2]++
+                    } else if (age >= 15 && age <= 19) {
+                        if (supressed) {
+                            regimenSuppressionValues[i][3]++
+                            regimenSuppressionValues[regimenSuppressionOptions.length - 1][3]++
+                        }
+                        regimenSuppressionTotals[i][3]++
+                        regimenSuppressionTotals[regimenSuppressionOptions.length - 1][3]++
                     }
-                    regimenSuppressionTotals[i][0]++
-                    regimenSuppressionTotals[regimenSuppressionOptions.length - 1][0]++
-                } else if (age >= 5 && age <= 9) {
-                    if (supressed) {
-                        regimenSuppressionValues[i][1]++
-                        regimenSuppressionValues[regimenSuppressionOptions.length - 1][1]++
-                    }
-                    regimenSuppressionTotals[i][1]++
-                    regimenSuppressionTotals[regimenSuppressionOptions.length - 1][1]++
-                } else if (age >= 10 && age <= 14) {
-                    if (supressed) {
-                        regimenSuppressionValues[i][2]++
-                        regimenSuppressionValues[regimenSuppressionOptions.length - 1][2]++
-                    }
-                    regimenSuppressionTotals[i][2]++
-                    regimenSuppressionTotals[regimenSuppressionOptions.length - 1][2]++
-                } else if (age >= 15 && age <= 19) {
-                    if (supressed) {
-                        regimenSuppressionValues[i][3]++
-                        regimenSuppressionValues[regimenSuppressionOptions.length - 1][3]++
-                    }
-                    regimenSuppressionTotals[i][3]++
-                    regimenSuppressionTotals[regimenSuppressionOptions.length - 1][3]++
                 }
             }
         }
@@ -657,7 +662,7 @@ function drawRegimenSuppressionTable(tableData, options) {
         row.insertCell(6).appendChild(document.createTextNode((cat2Total - cat2Value) + ' (' + (cat2Total === 0 ? 0 : (100 - cat2Perc)).toFixed(2) + '%)'))
         row.insertCell(7).appendChild(document.createTextNode(cat3Value + ' (' +cat3Perc + '%)'))
         row.insertCell(8).appendChild(document.createTextNode((cat3Total - cat3Value) + ' (' + (cat3Total === 0 ? 0 : (100 - cat3Perc)).toFixed(2) + '%)'))
-        row.insertCell(9).appendChild(document.createTextNode(rowSuppressed + ' ('+ (rowTotals === 0 ? 0 : ((rowSuppressed/rowTotals)*100).toFixed(2))+'%)'))
+        row.insertCell(9).appendChild(document.createTextNode(rowSuppressed + '/'+ rowTotals +' ('+ (rowTotals === 0 ? 0 : ((rowSuppressed/rowTotals)*100).toFixed(2))+'%)'))
     }
     regimenSuppressionTable.appendChild(newBody)
 }
