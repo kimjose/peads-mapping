@@ -983,7 +983,7 @@ function otherLinkedOptionChanged() {
     let selectedValue =
         linkedSelect2.options[linkedSelect2.selectedIndex].value;
     if (selectedValue == "Y") {
-        childcccnoinput2.disabled = false;
+        childcccnoinput2.removeAttribute("disabled");
     } else {
         childcccnoinput2.disabled = true;
     }
