@@ -66,7 +66,7 @@ linkedSelect.addEventListener('click', () => initialLinkedOptionChanged());
 
 childTestedSelect2.addEventListener('click', () => otherchildTestOptionChanged());
 testOutcomeSelect2.addEventListener('click', () => otherTestOutcomeOptionChanged());
-linkedSelect2.addEventListener('click', () => otherTestOutcomeOptionChanged());
+linkedSelect2.addEventListener('click', () => otherLinkedOptionChanged());
 
 savePatientBtn.addEventListener('click', () => {
     savePatient();
@@ -983,7 +983,7 @@ function otherLinkedOptionChanged() {
     let selectedValue =
         linkedSelect2.options[linkedSelect2.selectedIndex].value;
     if (selectedValue == "Y") {
-        childcccnoinput2.removeAttribute("disabled");
+        childcccnoinput2.disabled = false;
     } else {
         childcccnoinput2.disabled = true;
     }
