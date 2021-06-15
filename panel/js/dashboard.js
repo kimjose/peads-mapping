@@ -244,21 +244,21 @@ function loadData(data) {
             } else if (datum.currentRegimen.endsWith('LPVr')) {
                 if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) lpvr0++
                 if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) lpvr1++
-                if (datum.regimenLine === "Second regimen" && datum.weight < 20) lpvr2++
-                if (datum.regimenLine === "Second regimen" && datum.weight >= 20) lpvr3++
+                if (datum.regimenLine === "Second Regimen Line" && datum.weight < 20) lpvr2++
+                if (datum.regimenLine === "Second Regimen Line" && datum.weight >= 20) lpvr3++
             } else if (datum.currentRegimen.endsWith('EFV')) {
                 if (datum.weight < 20) efv0++
                 if (datum.weight >= 20) efv1++
             } else if (datum.currentRegimen.endsWith('ATVr')) {
                 if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) atvr0++
                 if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) atvr1++
-                if (datum.regimenLine === "Second regimen" && datum.weight < 20) atvr2++
-                if (datum.regimenLine === "Second regimen" && datum.weight >= 20) atvr3++
+                if (datum.regimenLine === "Second Regimen Line" && datum.weight < 20) atvr2++
+                if (datum.regimenLine === "Second Regimen Line" && datum.weight >= 20) atvr3++
             } else if (datum.currentRegimen.endsWith('DTG')) {
                 if (datum.regimenLine === "First Regimen Line" && datum.weight < 20) dtg0++
                 if (datum.regimenLine === "First Regimen Line" && datum.weight >= 20) dtg1++
-                if (datum.regimenLine === "Second regimen" && datum.weight < 20) dtg2++
-                if (datum.regimenLine === "Second regimen" && datum.weight >= 20) dtg3++
+                if (datum.regimenLine === "Second Regimen Line" && datum.weight < 20) dtg2++
+                if (datum.regimenLine === "Second Regimen Line" && datum.weight >= 20) dtg3++
 
             } else {
                 if (datum.weight < 20) other0++

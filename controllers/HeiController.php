@@ -136,7 +136,7 @@ WHERE A.hei_number LIKE '$searchString%' OR A.name LIKE '$searchString%'";
             $userClients = [];
             foreach ($clients as $client){
                 $client->tracings = $this->getClientTracings($client->id);
-                if (in_array($client->facility_code, $this->user->facilities)) array_push($client);
+                if (in_array($client->facility_code, $this->user->facilities)) array_push($userClients, $client);
             }
             echo myJsonResponse(SUCCESS_CODE, "Data fetched.", $userClients);
         } catch (\Throwable $e){
