@@ -205,7 +205,7 @@ function loadData(data) {
     let other0 = 0, other1 = 0
     let regimenSuppressionOptions = [
         'ABC+3TC+AZT', 'ABC+3TC+RAL', 'ABC+3TC+DTG', 'TDF+3TC+DTG', 'TDF+3TC+EFV', 'ABC+3TC+EFV', 'AZT+3TC+LPVr', 'ABC+3TC+LPVr',
-        'AZT+3TC+EFV', 'TDF+3TC+LPVr', 'TDF+3TC+ATVr', 'AZT+3TC+ATVr', 'ABC+3TC+ATVr', 'AZT+3TC+DTG', 'TDF+3TC+DTG+DRVr', 'Total'
+        'AZT+3TC+EFV', 'TDF+3TC+LPVr', 'TDF+3TC+ATVr', 'AZT+3TC+ATVr', 'ABC+3TC+ATVr', 'AZT+3TC+DTG', 'TDF+3TC+DTG+DRVr', 'Totals'
     ]
     let regimenSuppressionValues = [
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
@@ -217,9 +217,9 @@ function loadData(data) {
     data.forEach(datum => {
         let age = calculateAge(new Date(datum.dob))
         let supressed = datum.vlOutcome === "Supressed"
-        if (age >= 2 && age <= 19 && datum.statusAtOVCDiscontinuation == 'Active') ovcData.push(datum)
-        if (age >= 10 && age <= 19 && datum.statusAtOTZTransition == 'Active') otzData.push(datum)
-        if (age >= 1 && age <= 14 && datum.PAMAStatusCurrent == 'Active') pamaData.push(datum)
+        if (age >= 2 && age <= 19 && datum.statusAtOVCDiscontinuation === 'Active') ovcData.push(datum)
+        if (age >= 10 && age <= 19 && datum.statusAtOTZTransition === 'Active') otzData.push(datum)
+        if (age >= 1 && age <= 14 && datum.PAMAStatusCurrent === 'Active') pamaData.push(datum)
         if (datum.sex === 'M') {
             if (age >= 0 && age <= 4) ageCat0++
             else if (age >= 5 && age <= 9) ageCat1++
@@ -264,17 +264,33 @@ function loadData(data) {
         for (let i = 0; i < regimenSuppressionOptions.length; i++) {
             if (datum.currentRegimen === regimenSuppressionOptions[i]) {
                 if (age >= 0 && age <= 4) {
-                    if (supressed) regimenSuppressionValues[i][0]++
+                    if (supressed) {
+                        regimenSuppressionValues[i][0]++
+                        regimenSuppressionValues[regimenSuppressionOptions.length - 1][0]++
+                    }
                     regimenSuppressionTotals[i][0]++
+                    regimenSuppressionTotals[regimenSuppressionOptions.length - 1][0]++
                 } else if (age >= 5 && age <= 9) {
-                    if (supressed) regimenSuppressionValues[i][1]++
+                    if (supressed) {
+                        regimenSuppressionValues[i][1]++
+                        regimenSuppressionValues[regimenSuppressionOptions.length - 1][1]++
+                    }
                     regimenSuppressionTotals[i][1]++
+                    regimenSuppressionTotals[regimenSuppressionOptions.length - 1][1]++
                 } else if (age >= 10 && age <= 14) {
-                    if (supressed) regimenSuppressionValues[i][2]++
+                    if (supressed) {
+                        regimenSuppressionValues[i][2]++
+                        regimenSuppressionValues[regimenSuppressionOptions.length - 1][2]++
+                    }
                     regimenSuppressionTotals[i][2]++
+                    regimenSuppressionTotals[regimenSuppressionOptions.length - 1][2]++
                 } else if (age >= 15 && age <= 19) {
-                    if (supressed) regimenSuppressionValues[i][3]++
+                    if (supressed) {
+                        regimenSuppressionValues[i][3]++
+                        regimenSuppressionValues[regimenSuppressionOptions.length - 1][3]++
+                    }
                     regimenSuppressionTotals[i][3]++
+                    regimenSuppressionTotals[regimenSuppressionOptions.length - 1][3]++
                 }
             }
         }
@@ -625,6 +641,8 @@ function drawRegimenSuppressionTable(tableData, options) {
     for (let i = 0; i < options.length; i++) {
         let row = newBody.insertRow(i)
         let rowDatum = tableData[i]
+        let rowSuppressed = rowDatum.suppressedValues[0] + rowDatum.suppressedValues[1] + rowDatum.suppressedValues[2] + rowDatum.suppressedValues[3];
+        let rowTotals = rowDatum.totals[0] + rowDatum.totals[1] + rowDatum.totals[2] + rowDatum.totals[3];
         let cat0Value = rowDatum.suppressedValues[0], cat0Total = rowDatum.totals[0], cat0Perc = rowDatum.suppressedPercentage[0]
         let cat1Value = rowDatum.suppressedValues[1], cat1Total = rowDatum.totals[1], cat1Perc = rowDatum.suppressedPercentage[1]
         let cat2Value = rowDatum.suppressedValues[2], cat2Total = rowDatum.totals[2], cat2Perc = rowDatum.suppressedPercentage[2]
@@ -639,6 +657,7 @@ function drawRegimenSuppressionTable(tableData, options) {
         row.insertCell(6).appendChild(document.createTextNode((cat2Total - cat2Value) + ' (' + (cat2Total === 0 ? 0 : (100 - cat2Perc)).toFixed(2) + '%)'))
         row.insertCell(7).appendChild(document.createTextNode(cat3Value + ' (' +cat3Perc + '%)'))
         row.insertCell(8).appendChild(document.createTextNode((cat3Total - cat3Value) + ' (' + (cat3Total === 0 ? 0 : (100 - cat3Perc)).toFixed(2) + '%)'))
+        row.insertCell(9).appendChild(document.createTextNode(rowSuppressed + ' ('+ (rowTotals === 0 ? 0 : ((rowSuppressed/rowTotals)*100).toFixed(2))+'%)'))
     }
     regimenSuppressionTable.appendChild(newBody)
 }
