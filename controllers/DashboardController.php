@@ -69,6 +69,7 @@ LEFT JOIN observations B ON A.cccNo = B.patientCCC AND
 B.id = (SELECT MAX(id) FROM observations C WHERE C.patientCCC = A.cccNo) 
 WHERE A.transferred_out = 0");
 
+            $dashboardData['timestamp'] = date('Y-m-d G:i:s');
             $dashboardData['allCounties'] = $counties;
             $dashboardData['technicalOfficers'] = $tos;
             $dashboardData['allFacilities'] = $allFacilities;

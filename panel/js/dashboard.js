@@ -31,6 +31,10 @@ function initialize() {
             allFacilities = response.allFacilities
             allTos = response.technicalOfficers
             patientsData = response.patientsData
+            let labelTimestamp = document.getElementById("labelTimestamp")
+            if (response.timestamp != null){
+                labelTimestamp.innerText = "Data timestamp : " + response.timestamp
+            }
 
             console.log(counties);
 
