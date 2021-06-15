@@ -1,6 +1,7 @@
 vendor/
 bootstrap.php
 .idea
+.htaccess
 panel/logs
 panel/reports-excel/temp
 assets/dashboard_data.json
