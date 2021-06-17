@@ -15,7 +15,6 @@ const tdHeiStatus = document.getElementById("tdHeiStatus")
 const tdStatusDate = document.getElementById("tdStatusDate")
 const btnEditClient = document.getElementById("btnEditClient")
 
-
 const inputDot = document.getElementById("inputDot")
 const selectTracingMode = document.getElementById("selectTracingMode")
 const selectTracingOutcome = document.getElementById("selectTracingOutcome")
@@ -46,6 +45,9 @@ var activeClient = null
 var editedClientId = ''
 var editedTraceId = ''
 
+
+
+initialize();
 
 function initialize(){
     $("#heiClientDialog").on("hide.bs.modal", () => {
@@ -131,8 +133,8 @@ function initialize(){
 function outcomeChanged(){
     let selected = selectTracingOutcome.options[selectTracingOutcome.selectedIndex].value
     console.log(selected)
-    if (selected === 'Confirmed Effective Transfer' ||
-        selected === 'Traced Back'){
+    if (selected == 'Confirmed Effective Transfer' ||
+        selected == 'Traced Back'){
         selectHivTested.removeAttribute('disabled')
         selectTestType.removeAttribute('disabled')
         selectTestResult.removeAttribute('disabled')
@@ -159,7 +161,7 @@ function outcomeChanged(){
 
 function linkedChanged(){
     let selected = selectLinked.options[selectLinked.selectedIndex].value
-    if (selected === 'Yes') inputCccNo.removeAttribute('disabled')
+    if (selected == 'Yes') inputCccNo.removeAttribute('disabled')
     else {
         inputCccNo.value = ''
         inputCccNo.setAttribute('disabled', '')
@@ -169,7 +171,7 @@ function linkedChanged(){
 function testResultChanged(){
     let selected = selectTestResult.options[selectTestResult.selectedIndex].value
     console.log(selected)
-    if (selected === 'Positive'){
+    if (selected == 'Positive'){
         selectLinked.removeAttribute('disabled')
         inputCccNo.removeAttribute('disabled')
 
@@ -241,26 +243,28 @@ function saveTracing() {
     let ccc_no = inputCccNo.value.trim()
     let recommendations = inputRecommendation.value
 
-    if (date === '') errors += "\n Enter a valid date of tracing."
-    if (mode === '') errors += "\n Select a valid tracing mode."
-    if (outcome === '') errors += "\n Select a valid tracing outcome."
+    if (date == '') errors += "\n Enter a valid date of tracing."
+    if (mode == '') errors += "\n Select a valid tracing mode."
+    if (outcome == '') errors += "\n Select a valid tracing outcome."
 
-    if (outcome === 'Confirmed Effective Transfer'
-    || outcome === 'Traced Back'){
-        if (tested === '') errors += "\n Select a valid option for HIV tested."
-        if (tested === 'Yes') {
-            if (test_type === '') errors += "\n Select a valid test type."
-            if (test_date === '') errors += "\n Enter a valid test date."
-            if (test_results === '') errors += "\n Enter results of the HIV test."
-            if (linked_to_care === '') errors += "\n Select a valid option for linked to care."
-            if (linked_to_care === 'Yes') {
-                if (ccc_no === '' ||ccc_no.length !== 10) errors += "\n Enter a valid ccc number."
+    if (outcome == 'Confirmed Effective Transfer'
+    || outcome == 'Traced Back'){
+        if (tested == '') errors += "\n Select a valid option for HIV tested."
+        if (tested == 'Yes') {
+            if (test_type == '') errors += "\n Select a valid test type."
+            if (test_date == '') errors += "\n Enter a valid test date."
+            if (test_results == '') errors += "\n Enter results of the HIV test."
+            if (test_results == 'Positive') {
+                if (linked_to_care == '') errors += "\n Select a valid option for linked to care."
+            }
+            if (linked_to_care == 'Yes') {
+                if (ccc_no == '' ||ccc_no.length != 10) errors += "\n Enter a valid ccc number."
             }
         }
     }
     errors = errors.trim()
     console.log(errors)
-    if (errors !== '') {
+    if (errors != '') {
         labelTracingErrors.innerText = errors
         return
     }
@@ -287,7 +291,7 @@ function saveTracing() {
         contentType: false,
         success : response => {
             let mResponse = JSON.parse(response)
-            if (mResponse.code === 200){
+            if (mResponse.code == 200){
                 loadTracings(mResponse.data)
                 $("#traceDialog").modal("hide");
             }
@@ -309,7 +313,7 @@ function searchClient(){
             url: "search_hei_clients/" + searchString,
             success : response => {
                 let mResponse = JSON.parse(response)
-                if (mResponse.code === 200){
+                if (mResponse.code == 200){
                     let searchMatches = mResponse.data
                     loadMatches(searchMatches)
                 } else {
@@ -493,19 +497,4 @@ function editTracing(tracing){
 }
 
 
-
-
-
-
-
-
-
-
-
-
 //todo logics and safety checks & error handling
-
-
-
-
-initialize()

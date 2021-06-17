@@ -694,8 +694,6 @@ function loadObsData(observation) {
             console.log("Status check 2");
         }
     }
-    // vloutcomestatusInput.value = observation.vlOutcome;
-    // $("#currentvlstatustSelect").val(observation.vlOutcome);
     weightInput.value = observation.weight;
     isZScoreCheck.checked = false;
     isMUACCheck.checked = false;
@@ -777,9 +775,6 @@ function loadObsData(observation) {
         ovcEnrollmentDateInput.readOnly = true;
     }
     cpmisNumberInput.value = observation.CPMISNumber;
-    /*if (observation.CPMISNumber !== 0) { //TODO comment out
-        cpmisNumberInput.readOnly = true;
-    }*/
     if (observation.ovcVLCopies == "LDL") {
         isLDL2.checked = true;
         ovcVLcopiesInput.value = '';
@@ -971,7 +966,6 @@ function verify() {
     if (isLDL1.checked || vlcopiesInput.value < 1000) vlOutcome = "Supressed";
     else if (vlCopies.value >= 1000) vlOutcome = "Not Supressed";
     let weight = weightInput.value;
-    // let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
     let vlScoreType = "";
     if (isBMICheck.checked) vlScoreType = "BMI";
     else if (isZScoreCheck.checked) vlScoreType = "ZScore";
@@ -1229,7 +1223,6 @@ function submitData(formData = null) {
         let vlOutcome = "Not Done";
         if (isLDL1.checked || (vlcopiesInput.value < 1000 && vlcopiesInput.value >= 0)) vlOutcome = "Supressed";
         else if (vlcopiesInput.value >= 1000) vlOutcome = "Not Supressed";
-        // let vlOutcome = currentvlstatustSelect.options[currentvlstatustSelect.selectedIndex].value;
         let vlScoreType = "";
         if (isBMICheck.checked) vlScoreType = "BMI";
         else if (isZScoreCheck.checked) vlScoreType = "ZScore";

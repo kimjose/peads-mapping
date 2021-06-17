@@ -7,6 +7,7 @@ namespace controllers;
 use models\AssignedFacility;
 use models\HeiClient;
 use models\HeiTracing;
+use models\Facility;
 
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -16,10 +17,19 @@ class HeiController
     public function __construct()
     {
         $this->user = $_SESSION['user'];
-        $facilities = AssignedFacility::where('userID', $this->user->id)->get();
+        
         $facilityCodes = [];
-        foreach ($facilities as $facility) {
-            array_push($facilityCodes, $facility->facility);
+        if  (in_array("3", $this->user->permissions)) {
+            $facilities = Facility::all();
+            foreach ($facilities as $facility) {
+                array_push($facilityCodes, $facility->mfl_code);
+            }
+
+        } else {
+            $facilities = AssignedFacility::where('userID', $this->user->id)->get();
+            foreach ($facilities as $facility) {
+                array_push($facilityCodes, $facility->facility);
+            }
         }
         $this->user->facilities = $facilityCodes;
     }
