@@ -126,6 +126,7 @@ function initialize(){
     document.getElementById('btnEditClient').addEventListener('click', () => editClient())
 
     selectTracingOutcome.addEventListener('change', ()=>outcomeChanged())
+    selectHivTested.addEventListener('change', ()=>testedChanged())
     selectLinked.addEventListener('change', ()=>linkedChanged())
     selectTestResult.addEventListener('change', ()=>testResultChanged())
 }
@@ -165,6 +166,25 @@ function linkedChanged(){
     else {
         inputCccNo.value = ''
         inputCccNo.setAttribute('disabled', '')
+    }
+}
+
+function testedChanged(){
+    let selected = selectHivTested.options[selectHivTested.selectedIndex].value
+    if (selected === "Yes"){
+        if (selectTestType.hasAttribute('disabled')) selectTestType.removeAttribute('disabled')
+        if (selectTestResult.hasAttribute('disabled')) selectTestResult.removeAttribute('disabled')
+        if (inputDateTested.hasAttribute('disabled')) inputDateTested.removeAttribute('disabled')
+    } else{
+        console.log("Here now.")
+        $('#selectTestResult').val('')
+        $('#selectTestType').val('')
+        inputDateTested.value = ''
+
+        testResultChanged()
+        selectTestType.setAttribute('disabled', '')
+        selectTestResult.setAttribute('disabled', '')
+        inputDateTested.setAttribute('disabled', '')
     }
 }
 
@@ -492,6 +512,7 @@ function editTracing(tracing){
     inputCccNo.value = tracing.ccc_no
     inputRecommendation.value = tracing.recommendations
     outcomeChanged()
+    testedChanged()
     linkedChanged()
     testResultChanged()
 }
