@@ -302,7 +302,7 @@ function saveTracing() {
 
 function searchClient(){
     let searchString = inputSearch.value.trim()
-    if (searchString.length > 2) {
+    if (searchString.length > 1) {
         divHeiTracingCard.innerHTML = ''
         divClientsDetails.classList.add('d-none')
         btnAddTrace.setAttribute("disabled", "")

@@ -36,8 +36,8 @@ class ReportsController
     public function heiTracingReport(){
         try {
             $tracings = [];
-            $allTracings = DB::select("SELECT * FROM hei_client_tracings;");
-            echo json_encode($allTracings);
+            $allTracings = DB::select("SELECT A.`*`, B.name AS 'facilityName', B.county AS 'countyName' FROM hei_client_tracings A LEFT JOIN facilities B ON A.facility_code = B.mfl_code;");
+//            echo json_encode($allTracings);
             foreach ($allTracings as $m){
                 if (in_array($m->facility_code, $this->user->facilities)) {
                     $tr['date'] = $m->date;
@@ -58,16 +58,18 @@ class ReportsController
                     $tr['pmtct_enrollment_date'] = $m->pmtct_enrollment_date;
                     $tr['status'] = $m->status;
                     $tr['status_date'] = $m->status_date;
+                    $tr['facilityName'] = $m->facilityName;
+                    $tr['countyName'] = $m->countyName;
                     array_push($tracings, $tr);
                 }
             }
             $headers = [
-                "trace date", "mode", "outcome", "hiv_tested", "hiv_test_type", "hiv_test_date", "hiv_test_results", "linked", "ccc_no", "recommendation",
-                "hei_number", "names/initials", "dob", "gender", "facility_code", "pmtct_enrollment_date", "status", "status_date"
+                "hei_number", "names/initials", "dob", "gender", "pmtct_enrollment_date", "status", "status_date", "facility_code", "facility_name", "county_name",
+                "trace date", "mode", "outcome", "hiv_tested", "hiv_test_type", "hiv_test_date", "hiv_test_results", "linked", "ccc_no", "recommendation"
             ];
             $attrs = [
-                "date", "mode", "outcome", "hiv_tested", "hiv_test_type", "hiv_test_date", "hiv_test_results", "linked_to_care", "ccc_no", "recommendations",
-                "hei_number", "name", "dob", "gender", "facility_code", "pmtct_enrollment_date", "status", "status_date"
+                "hei_number", "name", "dob", "gender", "pmtct_enrollment_date", "status", "status_date", "facility_code", "facilityName", "countyName",
+                "date", "mode", "outcome", "hiv_tested", "hiv_test_type", "hiv_test_date", "hiv_test_results", "linked_to_care", "ccc_no", "recommendations"
             ];
             /* for static
             foreach ($allTracings as $m) {
