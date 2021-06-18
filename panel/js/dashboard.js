@@ -33,7 +33,7 @@ function initialize() {
             patientsData = response.patientsData
             let labelTimestamp = document.getElementById("labelTimestamp")
             if (response.timestamp != null){
-                labelTimestamp.innerText = "Data timestamp : " + response.timestamp
+                labelTimestamp.innerText = "Data loaded on : " + response.timestamp
             }
 
             console.log(counties);
