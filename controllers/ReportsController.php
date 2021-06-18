@@ -64,7 +64,7 @@ class ReportsController
                 }
             }
             $headers = [
-                "hei_number", "names/initials", "dob", "gender", "pmtct_enrollment_date", "status", "status_date", "facility_code", "facility_name", "county_name",
+                "hei_number", "names/initials", "dob", "gender", "HEI_enrollment_date", "status", "status_date", "facility_code", "facility_name", "county_name",
                 "trace date", "mode", "outcome", "hiv_tested", "hiv_test_type", "hiv_test_date", "hiv_test_results", "linked", "ccc_no", "recommendation"
             ];
             $attrs = [
