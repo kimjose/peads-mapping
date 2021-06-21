@@ -49,7 +49,7 @@
     ],
     "tracingOutcomes" : [
         "Confirmed Effective Transfer", "Non Effective Transfer", "Died", "Not Traced", "Traced Back",
-        "Traced not Found"
+        "Traced not Found", "Traced Found and Declined"
     ],
     "hivTestTypes" : [
         "Antibody", "PCR", "Not Due"

@@ -134,8 +134,7 @@ function initialize(){
 function outcomeChanged(){
     let selected = selectTracingOutcome.options[selectTracingOutcome.selectedIndex].value
     console.log(selected)
-    if (selected == 'Confirmed Effective Transfer' ||
-        selected == 'Traced Back'){
+    if (selected === 'Traced Back'){
         selectHivTested.removeAttribute('disabled')
         selectTestType.removeAttribute('disabled')
         selectTestResult.removeAttribute('disabled')
@@ -162,7 +161,7 @@ function outcomeChanged(){
 
 function linkedChanged(){
     let selected = selectLinked.options[selectLinked.selectedIndex].value
-    if (selected == 'Yes') inputCccNo.removeAttribute('disabled')
+    if (selected === 'Yes') inputCccNo.removeAttribute('disabled')
     else {
         inputCccNo.value = ''
         inputCccNo.setAttribute('disabled', '')
@@ -191,7 +190,7 @@ function testedChanged(){
 function testResultChanged(){
     let selected = selectTestResult.options[selectTestResult.selectedIndex].value
     console.log(selected)
-    if (selected == 'Positive'){
+    if (selected === 'Positive'){
         selectLinked.removeAttribute('disabled')
         inputCccNo.removeAttribute('disabled')
 
@@ -267,8 +266,7 @@ function saveTracing() {
     if (mode == '') errors += "\n Select a valid tracing mode."
     if (outcome == '') errors += "\n Select a valid tracing outcome."
 
-    if (outcome == 'Confirmed Effective Transfer'
-    || outcome == 'Traced Back'){
+    if (outcome == 'Traced Back'){
         if (tested == '') errors += "\n Select a valid option for HIV tested."
         if (tested == 'Yes') {
             if (test_type == '') errors += "\n Select a valid test type."
