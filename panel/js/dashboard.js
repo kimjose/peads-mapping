@@ -12,6 +12,7 @@ var pamaChart = null;
 var patientCategorizationChart = null;
 var treatmentChart = null;
 var regimenSuppressionChart = null;
+var pediatricSummaryChart = null
 
 
 initialize()
@@ -32,7 +33,7 @@ function initialize() {
             allTos = response.technicalOfficers
             patientsData = response.patientsData
             let labelTimestamp = document.getElementById("labelTimestamp")
-            if (response.timestamp != null){
+            if (response.timestamp != null) {
                 labelTimestamp.innerText = "Data loaded on : " + response.timestamp
             }
 
@@ -69,7 +70,7 @@ function filterByCounty() {
     } else if (selected == 0) {
         loadData(patientsData);
         $('#toSelect').find('option').remove().end().append('<option selected hidden value="">Select Technical Officer</option>')
-        .val('').append('<option value="0">All Officers</option>').val('0');
+            .val('').append('<option value="0">All Officers</option>').val('0');
         allTos.forEach(to => {
             let option = document.createElement('option')
             option.value = to.id;
@@ -77,7 +78,7 @@ function filterByCounty() {
             toSelect.appendChild(option)
         });
         $('#facilitySelect').find('option').remove().end().append('<option selected hidden value="">Select Facility</option>')
-        .val('').append('<option value="0">All Facilities</option>').val('0');
+            .val('').append('<option value="0">All Facilities</option>').val('0');
         allFacilities.forEach(facility => {
             let option = document.createElement('option')
             option.value = facility.mfl_code
@@ -88,10 +89,10 @@ function filterByCounty() {
         let filtered = [];
         let countyFacilities = [];
         $('#toSelect').find('option').remove().end().append('<option selected hidden value="">Select Technical Officer</option>')
-        .val('').append('<option value="1">All Officers</option>').val('1');
+            .val('').append('<option value="1">All Officers</option>').val('1');
         console.log(allTos);
         allTos.forEach(to => {
-            if(to.county == selected) {
+            if (to.county == selected) {
                 let option = document.createElement('option')
                 option.value = to.id
                 option.appendChild(document.createTextNode(to.names))
@@ -105,7 +106,7 @@ function filterByCounty() {
             }
         })
         $('#facilitySelect').find('option').remove().end().append('<option selected hidden value="">Select Facility</option>')
-        .val('').append('<option value="1">All Facilities</option>').val('1');
+            .val('').append('<option value="1">All Facilities</option>').val('1');
         allFacilities.forEach(facility => {
             if (facility.county == selected) {
                 countyFacilities.push(facility);
@@ -139,11 +140,11 @@ function filterByTo() {
         let filtered = [];
         let countyFacilities = [];
         let toFacilities = [];
-        
+
         $('#facilitySelect').find('option').remove().end().append('<option selected hidden value="">Select Facility</option>')
-        .val('').append('<option value="1">All Facilities</option>').val('1');
-        allFacilities.forEach(fac => {  
-            if (fac.assignedto == selected){
+            .val('').append('<option value="1">All Facilities</option>').val('1');
+        allFacilities.forEach(fac => {
+            if (fac.assignedto == selected) {
                 toFacilities.push(fac)
                 let option = document.createElement('option')
                 option.value = fac.mfl_code
@@ -151,14 +152,14 @@ function filterByTo() {
                 facilitySelect.appendChild(option)
             }
         })
-        
-        patientsData.forEach(patientData =>{
+
+        patientsData.forEach(patientData => {
             console.log(patientData.to_id)
-            if (patientData.to_id == selected){
+            if (patientData.to_id == selected) {
                 filtered.push(patientData);
             }
         });
-        
+
         loadData(filtered)
     }
 
@@ -173,17 +174,17 @@ function filterByFacility() {
     } else if (selected == 1) {
         let filtered = [];
         let selectedto = toSelect.options[toSelect.selectedIndex].value;
-        patientsData.forEach(patientData =>{
-            if (patientData.to_id == selectedto){
+        patientsData.forEach(patientData => {
+            if (patientData.to_id == selectedto) {
                 filtered.push(patientData);
             }
         });
-        
+
         loadData(filtered);
     } else {
         let filtered = [];
-        patientsData.forEach(patientData =>{
-            if (patientData.facility == selected){
+        patientsData.forEach(patientData => {
+            if (patientData.facility == selected) {
                 filtered.push(patientData)
             }
         })
@@ -218,6 +219,8 @@ function loadData(data) {
     let regimenSuppressionTotals = [
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
         [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    let pedSummaryDataset0 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    let pedSummaryDataset1 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     data.forEach(datum => {
         let age = calculateAge(new Date(datum.dob))
         let supressed = datum.vlOutcome === "Supressed"
@@ -265,10 +268,36 @@ function loadData(data) {
                 if (datum.weight >= 20) other1++
 
             }
+            //pediatric summary
+            if (age >= 0 && age <= 14) {
+                pedSummaryDataset0[0]++
+                if (datum.vlScoreType !== '') pedSummaryDataset0[1]++
+                if (datum.disclosureStatus === "Not started") pedSummaryDataset0[2]++
+                if (datum.disclosureStatus === "NA(below 5yrs)") pedSummaryDataset0[3]++
+                if (datum.disclosureStatus === "Partial/Ongoingdisclosure") pedSummaryDataset0[4]++
+                if (datum.disclosureStatus === "Fulldisclosure") pedSummaryDataset0[5]++
+                if (datum.iptStatus === "Completed" || datum.iptStatus === "Started and ongoing"
+                    || datum.iptStatus === "Discontinued") pedSummaryDataset0[6]++
+                if (datum.iptStatus === "Not started") pedSummaryDataset0[7]++
+                if (datum.iptStatus === "Completed") pedSummaryDataset0[8]++
+            }
+            if (age >= 15 && age <= 19) {
+                pedSummaryDataset1[0]++
+                if (datum.vlScoreType !== '') pedSummaryDataset1[1]++
+                if (datum.disclosureStatus === "Not started") pedSummaryDataset1[2]++
+                if (datum.disclosureStatus === "NA(below 5yrs)") pedSummaryDataset1[3]++
+                if (datum.disclosureStatus === "Partial/Ongoingdisclosure") pedSummaryDataset1[4]++
+                if (datum.disclosureStatus === "Fulldisclosure") pedSummaryDataset1[5]++
+                if (datum.iptStatus === "Completed" || datum.iptStatus === "Started and ongoing"
+                    || datum.iptStatus === "Discontinued") pedSummaryDataset1[6]++
+                if (datum.iptStatus === "Not started") pedSummaryDataset1[7]++
+                if (datum.iptStatus === "Completed") pedSummaryDataset1[8]++
+            }
+
         }
 //For regimen suppression
         for (let i = 0; i < regimenSuppressionOptions.length; i++) {
-            if (datum.statusAtTransition === "Active"){
+            if (datum.statusAtTransition === "Active") {
 
                 if (datum.currentRegimen === regimenSuppressionOptions[i]) {
                     if (age >= 0 && age <= 4) {
@@ -326,9 +355,9 @@ function loadData(data) {
             borderColor: "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")",
         }
         let tableDatum = {
-            suppressedValues : [regimenSuppressionValues[i][0], regimenSuppressionValues[i][1], regimenSuppressionValues[i][2], regimenSuppressionValues[i][3]],
-            totals : [regimenSuppressionTotals[i][0], regimenSuppressionTotals[i][1], regimenSuppressionTotals[i][2], regimenSuppressionTotals[i][3]],
-            suppressedPercentage : [val0, val1, val2, val3]
+            suppressedValues: [regimenSuppressionValues[i][0], regimenSuppressionValues[i][1], regimenSuppressionValues[i][2], regimenSuppressionValues[i][3]],
+            totals: [regimenSuppressionTotals[i][0], regimenSuppressionTotals[i][1], regimenSuppressionTotals[i][2], regimenSuppressionTotals[i][3]],
+            suppressedPercentage: [val0, val1, val2, val3]
         }
         regimenSuppressionDatasets.push(dataset)
         regimenSuppressionTableData.push(tableDatum)
@@ -339,6 +368,7 @@ function loadData(data) {
     drawPamaData(pamaData)
     drawPatientCategorization(patientCategorizationData)
     drawTreatmentChart(treatmentData)
+    drawPediatricSummaryChart(pedSummaryDataset0, pedSummaryDataset1)
     drawRegimenSuppressionChart(regimenSuppressionDatasets)
     drawRegimenSuppressionTable(regimenSuppressionTableData, regimenSuppressionOptions);
 }
@@ -562,12 +592,13 @@ function drawTreatmentChart(data) {
                         ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'bottom';
-            
+
                         this.data.datasets.forEach(function (dataset, i) {
                             var meta = chartInstance.controller.getDatasetMeta(i);
                             meta.data.forEach(function (bar, index) {
-                                var data = dataset.data[index];                            
-                                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                var data = dataset.data[index];
+                                if (meta.hidden) ctx.fillText("", 0, 0)
+                                else ctx.fillText(data, bar._model.x, bar._model.y - 5);
                             });
                         });
                     }
@@ -579,6 +610,88 @@ function drawTreatmentChart(data) {
     treatmentChart.data.datasets[1].data = data.over20
     treatmentChart.update()
 
+}
+
+function drawPediatricSummaryChart(dataset0, dataset1) {
+    if (pediatricSummaryChart == null) {
+        // let ctxPA = document.getElementById("pediatricSummaryChart").getContext('2d');
+        pediatricSummaryChart = new Chart(document.getElementById("pediatricSummaryChart"), {
+            showTooltips: false,
+            type: "horizontalBar",
+            data: {
+                labels: ["Active in mapping tool", "Nutrition assessment(BMI, Zscore, MUAC)",
+                    "Disclosure not started", "Disclosure not applicable", "Disclosure ongoing", "Disclosure Completed",
+                    "IPT initiated", "IPT Not Started", "IPT Completed"],
+                datasets: [
+                    {
+                        label: "0-14 yrs",
+                        data: [22, 33, 55, 12, 86, 23, 14, 45, 34],
+                        fill: false,
+                        backgroundColor: '#0724ab',
+                        borderColor: '#3895D3',
+                        borderWidth: 1
+                    },
+                    {
+                        label: "15-19 yrs",
+                        data: [22, 33, 55, 12, 86, 23, 14, 45, 34],
+                        fill: false,
+                        backgroundColor: '#c6961c',
+                        borderColor: '#e05e52',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                tooltips: {
+                    enabled: false
+                },
+                hover: {
+                    animationDuration: 0
+                },
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "No of patients",
+                        },
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            drawOnChartArea: true,
+                        },
+                    }],
+                    yAxes: [{
+                        gridLines: {
+                            drawOnChartArea: true,
+                        },
+                    }]
+                },
+                animation: {
+                    duration: 1,
+                    onComplete: function () {
+                        var chartInstance = this.chart,
+                            ctx = chartInstance.ctx;
+                        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+                        this.data.datasets.forEach(function (dataset, i) {
+                            let meta = chartInstance.controller.getDatasetMeta(i);
+                            meta.data.forEach(function (bar, index) {
+                                let data = dataset.data[index]
+                                if (meta.hidden) ctx.fillText("", 0, 0)
+                                else ctx.fillText(data, bar._model.x + 15, bar._model.y + 7)
+                            });
+
+                        });
+                    }
+                },
+            }
+        });
+    }
+    pediatricSummaryChart.data.datasets[0].data = dataset0
+    pediatricSummaryChart.data.datasets[1].data = dataset1
+    pediatricSummaryChart.update()
 }
 
 function drawRegimenSuppressionChart(datasets) {
@@ -652,21 +765,25 @@ function drawRegimenSuppressionTable(tableData, options) {
         let rowDatum = tableData[i]
         let rowSuppressed = rowDatum.suppressedValues[0] + rowDatum.suppressedValues[1] + rowDatum.suppressedValues[2] + rowDatum.suppressedValues[3];
         let rowTotals = rowDatum.totals[0] + rowDatum.totals[1] + rowDatum.totals[2] + rowDatum.totals[3];
-        let cat0Value = rowDatum.suppressedValues[0], cat0Total = rowDatum.totals[0], cat0Perc = rowDatum.suppressedPercentage[0]
-        let cat1Value = rowDatum.suppressedValues[1], cat1Total = rowDatum.totals[1], cat1Perc = rowDatum.suppressedPercentage[1]
-        let cat2Value = rowDatum.suppressedValues[2], cat2Total = rowDatum.totals[2], cat2Perc = rowDatum.suppressedPercentage[2]
-        let cat3Value = rowDatum.suppressedValues[3], cat3Total = rowDatum.totals[3], cat3Perc = rowDatum.suppressedPercentage[3]
+        let cat0Value = rowDatum.suppressedValues[0], cat0Total = rowDatum.totals[0],
+            cat0Perc = rowDatum.suppressedPercentage[0]
+        let cat1Value = rowDatum.suppressedValues[1], cat1Total = rowDatum.totals[1],
+            cat1Perc = rowDatum.suppressedPercentage[1]
+        let cat2Value = rowDatum.suppressedValues[2], cat2Total = rowDatum.totals[2],
+            cat2Perc = rowDatum.suppressedPercentage[2]
+        let cat3Value = rowDatum.suppressedValues[3], cat3Total = rowDatum.totals[3],
+            cat3Perc = rowDatum.suppressedPercentage[3]
 
         row.insertCell(0).appendChild(document.createTextNode(options[i]))
-        row.insertCell(1).appendChild(document.createTextNode(cat0Value + ' (' +cat0Perc + '%)'))
-        row.insertCell(2).appendChild(document.createTextNode((cat0Total - cat0Value) + ' (' + (cat0Total === 0 ? 0 :(100 - cat0Perc)).toFixed(2) + '%)'))
-        row.insertCell(3).appendChild(document.createTextNode(cat1Value + ' (' +cat1Perc + '%)'))
-        row.insertCell(4).appendChild(document.createTextNode((cat1Total - cat1Value) + ' (' + (cat1Total === 0 ? 0 :(100 - cat1Perc)).toFixed(2) + '%)'))
-        row.insertCell(5).appendChild(document.createTextNode(cat2Value + ' (' +cat2Perc + '%)'))
+        row.insertCell(1).appendChild(document.createTextNode(cat0Value + ' (' + cat0Perc + '%)'))
+        row.insertCell(2).appendChild(document.createTextNode((cat0Total - cat0Value) + ' (' + (cat0Total === 0 ? 0 : (100 - cat0Perc)).toFixed(2) + '%)'))
+        row.insertCell(3).appendChild(document.createTextNode(cat1Value + ' (' + cat1Perc + '%)'))
+        row.insertCell(4).appendChild(document.createTextNode((cat1Total - cat1Value) + ' (' + (cat1Total === 0 ? 0 : (100 - cat1Perc)).toFixed(2) + '%)'))
+        row.insertCell(5).appendChild(document.createTextNode(cat2Value + ' (' + cat2Perc + '%)'))
         row.insertCell(6).appendChild(document.createTextNode((cat2Total - cat2Value) + ' (' + (cat2Total === 0 ? 0 : (100 - cat2Perc)).toFixed(2) + '%)'))
-        row.insertCell(7).appendChild(document.createTextNode(cat3Value + ' (' +cat3Perc + '%)'))
+        row.insertCell(7).appendChild(document.createTextNode(cat3Value + ' (' + cat3Perc + '%)'))
         row.insertCell(8).appendChild(document.createTextNode((cat3Total - cat3Value) + ' (' + (cat3Total === 0 ? 0 : (100 - cat3Perc)).toFixed(2) + '%)'))
-        row.insertCell(9).appendChild(document.createTextNode(rowSuppressed + '/'+ rowTotals +' ('+ (rowTotals === 0 ? 0 : ((rowSuppressed/rowTotals)*100).toFixed(2))+'%)'))
+        row.insertCell(9).appendChild(document.createTextNode(rowSuppressed + '/' + rowTotals + ' (' + (rowTotals === 0 ? 0 : ((rowSuppressed / rowTotals) * 100).toFixed(2)) + '%)'))
     }
     regimenSuppressionTable.appendChild(newBody)
 }
