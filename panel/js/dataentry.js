@@ -66,8 +66,8 @@ const otzVlDateInput = document.getElementById("otzvldate");
 // const missedLastAppointmentSelect = document.getElementById(
 //   "missedLastAppointmentSelect"
 // );
-const otzNextAppointmentDateInput = document.getElementById("otzNextAppointmentDate");
-const otzLastAttendDateInput = document.getElementById("otzlastAttendDate");
+// const otzNextAppointmentDateInput = document.getElementById("otzNextAppointmentDate");
+// const otzLastAttendDateInput = document.getElementById("otzlastAttendDate");
 const artAssessmentSelect = document.getElementById("artassessmentSelect");
 const otzModulesSelect = document.getElementById("modulesSelect");
 const otzTransitionStatusSelect = document.getElementById(
@@ -820,8 +820,8 @@ function loadObsData(observation) {
             artAssessmentSelect.selectedIndex = i;
         }
     }
-    otzLastAttendDateInput.value = observation.lastAttendDate;
-    otzNextAppointmentDateInput.value = observation.nextAppointmentDate;
+    // otzLastAttendDateInput.value = observation.lastAttendDate;
+    // otzNextAppointmentDateInput.value = observation.nextAppointmentDate;
     var otzModules = otzModulesSelect.options;
     for (var i = 0; i < otzModules.length; i++) {
         const otzModule = otzModules[i];
@@ -1034,8 +1034,8 @@ function verify() {
     if (isLDL4.checked) OTZVL = "LDL";
     else OTZVL = otzVlInput.value;
     let OTZVLDate = otzVlDateInput.value;
-    let lastAttendDate = otzLastAttendDateInput.value;
-    let nextAppointmentDate = otzNextAppointmentDateInput.value;
+    let lastAttendDate = '';
+    let nextAppointmentDate = '';
     let ArtAdherenceAssessment = artAssessmentSelect.options[artAssessmentSelect.selectedIndex].value;
     let completedOTZModules = otzModulesSelect.options[otzModulesSelect.selectedIndex].value;
     let statusAtOTZTransition = otzTransitionStatusSelect.options[otzTransitionStatusSelect.selectedIndex].value;
@@ -1289,8 +1289,8 @@ function submitData(formData = null) {
           missedLastAppointmentSelect.options[
             missedLastAppointmentSelect.selectedIndex
           ].value;*/
-        let lastAttendDate = otzLastAttendDateInput.value;
-        let nextAppointmentDate = otzNextAppointmentDateInput.value;
+        let lastAttendDate = '';
+        let nextAppointmentDate = '';
         let ArtAdherenceAssessment =
             artAssessmentSelect.options[artAssessmentSelect.selectedIndex].value;
         let completedOTZModules = otzModulesSelect.options[otzModulesSelect.selectedIndex].value;

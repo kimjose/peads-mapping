@@ -441,7 +441,7 @@ function drawOvcData(data) {
     let active = data.length
     let enrolled = 0
     data.forEach(datum => {
-        if (datum.enrolledInOVC === 'Y') enrolled++
+        if (datum.enrolledInOVC == 'Y') enrolled++
     })
     document.getElementById('tdOvcActive').innerText = active
     document.getElementById('tdOvcEnrolled').innerText = enrolled + ''
