@@ -46,7 +46,7 @@ class UserController
                 session_start();
                 $_SESSION['user'] = $user;
                 echo myJsonResponse(200, 'Logged in', $user);
-            } else throw new Exception("Error Processing Request", 1);
+            } else throw new \Exception("Error Processing Request", 1);
         } catch (\Throwable $e) {
             logError($e->getCode(), $e->getMessage());
             echo myJsonResponse($e->getCode(), "Error encountered. Try again later.", $e->getMessage());

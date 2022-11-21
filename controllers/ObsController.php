@@ -131,7 +131,7 @@ class ObsController
     public function loadPreviousObservation($cccNo) {
         try {
             $patient = Patient::where('cccNo', $cccNo)->orderBy('id', 'desc')->first();
-            if ($patient == null) throw new Exception("Patient not found", 404);
+            if ($patient == null) throw new \Exception("Patient not found", 404);
             $facility = Facility::where('mfl_code', $patient->facility)->first();
             $patient['facilityData'] = $facility;
             $data = [];
