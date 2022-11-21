@@ -1,5 +1,4 @@
 vendor/
-bootstrap.php
 .idea
 .htaccess
 panel/logs
