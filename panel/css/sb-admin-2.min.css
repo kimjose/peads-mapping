@@ -10246,19 +10246,19 @@ a:focus {
 }
 
 .bg-login-image {
-    background: url(../img/chslogo.png);
+    background: url(../img/logo.png);
     background-position: center;
     background-size: cover;
 }
 
 .bg-register-image {
-    background: url(../img/chslogo.png);
+    background: url(../img/logo.png);
     background-position: center;
     background-size: cover
 }
 
 .bg-password-image {
-    background: url(../img/chslogo.png);
+    background: url(../img/logo.png);
     background-position: center;
     background-size: cover
 }
